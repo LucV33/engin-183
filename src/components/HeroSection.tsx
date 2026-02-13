@@ -7,8 +7,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const rotatingWords = [
   "TikTok Shop.",
-  "Brand Livestreams.",
-  "Product Launches.",
+  "Brand Campaigns.",
+  "Product Launch.",
   "Flash Sales.",
 ];
 
@@ -44,9 +44,9 @@ const HeroSection = () => {
               Live Shopping Platform
             </Badge>
 
-            <h1 className="text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Find and Book the Best Live Hosts For Your{" "}
-              <span className="relative inline-block">
+              <span className="relative inline-block" style={{ minWidth: "280px" }}>
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={currentWord}
@@ -54,7 +54,7 @@ const HeroSection = () => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -20, opacity: 0 }}
                     transition={{ duration: 0.35, ease: "easeInOut" }}
-                    className="inline-block text-primary"
+                    className="inline-block text-primary whitespace-nowrap"
                   >
                     {rotatingWords[currentWord]}
                   </motion.span>
