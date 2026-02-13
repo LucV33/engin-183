@@ -41,11 +41,11 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="max-w-xl">
             <Badge variant="secondary" className="mb-6 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-primary/10 text-primary border-0">
-              Live Shopping Platform
+              Live Shopping Network
             </Badge>
 
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-              Find and Book the Best Live Hosts For Your{" "}
+              Match and Manage the Best Live Hosts For Your{" "}
               <span className="relative inline-block" style={{ minWidth: "280px" }}>
                 <AnimatePresence mode="wait">
                   <motion.span
