@@ -1,41 +1,132 @@
 
 
-# Hostify Landing Page
+# Hostify Marketplace Architecture
 
-A clean, modern landing page for Hostify — a marketplace connecting e-commerce brands with live shopping hosts. Built with a cool blue gradient aesthetic targeting Gen Z creators and DTC brands.
+## Overview
 
-## Navigation Bar
-- Hostify logo/wordmark on the left
-- Nav links: "For Brands", "For Hosts", "Pricing", "Blog" — all linking to a "Coming Soon" placeholder page
-- Right side: "Log in" and "Register" buttons, both linking to the Coming Soon page
+Two user types — **Creators** and **Brands** — each pick their role at signup. Creators browse product listings posted by brands; brands browse creator profiles. Either side can initiate a conversation.
 
-## Section 1: Hero
-- Small label text: "Live Shopping Platform"
-- Large headline with rotating text animation: **"Find and Book the Best Live Hosts For Your..."** cycling through **"TikTok Shop." → "Brand Livestreams." → "Product Launches." → "Flash Sales."** with a smooth text swap animation
-- Subheadline: "Stop scrambling for live hosts. Hostify matches your brand with vetted creators who sell on camera, so you can go live faster and sell more."
-- Two CTA buttons: **"Browse Hosts"** (solid primary) and **"Apply as a Host"** (outlined) — both link to Coming Soon
-- Right side: a carousel/grid of host profile cards (Youdji-style vertical video thumbnail cards) with placeholder images, host names, "See Profile" overlay, and a stat line like "Avg. $3,200 GMV per stream • 4.9 ★"
-- Video-ready containers: cards structured with a wrapper that can accept mp4/embedded video in the future, with a play button overlay on placeholder thumbnails
-- Background: soft blue cloud gradient (replacing Youdji's pink), keeping the same dreamy, soft feel
+## Database Schema
 
-## Section 2: Social Proof Bar
-- Text: "Trusted by 200+ e-commerce brands going live every week."
-- Horizontally auto-scrolling row of gray placeholder brand logos (8–10 generic logo placeholders)
+### Tables
 
-## Section 3: How It Works (3 Steps)
-- Section title: "How It Works"
-- Three cards/steps laid out in a row (stacking on mobile):
-  - **Step 1 — "Find Your Host"**: "Browse vetted live shopping hosts. Filter by niche, selling style, platform, and past performance. Watch highlight reels before you book." + placeholder image/video container with play button overlay
-  - **Step 2 — "Align and Book"**: "Message hosts directly. Share your product brief, agree on format and budget, and lock in your live date. No agencies, no middlemen." + placeholder image/video container
-  - **Step 3 — "Go Live and Sell"**: "Ship your product, drop your talking points, and watch them sell. Track viewers, clicks, and conversions in real time." + placeholder image/video container
+**profiles** — core user info (auto-created on signup)
+- id (FK to auth.users), role (creator/brand), display_name, avatar_url, bio, created_at
 
-## Coming Soon Page
-- Simple centered page: "Coming Soon — We're Building Something Big" with a link back to the homepage
+**user_roles** — security role table (for RLS, separate from profiles)
+- id, user_id (FK to auth.users), role (app_role enum: creator, brand)
 
-## Design & Technical Details
-- Cool blue gradient cloud background on the hero (replacing Youdji's pink/peach tones)
-- Clean sans-serif typography (Inter or similar)
-- Fully mobile responsive — cards stack vertically, text scales properly
-- All media containers use a consistent component pattern with placeholder support, play button overlays, and easy-to-swap src props for future real content
-- Smooth animations: rotating hero text, auto-scrolling logo bar, fade-in on scroll for How It Works cards
+**creator_profiles** — extended creator data
+- id, user_id (FK), niches (text array), platforms (text array: tiktok, instagram, amazon), follower_count, avg_gmv, rating, portfolio_urls (text array), past_collabs (text array), location, created_at
+
+**brand_profiles** — extended brand data
+- id, user_id (FK), company_name, website, industry, logo_url, created_at
+
+**products** — brand product listings
+- id, brand_id (FK to profiles), title, description, images (text array), category, budget_min, budget_max, target_platforms (text array), preferred_date, commission_info, status (active/paused/closed), created_at
+
+**conversations** — chat threads between a brand and a creator
+- id, brand_user_id (FK), creator_user_id (FK), product_id (FK, nullable — the product that started the convo), created_at, last_message_at
+
+**messages** — individual messages within a conversation
+- id, conversation_id (FK), sender_id (FK to auth.users), content (text), created_at, read_at
+
+### Key Relationships
+
+```text
+auth.users
+  +-- profiles (1:1)
+  +-- user_roles (1:1)
+  +-- creator_profiles (1:1, if role = creator)
+  +-- brand_profiles (1:1, if role = brand)
+  +-- products (1:many, brands only)
+  +-- conversations (as brand or creator)
+       +-- messages (1:many)
+```
+
+### Row-Level Security Strategy
+
+- **profiles**: Users can read all profiles, update only their own
+- **creator_profiles**: Readable by all authenticated users (brands need to browse), writable only by the owning creator
+- **brand_profiles**: Same pattern — readable by all, writable by owner
+- **products**: Readable by all authenticated users, writable only by the brand that created them
+- **conversations**: Readable/writable only by the two participants
+- **messages**: Readable only by conversation participants, insertable only by participants
+- Role checks use a `has_role()` security definer function to avoid infinite recursion
+
+## Application Flow
+
+### Registration
+1. User signs up with email/password
+2. Picks role: "I'm a Creator" or "I'm a Brand"
+3. Redirected to onboarding form:
+   - **Creator**: Add bio, niches, platforms, stats, portfolio images/videos
+   - **Brand**: Add company name, industry, website, logo
+4. Profile saved, lands on their dashboard/feed
+
+### Creator Experience
+1. **Feed**: Scrollable list of active product listings from brands
+   - Filter by category, platform, budget range
+   - Search by keyword
+2. **Product detail**: View full product info + brand profile
+3. **Message**: Click "I'm interested" to start a conversation with the brand about that product
+
+### Brand Experience
+1. **Post Products**: Add product listings with images, budget, platforms, dates
+2. **Feed**: Scrollable list of creator profiles
+   - Filter by niche, platform, rating, GMV range
+   - Search by name or keyword
+3. **Creator detail**: View full creator profile + portfolio
+4. **Message**: Click "Message" to start a conversation with a creator
+
+### Messaging
+1. Basic text messaging (no real-time — poll or refresh to see new messages)
+2. Conversation list page showing all threads sorted by last message
+3. Unread message indicator (count of messages where read_at is null)
+
+## Pages to Build
+
+| Page | Route | Who |
+|------|-------|-----|
+| Login | /login | All |
+| Register | /register | All |
+| Onboarding | /onboarding | New users |
+| Creator Feed (products) | /feed | Creators |
+| Brand Feed (creators) | /feed | Brands |
+| Product Detail | /products/:id | Creators |
+| Creator Detail | /creators/:id | Brands |
+| My Products | /my-products | Brands |
+| Add/Edit Product | /products/new | Brands |
+| Conversations List | /messages | All |
+| Conversation Thread | /messages/:id | All |
+| My Profile / Settings | /profile | All |
+
+## Technical Details
+
+### Infrastructure
+- **Lovable Cloud** for backend (Supabase-managed database, auth, edge functions, storage)
+- **Supabase Auth** for email/password authentication
+- **Supabase Storage** for profile photos, product images, and portfolio media
+- **Edge functions** for any server-side logic (e.g., unread count, search indexing)
+
+### Storage Buckets
+- `avatars` — profile photos (public)
+- `product-images` — brand product photos (public)
+- `portfolio` — creator highlight reels and media (public)
+
+### Frontend Patterns
+- Protected routes using an auth context wrapper
+- Role-based route guards (creators can't access brand pages and vice versa)
+- TanStack Query for data fetching with pagination
+- Existing shadcn/ui components for forms, cards, dialogs
+
+### Implementation Order
+1. Set up Lovable Cloud + database schema + RLS policies
+2. Auth (login, register, role selection)
+3. Onboarding flows (creator profile, brand profile)
+4. Brand: product creation + management
+5. Creator feed (browse products) with filters
+6. Brand feed (browse creators) with filters
+7. Messaging (conversations + messages)
+8. Polish (unread counts, empty states, mobile responsiveness)
 
