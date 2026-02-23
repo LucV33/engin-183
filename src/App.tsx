@@ -19,6 +19,7 @@ import NewProduct from "./pages/NewProduct";
 import Messages from "./pages/Messages";
 import ConversationThread from "./pages/ConversationThread";
 import Profile from "./pages/Profile";
+import ForCreators from "./pages/ForCreators";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/for-creators" element={<ForCreators />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
             <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
