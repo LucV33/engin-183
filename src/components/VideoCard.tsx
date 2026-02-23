@@ -7,23 +7,85 @@ interface VideoCardProps {
   onHover?: (hovering: boolean) => void;
 }
 
+// Global thumbnail cache & queue
+const thumbCache = new Map<string, string>();
+const thumbQueue: Array<{ src: string; resolve: (url: string) => void }> = [];
+let isProcessing = false;
+
+function processQueue() {
+  if (isProcessing || thumbQueue.length === 0) return;
+  isProcessing = true;
+  const { src, resolve } = thumbQueue.shift()!;
+
+  const offscreen = document.createElement("video");
+  offscreen.crossOrigin = "anonymous";
+  offscreen.muted = true;
+  offscreen.playsInline = true;
+  offscreen.preload = "auto";
+  offscreen.src = src;
+
+  const cleanup = () => {
+    offscreen.removeAttribute("src");
+    offscreen.load();
+    offscreen.remove();
+    isProcessing = false;
+    processQueue(); // next in queue
+  };
+
+  const handleSeeked = () => {
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = offscreen.videoWidth || 320;
+      canvas.height = offscreen.videoHeight || 568;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+        thumbCache.set(src, dataUrl);
+        resolve(dataUrl);
+      } else {
+        resolve("");
+      }
+    } catch {
+      resolve("");
+    }
+    cleanup();
+  };
+
+  offscreen.addEventListener("seeked", handleSeeked, { once: true });
+  offscreen.addEventListener("loadeddata", () => {
+    offscreen.currentTime = 0.5;
+  }, { once: true });
+
+  // Timeout fallback
+  setTimeout(() => {
+    resolve(thumbCache.get(src) || "");
+    cleanup();
+  }, 8000);
+}
+
+function generateThumbnail(videoSrc: string): Promise<string> {
+  if (thumbCache.has(videoSrc)) return Promise.resolve(thumbCache.get(videoSrc)!);
+  return new Promise((resolve) => {
+    thumbQueue.push({ src: videoSrc, resolve });
+    processQueue();
+  });
+}
+
 const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [thumbUrl, setThumbUrl] = useState<string>(thumbCache.get(src) || "");
 
-  // Seek to 0.5s on metadata load to force a visible thumbnail frame
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    const seekToThumb = () => {
-      if (video.currentTime === 0) video.currentTime = 0.5;
-    };
-    video.addEventListener("loadeddata", seekToThumb);
-    // If already loaded (cached), seek immediately
-    if (video.readyState >= 2) seekToThumb();
-    return () => video.removeEventListener("loadeddata", seekToThumb);
-  }, [src]);
+    if (thumbUrl) return;
+    let cancelled = false;
+    generateThumbnail(src).then((url) => {
+      if (!cancelled && url) setThumbUrl(url);
+    });
+    return () => { cancelled = true; };
+  }, [src, thumbUrl]);
 
   const handleMouseEnter = () => {
     onHover?.(true);
@@ -67,11 +129,23 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
 
   return (
     <div
-      className="relative shrink-0 w-[160px] sm:w-[180px] rounded-2xl overflow-hidden border border-border group cursor-pointer"
+      className="relative shrink-0 w-[160px] sm:w-[180px] rounded-2xl overflow-hidden border border-border group cursor-pointer bg-muted"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
     >
+      {/* Poster image — shown instantly while video is not playing */}
+      {thumbUrl && !isPlaying && (
+        <img
+          src={thumbUrl}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover z-[1]"
+        />
+      )}
+      {/* Skeleton placeholder while thumbnail is loading */}
+      {!thumbUrl && !isPlaying && (
+        <div className="absolute inset-0 z-[1] bg-muted animate-pulse" />
+      )}
       <video
         ref={videoRef}
         src={src}
@@ -79,10 +153,10 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
         className="aspect-[9/16] w-full object-cover"
         playsInline
         loop
-        preload="metadata"
+        preload="none"
       />
       {/* Play/Pause overlay */}
-      <div className={`absolute inset-0 flex items-center justify-center transition-opacity ${
+      <div className={`absolute inset-0 z-[2] flex items-center justify-center transition-opacity ${
         isPlaying ? "opacity-0 hover:opacity-100" : "opacity-100"
       } bg-background/20`}>
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -107,7 +181,7 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
         </button>
       )}
       {/* Bottom gradient */}
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background/70 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-20 z-[3] bg-gradient-to-t from-background/70 to-transparent" />
     </div>
   );
 };
