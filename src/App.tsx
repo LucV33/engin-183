@@ -21,6 +21,7 @@ import Messages from "./pages/Messages";
 import ConversationThread from "./pages/ConversationThread";
 import Profile from "./pages/Profile";
 import ForCreators from "./pages/ForCreators";
+import Waitlist from "./pages/Waitlist";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/for-brands" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/waitlist" element={<Waitlist />} />
             <Route path="/for-creators" element={<ForCreators />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />

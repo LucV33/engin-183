@@ -116,7 +116,7 @@ const steps = [
     step: 2,
     title: "Get Booked by Top Brands",
     description:
-      "Chat directly with brands, negotiate your rates, and lock in live stream deals — all inside Hostify.",
+      "Chat directly with brands, negotiate your rates, and lock in live stream deals — all inside gmv.live.",
   },
   {
     step: 3,
@@ -139,15 +139,15 @@ const faqs = [
     a: "A live shopping host is a creator who sells products in real-time on platforms like TikTok Shop, Amazon Live, or brand websites. Hosts engage audiences, demo products, and drive sales during live streams.",
   },
   {
-    q: "How do I get booked on Hostify?",
+    q: "How do I get booked on gmv.live?",
     a: "Once your profile is live, brands can discover you through our marketplace, view your portfolio, and reach out directly with product offers and stream opportunities.",
   },
   {
-    q: "Does Hostify take a cut of my earnings?",
-    a: "Hostify does not take a percentage of your sales commissions. We charge brands a platform fee — your rates stay yours.",
+    q: "Does gmv.live take a cut of my earnings?",
+    a: "gmv.live does not take a percentage of your sales commissions. We charge brands a platform fee — your rates stay yours.",
   },
   {
-    q: "What platforms does Hostify support?",
+    q: "What platforms does gmv.live support?",
     a: "We support TikTok Shop, Amazon Live, Instagram Live, YouTube Live, and custom brand storefronts. More platforms are added regularly.",
   },
   {
@@ -174,7 +174,6 @@ const ForCreators = () => {
       {/* ═══════ HERO + FEATURE CARDS ═══════ */}
       <section className="relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24">
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          {/* Text — left aligned like reference */}
           <p className="text-sm font-medium text-muted-foreground">Become a Live Shopping Host</p>
 
           <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl max-w-3xl">
@@ -182,7 +181,7 @@ const ForCreators = () => {
           </h1>
 
           <p className="mt-4 text-lg text-muted-foreground max-w-xl">
-            Your live hosting journey starts on Hostify.
+            Your live hosting journey starts on gmv.live.
           </p>
 
           {/* 6-card grid */}
@@ -201,8 +200,8 @@ const ForCreators = () => {
 
           <div className="mt-10 flex justify-center">
             <Button size="lg" asChild>
-              <Link to="/register">
-                Join Hostify for Free <ArrowRight className="ml-1 h-4 w-4" />
+              <Link to="/waitlist">
+                Join gmv.live for Free <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -232,13 +231,13 @@ const ForCreators = () => {
           </div>
 
           <p className="mx-auto mt-6 max-w-lg text-base text-muted-foreground">
-            Real partnerships. Real payouts. Hostify is where live hosts get the
+            Real partnerships. Real payouts. gmv.live is where live hosts get the
             recognition, and revenue, they deserve.
           </p>
 
           <Button size="lg" className="mt-8" asChild>
-            <Link to="/register">
-              Join Hostify Now <ArrowRight className="ml-1 h-4 w-4" />
+            <Link to="/waitlist">
+              Join gmv.live Now <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
         </div>
@@ -272,7 +271,7 @@ const ForCreators = () => {
             How It Works
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
-            From sign-up to payout — here's how Hostify works for creators.
+            From sign-up to payout — here's how gmv.live works for creators.
           </p>
 
           <div className="mt-14 space-y-12">
@@ -380,13 +379,13 @@ const ForCreators = () => {
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             Focus on selling live for the best brands with our optimized tools
-            and resources. Hundreds of hosts have already joined Hostify and are
+            and resources. Hundreds of hosts have already joined gmv.live and are
             thriving — now it's your turn!
           </p>
           <div className="mt-10 flex flex-col items-center gap-4">
             <Button size="lg" asChild>
-              <Link to="/register">
-                Join Hostify <ChevronRight className="ml-1 h-4 w-4" />
+              <Link to="/waitlist">
+                Join gmv.live <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
             <Link
@@ -404,8 +403,8 @@ const ForCreators = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold text-foreground">Hostify</p>
-              <p className="mt-2 text-sm text-muted-foreground">support@hostify.live</p>
+              <p className="text-lg font-bold text-foreground">gmv.live</p>
+              <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>
@@ -418,7 +417,7 @@ const ForCreators = () => {
             </div>
           </div>
           <p className="mt-8 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Hostify. All rights reserved.
+            © {new Date().getFullYear()} gmv.live. All rights reserved.
           </p>
         </div>
       </footer>

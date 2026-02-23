@@ -57,7 +57,6 @@ const hosts = [
   },
 ];
 
-/* ─── Feature cards ─── */
 const features = [
   {
     icon: Search,
@@ -97,7 +96,6 @@ const features = [
   },
 ];
 
-/* ─── How it works ─── */
 const steps = [
   {
     step: 1,
@@ -122,7 +120,6 @@ const steps = [
   },
 ];
 
-/* ─── FAQ ─── */
 const faqs = [
   {
     q: "What is live shopping?",
@@ -133,8 +130,8 @@ const faqs = [
     a: "Use our filters to search by niche, platform, follower count, past GMV, and ratings. You can watch highlight reels and review portfolios before reaching out.",
   },
   {
-    q: "What does it cost to use Hostify?",
-    a: "Hostify charges a small platform fee on bookings. Host rates vary — you negotiate directly with hosts based on your budget and campaign needs.",
+    q: "What does it cost to use gmv.live?",
+    a: "gmv.live charges a small platform fee on bookings. Host rates vary — you negotiate directly with hosts based on your budget and campaign needs.",
   },
   {
     q: "Which platforms are supported?",
@@ -146,7 +143,6 @@ const faqs = [
   },
 ];
 
-/* ─── Brand names ─── */
 const brandNames = [
   "L'Oréal", "Sephora", "Nike", "Adidas", "Samsung", "Amazon",
   "Glossier", "Fenty", "Shein", "Zara", "H&M", "Unilever",
@@ -202,22 +198,22 @@ const Index = () => {
               </h1>
 
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                Stop scrambling for live hosts. Hostify matches your brand with
+                Stop scrambling for live hosts. gmv.live matches your brand with
                 vetted creators who sell on camera, so you can go live faster and
                 sell more.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <Button size="lg" asChild>
-                  <Link to="/register">Browse Hosts</Link>
+                  <Link to="/waitlist">Browse Hosts</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link to="/">Apply as a Host</Link>
+                  <Link to="/waitlist">Apply as a Host</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Host Cards with images */}
+            {/* Host Cards */}
             <div className="grid grid-cols-2 gap-4 sm:gap-5">
               {hosts.map((host, i) => (
                 <div
@@ -259,7 +255,7 @@ const Index = () => {
       </section>
 
       {/* ═══════ SOCIAL PROOF ═══════ */}
-      <section className="border-y border-border/50 bg-background py-10">
+      <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
             Trusted by 200+ e-commerce brands going live every week.
@@ -303,13 +299,13 @@ const Index = () => {
       </section>
 
       {/* ═══════ HOW IT WORKS ═══════ */}
-      <section className="bg-background py-20 sm:py-28">
+      <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             How It Works
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
-            From discovery to conversion — here's how Hostify works for brands.
+            From discovery to conversion — here's how gmv.live works for brands.
           </p>
 
           <div className="mt-14 space-y-12">
@@ -361,12 +357,12 @@ const Index = () => {
             Start Selling Live Today
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Join hundreds of brands already using Hostify to find top live shopping
+            Join hundreds of brands already using gmv.live to find top live shopping
             hosts, run campaigns, and drive real-time sales.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4">
             <Button size="lg" asChild>
-              <Link to="/register">
+              <Link to="/waitlist">
                 Get Started <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
@@ -385,8 +381,8 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold text-foreground">Hostify</p>
-              <p className="mt-2 text-sm text-muted-foreground">support@hostify.live</p>
+              <p className="text-lg font-bold text-foreground">gmv.live</p>
+              <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>
@@ -399,7 +395,7 @@ const Index = () => {
             </div>
           </div>
           <p className="mt-8 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Hostify. All rights reserved.
+            © {new Date().getFullYear()} gmv.live. All rights reserved.
           </p>
         </div>
       </footer>
