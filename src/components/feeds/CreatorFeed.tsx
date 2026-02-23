@@ -61,8 +61,18 @@ const CreatorFeed = () => {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products?.map((product: any) => (
-            <Card key={product.id} className="flex flex-col">
-              <CardHeader>
+            <Card key={product.id} className="flex flex-col overflow-hidden">
+              {product.images?.[0] && (
+                <div className="aspect-video w-full overflow-hidden bg-muted">
+                  <img
+                    src={product.images[0]}
+                    alt={product.title}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">{product.title}</CardTitle>
                   {product.category && <Badge variant="secondary">{product.category}</Badge>}
@@ -71,8 +81,11 @@ const CreatorFeed = () => {
                   by {product.profiles?.display_name || "Unknown Brand"}
                 </p>
               </CardHeader>
-              <CardContent className="flex flex-1 flex-col justify-between gap-4">
+              <CardContent className="flex flex-1 flex-col justify-between gap-3">
                 <p className="line-clamp-2 text-sm text-muted-foreground">{product.description}</p>
+                {product.commission_info && (
+                  <p className="text-sm font-medium text-primary">{product.commission_info}</p>
+                )}
                 <div className="flex items-center justify-between">
                   {(product.budget_min || product.budget_max) && (
                     <span className="text-sm font-medium text-foreground">
