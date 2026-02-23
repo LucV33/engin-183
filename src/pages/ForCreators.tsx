@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Star,
   MessageSquare,
@@ -20,43 +19,88 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-/* ─── Feature cards (top grid) ─── */
+/* ─── Feature cards (6-card grid like reference) ─── */
 const features = [
   {
-    icon: Star,
-    title: "Build Your Live Host Portfolio",
-    description:
-      "Create a standout profile in seconds — showcase your best streams and share it with brands.",
+    title: "The Best Live Host Portfolio",
+    description: "Create yours in seconds and share it around.",
+    visual: (
+      <div className="flex items-center gap-2">
+        <div className="h-10 w-10 rounded-full bg-muted overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop" alt="" className="h-full w-full object-cover" />
+        </div>
+        <div className="flex gap-1">
+          {[
+            "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=60&h=80&fit=crop",
+            "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=60&h=80&fit=crop",
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=60&h=80&fit=crop",
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=60&h=80&fit=crop",
+          ].map((src, i) => (
+            <img key={i} src={src} alt="" className="h-14 w-10 rounded-md object-cover" loading="lazy" />
+          ))}
+        </div>
+      </div>
+    ),
   },
   {
-    icon: MessageSquare,
-    title: "Brands Come to You",
-    description:
-      "No more cold pitching. Brands browse hosts and reach out with live stream offers directly.",
+    title: "Live Stream Offers Daily",
+    description: "Here, brands contact you directly.",
+    visual: (
+      <div className="space-y-2 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2 rounded-lg bg-background border border-border px-3 py-2">
+          <div className="h-5 w-5 rounded-full bg-primary/20 shrink-0" />
+          <span className="truncate">GlowSkin sent you a message…</span>
+        </div>
+        <div className="flex items-center gap-2 rounded-lg bg-background border border-border px-3 py-2">
+          <div className="h-5 w-5 rounded-full bg-accent/20 shrink-0" />
+          <span className="truncate">FitGear sent you a message…</span>
+        </div>
+      </div>
+    ),
   },
   {
-    icon: DollarSign,
-    title: "Your Rates, Your Rules",
-    description:
-      "Set your own commission and flat-rate pricing. No caps, no platform cuts on your rates.",
+    title: "Your Work, Your Prices",
+    description: "No limits, no constraints.",
+    visual: (
+      <div className="flex flex-wrap gap-1.5 text-xs">
+        {["1 stream $200", "Full day $800", "Commission 15%", "Highlights $50", "Multi-platform $500", "Custom quote"].map((t) => (
+          <span key={t} className="rounded-full border border-border bg-background px-2.5 py-1 text-muted-foreground">{t}</span>
+        ))}
+      </div>
+    ),
   },
   {
-    icon: Shield,
     title: "Guaranteed Payments",
-    description:
-      "Get paid on time, every time. Payments are secured before you go live.",
+    description: "Get paid, without any doubt.",
+    visual: (
+      <div className="grid grid-cols-4 gap-1">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="h-4 rounded-sm bg-primary/10" style={{ opacity: 0.3 + (i % 4) * 0.2 }} />
+        ))}
+      </div>
+    ),
   },
   {
-    icon: FileText,
     title: "Automatic Invoicing",
-    description:
-      "We handle the paperwork — contracts, invoices, and tax docs generated for you.",
+    description: "We take care of the paperwork for you.",
+    visual: (
+      <div className="grid grid-cols-3 gap-1">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-4 rounded-sm bg-accent/10" style={{ opacity: 0.3 + (i % 3) * 0.2 }} />
+        ))}
+      </div>
+    ),
   },
   {
-    icon: Sparkles,
     title: "And Much More…",
-    description:
-      "Analytics, stream scheduling, brand matchmaking, and tools built for live sellers.",
+    description: "Analytics, scheduling, contracts…",
+    visual: (
+      <div className="grid grid-cols-3 gap-1">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-4 rounded-sm bg-muted" />
+        ))}
+      </div>
+    ),
   },
 ];
 
@@ -112,52 +156,50 @@ const faqs = [
   },
 ];
 
-/* ─── Sample host names for the community section ─── */
 const communityNames = [
-  "Mia C.",
-  "Jordan L.",
-  "Aisha P.",
-  "Tyler R.",
-  "Priya S.",
-  "Carlos M.",
+  "Mia C.", "Jordan L.", "Aisha P.", "Tyler R.", "Priya S.", "Carlos M.",
 ];
 
-/* ─── Brand logos placeholder ─── */
-const brandLogos = Array.from({ length: 10 }, (_, i) => `Brand ${i + 1}`);
+const brandNames = [
+  "L'Oréal", "Sephora", "Nike", "Adidas", "Samsung", "Amazon",
+  "Glossier", "Fenty", "Shein", "Zara", "H&M", "Unilever",
+  "Estée Lauder", "TikTok", "Meta",
+];
 
 const ForCreators = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* ═══════ HERO ═══════ */}
-      <section className="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28">
-        {/* Decorative blobs */}
-        <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-primary/15 blur-3xl" />
-        <div className="absolute top-20 -right-60 h-[600px] w-[600px] rounded-full bg-accent/15 blur-3xl" />
+      {/* ═══════ HERO + FEATURE CARDS (single section, seamless bg) ═══════ */}
+      <section className="relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24 hero-gradient">
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Text — left aligned like reference */}
+          <p className="text-sm font-medium text-muted-foreground">Become a Live Shopping Host</p>
 
-        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <Badge
-            variant="secondary"
-            className="mb-6 rounded-full border-0 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary"
-          >
-            Become a Live Host
-          </Badge>
-
-          <h1 className="text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            Other Platforms Undervalue Your Work,{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">We Don't.</span>
-              <span className="absolute inset-x-0 bottom-1 z-0 h-4 bg-primary/25 sm:h-5" />
-            </span>
+          <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl max-w-3xl">
+            Where Top Brands Find Their Live Shopping Hosts.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            Hostify helps you shine as a live shopping host — showcase your
-            streams, connect with brands, and earn money doing what you love.
+          <p className="mt-4 text-lg text-muted-foreground max-w-xl">
+            Your live hosting journey starts on Hostify.
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
+          {/* 6-card grid */}
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <div
+                key={f.title}
+                className="rounded-2xl bg-card/60 backdrop-blur-sm border border-border/30 p-5 transition-shadow hover:shadow-lg"
+              >
+                <div className="mb-4 min-h-[56px]">{f.visual}</div>
+                <h3 className="text-sm font-bold text-card-foreground">{f.title}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">{f.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex justify-center">
             <Button size="lg" asChild>
               <Link to="/register">
                 Join Hostify for Free <ArrowRight className="ml-1 h-4 w-4" />
@@ -167,10 +209,9 @@ const ForCreators = () => {
         </div>
       </section>
 
-      {/* ═══════ SOCIAL PROOF STAT (Money) ═══════ */}
-      <section className="relative overflow-hidden py-20 sm:py-28">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+      {/* ═══════ MONEY STAT ═══════ */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-6xl font-black tracking-tight text-primary sm:text-7xl lg:text-8xl">
             +$2,000,000
           </p>
@@ -178,7 +219,6 @@ const ForCreators = () => {
             paid out to our hosts
           </p>
 
-          {/* Avatar row */}
           <div className="mt-8 flex justify-center -space-x-3">
             {communityNames.map((name, i) => (
               <div
@@ -204,46 +244,22 @@ const ForCreators = () => {
         </div>
       </section>
 
-      {/* ═══════ FEATURE CARDS (Perks) ═══════ */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="group rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-shadow hover:shadow-lg"
-              >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <f.icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-base font-semibold text-card-foreground">
-                  {f.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {f.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══════ BRAND TRUST BAR ═══════ */}
-      <section className="border-y border-border/50 bg-background py-10">
+      <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
             Over 200+ brands and agencies work with our hosts.
           </p>
         </div>
         <div className="relative overflow-hidden">
-          <div className="flex animate-scroll-logos w-max gap-12 px-6">
-            {[...brandLogos, ...brandLogos].map((name, i) => (
-              <div
+          <div className="flex animate-scroll-logos w-max gap-16 px-6">
+            {[...brandNames, ...brandNames].map((name, i) => (
+              <span
                 key={i}
-                className="flex h-10 w-28 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground/50"
+                className="shrink-0 text-lg font-bold tracking-tight text-foreground/30 select-none"
               >
                 {name}
-              </div>
+              </span>
             ))}
           </div>
         </div>
@@ -265,15 +281,9 @@ const ForCreators = () => {
                 key={s.step}
                 className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm sm:p-8"
               >
-                <p className="text-sm font-mono font-semibold text-primary">
-                  {s.step}_
-                </p>
-                <h3 className="mt-2 text-xl font-bold text-card-foreground sm:text-2xl">
-                  {s.title}
-                </h3>
-                <p className="mt-3 leading-relaxed text-muted-foreground">
-                  {s.description}
-                </p>
+                <p className="text-sm font-mono font-semibold text-primary">{s.step}_</p>
+                <h3 className="mt-2 text-xl font-bold text-card-foreground sm:text-2xl">{s.title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
 
                 {s.step === 1 && (
                   <div className="mt-6 grid grid-cols-4 gap-2 rounded-xl overflow-hidden">
@@ -283,13 +293,7 @@ const ForCreators = () => {
                       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop",
                       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop",
                     ].map((src, i) => (
-                      <img
-                        key={i}
-                        src={src}
-                        alt="Portfolio example"
-                        className="aspect-square w-full object-cover"
-                        loading="lazy"
-                      />
+                      <img key={i} src={src} alt="Portfolio example" className="aspect-square w-full object-cover" loading="lazy" />
                     ))}
                   </div>
                 )}
@@ -342,9 +346,7 @@ const ForCreators = () => {
                   <div className="mt-6 flex flex-col items-center rounded-xl border border-border bg-background p-8 text-center">
                     <p className="text-lg font-bold text-card-foreground">Congratulations! 🎉</p>
                     <p className="mt-4 text-4xl font-black text-primary">+ $550</p>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      The brand approved your live stream
-                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">The brand approved your live stream</p>
                   </div>
                 )}
               </div>
@@ -359,16 +361,11 @@ const ForCreators = () => {
           <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Still Have Questions?
           </h2>
-
           <Accordion type="single" collapsible className="mt-10">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
-                <AccordionTrigger className="text-left text-base font-medium">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {faq.a}
-                </AccordionContent>
+                <AccordionTrigger className="text-left text-base font-medium">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -386,7 +383,6 @@ const ForCreators = () => {
             and resources. Hundreds of hosts have already joined Hostify and are
             thriving — now it's your turn!
           </p>
-
           <div className="mt-10 flex flex-col items-center gap-4">
             <Button size="lg" asChild>
               <Link to="/register">
@@ -394,10 +390,10 @@ const ForCreators = () => {
               </Link>
             </Button>
             <Link
-              to="/register"
+              to="/for-brands"
               className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              See all hosts <ChevronRight className="ml-1 h-3 w-3" />
+              Are you a brand? <ChevronRight className="ml-1 h-3 w-3" />
             </Link>
           </div>
         </div>
@@ -409,9 +405,7 @@ const ForCreators = () => {
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
               <p className="text-lg font-bold text-foreground">Hostify</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                support@hostify.live
-              </p>
+              <p className="mt-2 text-sm text-muted-foreground">support@hostify.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>

@@ -146,8 +146,12 @@ const faqs = [
   },
 ];
 
-/* ─── Brand logos placeholder ─── */
-const brandNames = Array.from({ length: 10 }, (_, i) => `Brand ${i + 1}`);
+/* ─── Brand names ─── */
+const brandNames = [
+  "L'Oréal", "Sephora", "Nike", "Adidas", "Samsung", "Amazon",
+  "Glossier", "Fenty", "Shein", "Zara", "H&M", "Unilever",
+  "Estée Lauder", "TikTok", "Meta",
+];
 
 const Index = () => {
   const [currentWord, setCurrentWord] = useState(0);
@@ -262,14 +266,14 @@ const Index = () => {
           </p>
         </div>
         <div className="relative overflow-hidden">
-          <div className="flex animate-scroll-logos w-max gap-12 px-6">
+          <div className="flex animate-scroll-logos w-max gap-16 px-6">
             {[...brandNames, ...brandNames].map((name, i) => (
-              <div
+              <span
                 key={i}
-                className="flex h-10 w-28 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground/50"
+                className="shrink-0 text-lg font-bold tracking-tight text-foreground/30 select-none"
               >
                 {name}
-              </div>
+              </span>
             ))}
           </div>
         </div>
