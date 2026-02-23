@@ -78,4 +78,8 @@
   .animate-scroll-logos {
     animation: scroll-logos 30s linear infinite;
   }
+
+  .animate-scroll-logos.paused {
+    animation-play-state: paused;
+  }
 }

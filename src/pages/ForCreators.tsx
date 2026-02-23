@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,10 @@ const creatorVideos = [
   "/videos/creator-3.mp4",
   "/videos/creator-4.mp4",
   "/videos/creator-5.mp4",
+  "/videos/creator-6.mp4",
+  "/videos/creator-7.mp4",
+  "/videos/creator-8.mp4",
+  "/videos/creator-9.mp4",
 ];
 
 /* ─── How it works steps ─── */
@@ -100,6 +105,8 @@ const brandNames = [
 ];
 
 const ForCreators = () => {
+  const [carouselPaused, setCarouselPaused] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
@@ -127,6 +134,19 @@ const ForCreators = () => {
           <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
             Get paid to share your passion online.
           </p>
+
+          {/* CTA - before perks */}
+          <div className="mt-10 flex justify-center">
+            <Button
+              size="lg"
+              className="rounded-full px-8 text-base font-bold"
+              asChild
+            >
+              <Link to="/waitlist">
+                Join Now — It's Free <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -144,40 +164,28 @@ const ForCreators = () => {
               </div>
             ))}
           </div>
-
-          <div className="mt-10 flex justify-center">
-            <Button
-              size="lg"
-              className="rounded-full px-8 text-base font-bold"
-              asChild
-            >
-              <Link to="/waitlist">
-                Join Now — It's Free <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
 
       {/* ═══════ VIDEO CAROUSEL ═══════ */}
       <section className="py-10 sm:py-16 overflow-hidden">
         <div className="relative">
-          <div className="flex animate-scroll-logos gap-4 px-4 w-max">
+          <div className={`flex animate-scroll-logos gap-4 px-4 w-max ${carouselPaused ? "paused" : ""}`}>
             {[...creatorVideos, ...creatorVideos, ...creatorVideos].map((src, i) => (
-              <VideoCard key={i} src={src} />
+              <VideoCard key={i} src={src} onHover={(h) => setCarouselPaused(h)} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════ MONEY STAT ═══════ */}
+      {/* ═══════ LIVE SHOPPING MARKET STAT ═══════ */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-6xl font-black tracking-tight text-primary sm:text-7xl lg:text-8xl">
-            +$2,000,000
+            $600B+
           </p>
           <p className="mt-2 text-sm font-semibold uppercase tracking-widest text-primary/70">
-            paid out to our hosts
+            global live shopping market by 2027
           </p>
 
           <div className="mt-8 flex justify-center -space-x-3">
@@ -193,8 +201,9 @@ const ForCreators = () => {
           </div>
 
           <p className="mx-auto mt-6 max-w-lg text-base text-muted-foreground">
-            Real partnerships. Real payouts. gmv.live is where live hosts get the
-            recognition, and revenue, they deserve.
+            Live shopping is exploding worldwide. Thousands of creators are
+            already earning full-time income hosting live streams — and the
+            opportunity is just getting started.
           </p>
 
           <Button
@@ -203,7 +212,7 @@ const ForCreators = () => {
             asChild
           >
             <Link to="/waitlist">
-              Join gmv.live Now <ArrowRight className="ml-1 h-4 w-4" />
+              Join the Revolution <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
         </div>
@@ -213,7 +222,7 @@ const ForCreators = () => {
       <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
-            Over 200+ brands and agencies work with our hosts.
+            200+ brands have already joined the live shopping revolution.
           </p>
         </div>
         <div className="relative overflow-hidden">
