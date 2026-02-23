@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import VideoCard from "@/components/VideoCard";
+import { useVideoPreloader } from "@/hooks/useVideoPreloader";
 import {
   Sparkles,
   ArrowRight,
@@ -29,17 +30,18 @@ const perks = [
   { icon: FileText, title: "Contract Processing" },
 ];
 
-/* ─── Real video content ─── */
+/* ─── Real video content with static thumbnails ─── */
 const creatorVideos = [
-  "/videos/creator-1.mp4",
-  "/videos/creator-2.mp4",
-  "/videos/creator-3.mp4",
-  "/videos/creator-4.mp4",
-  "/videos/creator-5.mp4",
-  "/videos/creator-6.mp4",
-  "/videos/creator-7.mp4",
-  "/videos/creator-8.mp4",
-  "/videos/creator-9.mp4",
+  { src: "/videos/creator-1.mp4", poster: "/images/thumbs/creator-1.png" },
+  { src: "/videos/creator-2.mp4", poster: "/images/thumbs/creator-2.png" },
+  { src: "/videos/creator-3.mp4", poster: "/images/thumbs/creator-3.png" },
+  { src: "/videos/creator-4.mp4", poster: "/images/thumbs/creator-4.png" },
+  { src: "/videos/creator-5.mp4", poster: "/images/thumbs/creator-5.png" },
+  { src: "/videos/creator-6.mp4", poster: "/images/thumbs/creator-6.png" },
+  { src: "/videos/creator-7.mp4", poster: "/images/thumbs/creator-7.png" },
+  { src: "/videos/creator-8.mp4" },
+  { src: "/videos/creator-9.mp4" },
+  { src: "/videos/creator-10.mp4", poster: "/images/thumbs/creator-10.png" },
 ];
 
 /* ─── How it works steps ─── */
@@ -106,6 +108,7 @@ const brandNames = [
 
 const ForCreators = () => {
   const [carouselPaused, setCarouselPaused] = useState(false);
+  const preloadSet = useVideoPreloader(creatorVideos);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -171,8 +174,14 @@ const ForCreators = () => {
       <section className="py-10 sm:py-16 overflow-hidden">
         <div className="relative">
           <div className={`flex animate-scroll-logos gap-4 px-4 w-max ${carouselPaused ? "paused" : ""}`}>
-            {[...creatorVideos, ...creatorVideos, ...creatorVideos].map((src, i) => (
-              <VideoCard key={i} src={src} onHover={(h) => setCarouselPaused(h)} />
+            {[...creatorVideos, ...creatorVideos, ...creatorVideos].map((v, i) => (
+              <VideoCard
+                key={i}
+                src={v.src}
+                poster={v.poster}
+                shouldPreload={preloadSet.has(v.src)}
+                onHover={(h) => setCarouselPaused(h)}
+              />
             ))}
           </div>
         </div>
