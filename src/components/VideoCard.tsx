@@ -1,42 +1,58 @@
-import { useRef, useState } from "react";
-import { Play, Pause } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface VideoCardProps {
   src: string;
   poster?: string;
+  onHover?: (hovering: boolean) => void;
 }
 
-const VideoCard = ({ src, poster }: VideoCardProps) => {
+const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [userPaused, setUserPaused] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasThumbnail, setHasThumbnail] = useState(true);
 
   const handleMouseEnter = () => {
-    if (!userPaused && videoRef.current) {
+    onHover?.(true);
+    if (videoRef.current) {
       videoRef.current.play().catch(() => {});
       setIsPlaying(true);
+      setHasThumbnail(false);
     }
   };
 
   const handleMouseLeave = () => {
-    if (videoRef.current && !userPaused) {
+    onHover?.(false);
+    if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
       setIsPlaying(false);
+      setIsMuted(true);
+      videoRef.current.muted = true;
+      setHasThumbnail(true);
     }
   };
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!videoRef.current) return;
     if (isPlaying) {
       videoRef.current.pause();
       setIsPlaying(false);
-      setUserPaused(true);
     } else {
       videoRef.current.play().catch(() => {});
       setIsPlaying(true);
-      setUserPaused(false);
+      setHasThumbnail(false);
     }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    const newMuted = !isMuted;
+    videoRef.current.muted = newMuted;
+    setIsMuted(newMuted);
   };
 
   return (
@@ -68,6 +84,19 @@ const VideoCard = ({ src, poster }: VideoCardProps) => {
           )}
         </div>
       </div>
+      {/* Volume toggle - shown when playing */}
+      {isPlaying && (
+        <button
+          onClick={toggleMute}
+          className="absolute bottom-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-background/60 text-foreground backdrop-blur-sm transition-opacity hover:bg-background/80"
+        >
+          {isMuted ? (
+            <VolumeX className="h-3.5 w-3.5" />
+          ) : (
+            <Volume2 className="h-3.5 w-3.5" />
+          )}
+        </button>
+      )}
       {/* Bottom gradient */}
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background/70 to-transparent" />
     </div>
