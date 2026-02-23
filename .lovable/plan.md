@@ -1,132 +1,96 @@
 
 
-# Hostify Marketplace Architecture
+## Video Carousel: Instant Thumbnails + Smart Background Loading
 
-## Overview
+### What Changes
 
-Two user types — **Creators** and **Brands** — each pick their role at signup. Creators browse product listings posted by brands; brands browse creator profiles. Either side can initiate a conversation.
+**1. Save static thumbnail images to `public/images/thumbs/`**
 
-## Database Schema
+Copy each uploaded PNG as a static thumbnail file. Also copy the new video file (`ssstik.io_@shophousemedia_1771884916326.mp4`) as `creator-10.mp4`. Mapping:
 
-### Tables
+| Thumbnail | Video |
+|---|---|
+| ssstik.io_@shophousemedia_1771884405012.png | creator-1 |
+| ssstik.io_@shophousemedia_1771884386813.png | creator-2 |
+| ssstik.io_@garyvee_1771884277237.png | creator-3 |
+| ssstik.io_@garyvee_1771884249395.png | creator-4 |
+| ssstik.io_@shophousemedia_1771884235985.png | creator-5 |
+| ssstik.io_@coralily.kin_1771884846822.png | creator-6 |
+| ssstik.io_@garyvee_1771884831410.png | creator-7 |
+| Screenshot_2026-02-23_at_2.49.36 PM.png | creator-8 |
+| Screenshot_2026-02-23_at_2.50.36 PM.png | creator-9 |
+| ssstik.io_@shophousemedia_1771884916326.png | creator-10 |
 
-**profiles** — core user info (auto-created on signup)
-- id (FK to auth.users), role (creator/brand), display_name, avatar_url, bio, created_at
+**2. Add the new video**
 
-**user_roles** — security role table (for RLS, separate from profiles)
-- id, user_id (FK to auth.users), role (app_role enum: creator, brand)
+Copy the uploaded `.mp4` file to `public/videos/creator-10.mp4` and add it to the carousel.
 
-**creator_profiles** — extended creator data
-- id, user_id (FK), niches (text array), platforms (text array: tiktok, instagram, amazon), follower_count, avg_gmv, rating, portfolio_urls (text array), past_collabs (text array), location, created_at
+**3. Update ForCreators.tsx**
 
-**brand_profiles** — extended brand data
-- id, user_id (FK), company_name, website, industry, logo_url, created_at
-
-**products** — brand product listings
-- id, brand_id (FK to profiles), title, description, images (text array), category, budget_min, budget_max, target_platforms (text array), preferred_date, commission_info, status (active/paused/closed), created_at
-
-**conversations** — chat threads between a brand and a creator
-- id, brand_user_id (FK), creator_user_id (FK), product_id (FK, nullable — the product that started the convo), created_at, last_message_at
-
-**messages** — individual messages within a conversation
-- id, conversation_id (FK), sender_id (FK to auth.users), content (text), created_at, read_at
-
-### Key Relationships
+Change `creatorVideos` from a string array to an array of objects with `src` and `poster`:
 
 ```text
-auth.users
-  +-- profiles (1:1)
-  +-- user_roles (1:1)
-  +-- creator_profiles (1:1, if role = creator)
-  +-- brand_profiles (1:1, if role = brand)
-  +-- products (1:many, brands only)
-  +-- conversations (as brand or creator)
-       +-- messages (1:many)
+const creatorVideos = [
+  { src: "/videos/creator-1.mp4", poster: "/images/thumbs/creator-1.png" },
+  { src: "/videos/creator-2.mp4", poster: "/images/thumbs/creator-2.png" },
+  ...
+  { src: "/videos/creator-10.mp4", poster: "/images/thumbs/creator-10.png" },
+];
 ```
 
-### Row-Level Security Strategy
+Pass both `src` and `poster` to each `VideoCard`.
 
-- **profiles**: Users can read all profiles, update only their own
-- **creator_profiles**: Readable by all authenticated users (brands need to browse), writable only by the owning creator
-- **brand_profiles**: Same pattern — readable by all, writable by owner
-- **products**: Readable by all authenticated users, writable only by the brand that created them
-- **conversations**: Readable/writable only by the two participants
-- **messages**: Readable only by conversation participants, insertable only by participants
-- Role checks use a `has_role()` security definer function to avoid infinite recursion
+**4. Redesign VideoCard.tsx loading strategy**
 
-## Application Flow
+The core idea: thumbnails are always visible instantly (static images), videos load silently in the background, and playback begins on hover only when ready.
 
-### Registration
-1. User signs up with email/password
-2. Picks role: "I'm a Creator" or "I'm a Brand"
-3. Redirected to onboarding form:
-   - **Creator**: Add bio, niches, platforms, stats, portfolio images/videos
-   - **Brand**: Add company name, industry, website, logo
-4. Profile saved, lands on their dashboard/feed
+- **Instant thumbnail**: Use the `poster` image as a CSS `background-image` on the container div. This loads as a regular image -- fast and reliable. The video element is hidden until ready.
+- **Smart background preloading**: A new `useVideoPreloader` hook in ForCreators manages a global loading queue:
+  - On page mount, start preloading videos sequentially (not all at once to avoid network congestion)
+  - Priority order: middle videos first (indices 3-5, where users are most likely to hover), then outward
+  - Each video loads the first 10 seconds initially (using `MediaSource` API range requests where supported, or just letting the browser buffer naturally with `preload="auto"`)
+  - After the first pass of 10s chunks, go back and finish loading the rest
+- **Progress overlay on hover**: When a user hovers a card that isn't fully buffered yet:
+  - The static thumbnail stays visible (no black screen ever)
+  - A semi-transparent overlay shows a progress bar with percentage
+  - Once `canplaythrough` fires, the overlay fades and video plays with sound
+- **If video is already buffered on hover**: Plays immediately with sound, no overlay
 
-### Creator Experience
-1. **Feed**: Scrollable list of active product listings from brands
-   - Filter by category, platform, budget range
-   - Search by keyword
-2. **Product detail**: View full product info + brand profile
-3. **Message**: Click "I'm interested" to start a conversation with the brand about that product
+### Technical Details
 
-### Brand Experience
-1. **Post Products**: Add product listings with images, budget, platforms, dates
-2. **Feed**: Scrollable list of creator profiles
-   - Filter by niche, platform, rating, GMV range
-   - Search by name or keyword
-3. **Creator detail**: View full creator profile + portfolio
-4. **Message**: Click "Message" to start a conversation with a creator
+**VideoCard.tsx rewrite:**
 
-### Messaging
-1. Basic text messaging (no real-time — poll or refresh to see new messages)
-2. Conversation list page showing all threads sorted by last message
-3. Unread message indicator (count of messages where read_at is null)
+```text
+Component structure:
+- Container div with background-image set to poster (instant visibility)
+- Hidden video element (opacity-0 until playing)
+- Loading overlay (shown only during hover + buffering)
+- Play/pause overlay
+- Volume toggle
+- Bottom gradient
 
-## Pages to Build
+States:
+- isReady: video has enough data to play
+- isPlaying: currently playing
+- isMuted: sound muted
+- loadProgress: 0-100 buffer percentage
+- isHovering: mouse is over the card
 
-| Page | Route | Who |
-|------|-------|-----|
-| Login | /login | All |
-| Register | /register | All |
-| Onboarding | /onboarding | New users |
-| Creator Feed (products) | /feed | Creators |
-| Brand Feed (creators) | /feed | Brands |
-| Product Detail | /products/:id | Creators |
-| Creator Detail | /creators/:id | Brands |
-| My Products | /my-products | Brands |
-| Add/Edit Product | /products/new | Brands |
-| Conversations List | /messages | All |
-| Conversation Thread | /messages/:id | All |
-| My Profile / Settings | /profile | All |
+Behavior:
+- Mount: video has preload="none" (preloader handles loading separately)
+- Hover enter: if ready -> play immediately with sound; if not -> show progress overlay
+- Hover leave: pause, reset, show poster
+- Click: toggle play/pause
+```
 
-## Technical Details
+**Preloading strategy (in ForCreators.tsx):**
 
-### Infrastructure
-- **Lovable Cloud** for backend (Supabase-managed database, auth, edge functions, storage)
-- **Supabase Auth** for email/password authentication
-- **Supabase Storage** for profile photos, product images, and portfolio media
-- **Edge functions** for any server-side logic (e.g., unread count, search indexing)
+Rather than using a complex MediaSource approach (browser support varies), use a simpler but effective strategy:
 
-### Storage Buckets
-- `avatars` — profile photos (public)
-- `product-images` — brand product photos (public)
-- `portfolio` — creator highlight reels and media (public)
+1. Create hidden `<video>` elements or use `fetch` with `Range` headers for the priority videos
+2. Actually, the simplest effective approach: set `preload="auto"` on the real video elements but control the loading order via a staggered approach -- render videos with `preload="none"` initially, then a `useEffect` sets them to `preload="auto"` in priority order with small delays (200ms apart)
+3. Priority: center videos first (indices ~4-6 in the visible area), then expand outward
+4. Since the carousel triples the array (27 elements), only preload the unique 10 videos, not all 30 instances
 
-### Frontend Patterns
-- Protected routes using an auth context wrapper
-- Role-based route guards (creators can't access brand pages and vice versa)
-- TanStack Query for data fetching with pagination
-- Existing shadcn/ui components for forms, cards, dialogs
-
-### Implementation Order
-1. Set up Lovable Cloud + database schema + RLS policies
-2. Auth (login, register, role selection)
-3. Onboarding flows (creator profile, brand profile)
-4. Brand: product creation + management
-5. Creator feed (browse products) with filters
-6. Brand feed (browse creators) with filters
-7. Messaging (conversations + messages)
-8. Polish (unread counts, empty states, mobile responsiveness)
+This gives instant thumbnails from static PNGs, progressive background loading prioritized for the most likely hover targets, and a smooth transition from thumbnail to video playback.
 
