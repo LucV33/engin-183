@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface VideoCardProps {
@@ -7,85 +7,56 @@ interface VideoCardProps {
   onHover?: (hovering: boolean) => void;
 }
 
-// Global thumbnail cache & queue
-const thumbCache = new Map<string, string>();
-const thumbQueue: Array<{ src: string; resolve: (url: string) => void }> = [];
-let isProcessing = false;
-
-function processQueue() {
-  if (isProcessing || thumbQueue.length === 0) return;
-  isProcessing = true;
-  const { src, resolve } = thumbQueue.shift()!;
-
-  const offscreen = document.createElement("video");
-  offscreen.crossOrigin = "anonymous";
-  offscreen.muted = true;
-  offscreen.playsInline = true;
-  offscreen.preload = "auto";
-  offscreen.src = src;
-
-  const cleanup = () => {
-    offscreen.removeAttribute("src");
-    offscreen.load();
-    offscreen.remove();
-    isProcessing = false;
-    processQueue(); // next in queue
-  };
-
-  const handleSeeked = () => {
-    try {
-      const canvas = document.createElement("canvas");
-      canvas.width = offscreen.videoWidth || 320;
-      canvas.height = offscreen.videoHeight || 568;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
-        thumbCache.set(src, dataUrl);
-        resolve(dataUrl);
-      } else {
-        resolve("");
-      }
-    } catch {
-      resolve("");
-    }
-    cleanup();
-  };
-
-  offscreen.addEventListener("seeked", handleSeeked, { once: true });
-  offscreen.addEventListener("loadeddata", () => {
-    offscreen.currentTime = 0.5;
-  }, { once: true });
-
-  // Timeout fallback
-  setTimeout(() => {
-    resolve(thumbCache.get(src) || "");
-    cleanup();
-  }, 8000);
-}
-
-function generateThumbnail(videoSrc: string): Promise<string> {
-  if (thumbCache.has(videoSrc)) return Promise.resolve(thumbCache.get(videoSrc)!);
-  return new Promise((resolve) => {
-    thumbQueue.push({ src: videoSrc, resolve });
-    processQueue();
-  });
-}
-
 const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [thumbUrl, setThumbUrl] = useState<string>(thumbCache.get(src) || "");
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
+  // Track buffering progress & seek to thumbnail frame
   useEffect(() => {
-    if (thumbUrl) return;
-    let cancelled = false;
-    generateThumbnail(src).then((url) => {
-      if (!cancelled && url) setThumbUrl(url);
-    });
-    return () => { cancelled = true; };
-  }, [src, thumbUrl]);
+    const video = videoRef.current;
+    if (!video) return;
+
+    const onProgress = () => {
+      if (video.buffered.length > 0 && video.duration > 0) {
+        const buffered = video.buffered.end(video.buffered.length - 1);
+        setLoadProgress(Math.min((buffered / video.duration) * 100, 100));
+      }
+    };
+
+    const onCanPlay = () => {
+      setIsReady(true);
+      setLoadProgress(100);
+    };
+
+    const onLoadedData = () => {
+      // Seek to 0.5s to get a visible thumbnail
+      if (video.currentTime === 0) {
+        video.currentTime = 0.5;
+      }
+    };
+
+    video.addEventListener("progress", onProgress);
+    video.addEventListener("canplaythrough", onCanPlay);
+    video.addEventListener("loadeddata", onLoadedData);
+
+    // If already ready (cached)
+    if (video.readyState >= 3) {
+      setIsReady(true);
+      setLoadProgress(100);
+    }
+    if (video.readyState >= 2 && video.currentTime === 0) {
+      video.currentTime = 0.5;
+    }
+
+    return () => {
+      video.removeEventListener("progress", onProgress);
+      video.removeEventListener("canplaythrough", onCanPlay);
+      video.removeEventListener("loadeddata", onLoadedData);
+    };
+  }, [src]);
 
   const handleMouseEnter = () => {
     onHover?.(true);
@@ -100,7 +71,7 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
     onHover?.(false);
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = 0;
+      videoRef.current.currentTime = 0.5;
       setIsPlaying(false);
       setIsMuted(false);
       videoRef.current.muted = false;
@@ -134,27 +105,37 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
     >
-      {/* Poster image — shown instantly while video is not playing */}
-      {thumbUrl && !isPlaying && (
-        <img
-          src={thumbUrl}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover z-[1]"
-        />
-      )}
-      {/* Skeleton placeholder while thumbnail is loading */}
-      {!thumbUrl && !isPlaying && (
-        <div className="absolute inset-0 z-[1] bg-muted animate-pulse" />
-      )}
       <video
         ref={videoRef}
-        src={src}
+        src={src + "#t=0.5"}
         poster={poster}
         className="aspect-[9/16] w-full object-cover"
+        muted
         playsInline
         loop
-        preload="none"
+        preload="auto"
       />
+
+      {/* Loading overlay with progress — shown until video frame is visible */}
+      {!isReady && (
+        <div className="absolute inset-0 z-[1] flex flex-col items-center justify-center bg-muted">
+          {/* Pulsing icon */}
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 animate-pulse">
+            <Play className="h-4 w-4 text-primary ml-0.5" fill="currentColor" />
+          </div>
+          {/* Progress bar */}
+          <div className="w-3/4 h-1 rounded-full bg-border overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-300 ease-out"
+              style={{ width: `${loadProgress}%` }}
+            />
+          </div>
+          <span className="mt-1.5 text-[10px] text-muted-foreground font-medium">
+            {Math.round(loadProgress)}%
+          </span>
+        </div>
+      )}
+
       {/* Play/Pause overlay */}
       <div className={`absolute inset-0 z-[2] flex items-center justify-center transition-opacity ${
         isPlaying ? "opacity-0 hover:opacity-100" : "opacity-100"
@@ -167,6 +148,7 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
           )}
         </div>
       </div>
+
       {/* Volume toggle - shown when playing */}
       {isPlaying && (
         <button
@@ -180,6 +162,7 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
           )}
         </button>
       )}
+
       {/* Bottom gradient */}
       <div className="absolute inset-x-0 bottom-0 h-20 z-[3] bg-gradient-to-t from-background/70 to-transparent" />
     </div>
