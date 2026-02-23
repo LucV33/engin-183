@@ -20,7 +20,7 @@ const ProductDetail = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*, profiles!products_brand_id_fkey(display_name, avatar_url)")
+        .select("*, profiles!products_brand_profile_fkey(display_name, avatar_url)")
         .eq("id", id!)
         .single();
       if (error) throw error;

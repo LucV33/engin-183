@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Code, Video, ShoppingBag } from "lucide-react";
 
 const DEMO_ACCOUNTS = {
-  creator: { email: "sarah@demo.com", password: "demo1234", label: "Creator (Sarah Chen)" },
+  creator: { email: "creator1@demo.com", password: "demo1234", label: "Creator (Sarah Chen)" },
   brand: { email: "brand1@demo.com", password: "demo1234", label: "Brand (GlowUp Beauty)" },
 };
 

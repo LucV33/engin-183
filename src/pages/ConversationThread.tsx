@@ -24,8 +24,8 @@ const ConversationThread = () => {
         .from("conversations")
         .select(`
           *,
-          brand_profile:profiles!conversations_brand_user_id_fkey(display_name),
-          creator_profile:profiles!conversations_creator_user_id_fkey(display_name),
+          brand_profile:profiles!conversations_brand_profile_fkey(display_name),
+          creator_profile:profiles!conversations_creator_profile_fkey(display_name),
           product:products(title)
         `)
         .eq("id", id!)
