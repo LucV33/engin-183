@@ -14,16 +14,257 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      brand_profiles: {
+        Row: {
+          company_name: string
+          created_at: string
+          id: string
+          industry: string | null
+          logo_url: string | null
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          company_name?: string
+          created_at?: string
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          brand_user_id: string
+          created_at: string
+          creator_user_id: string
+          id: string
+          last_message_at: string | null
+          product_id: string | null
+        }
+        Insert: {
+          brand_user_id: string
+          created_at?: string
+          creator_user_id: string
+          id?: string
+          last_message_at?: string | null
+          product_id?: string | null
+        }
+        Update: {
+          brand_user_id?: string
+          created_at?: string
+          creator_user_id?: string
+          id?: string
+          last_message_at?: string | null
+          product_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_profiles: {
+        Row: {
+          avg_gmv: number | null
+          created_at: string
+          follower_count: number | null
+          id: string
+          location: string | null
+          niches: string[] | null
+          past_collabs: string[] | null
+          platforms: string[] | null
+          portfolio_urls: string[] | null
+          rating: number | null
+          user_id: string
+        }
+        Insert: {
+          avg_gmv?: number | null
+          created_at?: string
+          follower_count?: number | null
+          id?: string
+          location?: string | null
+          niches?: string[] | null
+          past_collabs?: string[] | null
+          platforms?: string[] | null
+          portfolio_urls?: string[] | null
+          rating?: number | null
+          user_id: string
+        }
+        Update: {
+          avg_gmv?: number | null
+          created_at?: string
+          follower_count?: number | null
+          id?: string
+          location?: string | null
+          niches?: string[] | null
+          past_collabs?: string[] | null
+          platforms?: string[] | null
+          portfolio_urls?: string[] | null
+          rating?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          brand_id: string
+          budget_max: number | null
+          budget_min: number | null
+          category: string | null
+          commission_info: string | null
+          created_at: string
+          description: string | null
+          id: string
+          images: string[] | null
+          preferred_date: string | null
+          status: Database["public"]["Enums"]["product_status"]
+          target_platforms: string[] | null
+          title: string
+        }
+        Insert: {
+          brand_id: string
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string | null
+          commission_info?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          preferred_date?: string | null
+          status?: Database["public"]["Enums"]["product_status"]
+          target_platforms?: string[] | null
+          title: string
+        }
+        Update: {
+          brand_id?: string
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string | null
+          commission_info?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          preferred_date?: string | null
+          status?: Database["public"]["Enums"]["product_status"]
+          target_platforms?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "creator" | "brand"
+      product_status: "active" | "paused" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +391,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["creator", "brand"],
+      product_status: ["active", "paused", "closed"],
+    },
   },
 } as const

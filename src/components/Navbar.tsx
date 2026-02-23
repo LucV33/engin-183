@@ -37,10 +37,10 @@ const Navbar = () => {
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 md:flex">
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/coming-soon">Log in</Link>
+            <Link to="/login">Log in</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link to="/coming-soon">Register</Link>
+            <Link to="/register">Register</Link>
           </Button>
         </div>
 
@@ -69,10 +69,10 @@ const Navbar = () => {
           ))}
           <div className="mt-3 flex flex-col gap-2">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/coming-soon" onClick={() => setMobileOpen(false)}>Log in</Link>
+              <Link to="/login" onClick={() => setMobileOpen(false)}>Log in</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link to="/coming-soon" onClick={() => setMobileOpen(false)}>Register</Link>
+              <Link to="/register" onClick={() => setMobileOpen(false)}>Register</Link>
             </Button>
           </div>
         </div>
