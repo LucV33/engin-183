@@ -9,6 +9,8 @@ const videos = [
   { src: "/videos/video-03.mp4", poster: "/images/thumbs/video-03.png" },
   { src: "/videos/video-04.mp4", poster: "/images/thumbs/video-04.png" },
   { src: "/videos/video-05.mp4", poster: "/images/thumbs/video-05.png" },
+  { src: "/videos/video-06.mp4", poster: "/images/thumbs/video-06.png" },
+  { src: "/videos/video-07.mp4", poster: "/images/thumbs/video-07.png" },
 ];
 
 function useVisibleCount() {
