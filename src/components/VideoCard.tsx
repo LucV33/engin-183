@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface VideoCardProps {
@@ -10,15 +10,14 @@ interface VideoCardProps {
 const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [hasThumbnail, setHasThumbnail] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
 
   const handleMouseEnter = () => {
     onHover?.(true);
     if (videoRef.current) {
+      videoRef.current.muted = false;
       videoRef.current.play().catch(() => {});
       setIsPlaying(true);
-      setHasThumbnail(false);
     }
   };
 
@@ -28,9 +27,8 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
       setIsPlaying(false);
-      setIsMuted(true);
-      videoRef.current.muted = true;
-      setHasThumbnail(true);
+      setIsMuted(false);
+      videoRef.current.muted = false;
     }
   };
 
@@ -43,7 +41,6 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
     } else {
       videoRef.current.play().catch(() => {});
       setIsPlaying(true);
-      setHasThumbnail(false);
     }
   };
 
@@ -64,13 +61,12 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
     >
       <video
         ref={videoRef}
-        src={src}
+        src={src + "#t=0.5"}
         poster={poster}
         className="aspect-[9/16] w-full object-cover"
-        muted
         playsInline
         loop
-        preload="metadata"
+        preload="auto"
       />
       {/* Play/Pause overlay */}
       <div className={`absolute inset-0 flex items-center justify-center transition-opacity ${
