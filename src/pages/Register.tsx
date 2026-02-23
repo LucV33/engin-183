@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CheckCircle, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ const Register = () => {
   const [displayName, setDisplayName] = useState("");
   const [role, setRole] = useState<AppRole | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -29,14 +31,34 @@ const Register = () => {
     setSubmitting(true);
     try {
       await signUp(email, password, role, displayName);
-      toast({ title: "Check your email", description: "We sent you a confirmation link." });
-      navigate("/login");
+      setRegistered(true);
     } catch (err: any) {
       toast({ title: "Signup failed", description: err.message, variant: "destructive" });
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (registered) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="flex flex-col items-center gap-4 pt-8 pb-6 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+              <Mail className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-xl font-semibold text-foreground">Check your email</h2>
+            <p className="text-muted-foreground">
+              We sent a verification link to <strong>{email}</strong>. Click the link to activate your account, then come back and log in.
+            </p>
+            <Button variant="outline" asChild className="mt-2">
+              <Link to="/login">Go to Login</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
