@@ -122,6 +122,9 @@ const communityNames = [
   "Carlos M.",
 ];
 
+/* ─── Brand logos placeholder ─── */
+const brandLogos = Array.from({ length: 10 }, (_, i) => `Brand ${i + 1}`);
+
 const ForCreators = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -164,31 +167,7 @@ const ForCreators = () => {
         </div>
       </section>
 
-      {/* ═══════ FEATURE CARDS ═══════ */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="group rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-shadow hover:shadow-lg"
-              >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <f.icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-base font-semibold text-card-foreground">
-                  {f.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {f.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════ SOCIAL PROOF STAT ═══════ */}
+      {/* ═══════ SOCIAL PROOF STAT (Money) ═══════ */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
@@ -225,6 +204,51 @@ const ForCreators = () => {
         </div>
       </section>
 
+      {/* ═══════ FEATURE CARDS (Perks) ═══════ */}
+      <section className="py-16 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <div
+                key={f.title}
+                className="group rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-shadow hover:shadow-lg"
+              >
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <f.icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-base font-semibold text-card-foreground">
+                  {f.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {f.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ BRAND TRUST BAR ═══════ */}
+      <section className="border-y border-border/50 bg-background py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
+            Over 200+ brands and agencies work with our hosts.
+          </p>
+        </div>
+        <div className="relative overflow-hidden">
+          <div className="flex animate-scroll-logos w-max gap-12 px-6">
+            {[...brandLogos, ...brandLogos].map((name, i) => (
+              <div
+                key={i}
+                className="flex h-10 w-28 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground/50"
+              >
+                {name}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════ HOW IT WORKS ═══════ */}
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -251,7 +275,6 @@ const ForCreators = () => {
                   {s.description}
                 </p>
 
-                {/* Visual mockups per step */}
                 {s.step === 1 && (
                   <div className="mt-6 grid grid-cols-4 gap-2 rounded-xl overflow-hidden">
                     {[
@@ -288,7 +311,7 @@ const ForCreators = () => {
                 )}
 
                 {s.step === 3 && (
-  <div className="mt-6 space-y-3">
+                  <div className="mt-6 space-y-3">
                     <div className="rounded-xl bg-primary/10 border border-primary/20 p-4">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-card-foreground">Your Payment</span>
