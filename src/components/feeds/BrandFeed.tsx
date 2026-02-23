@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 
@@ -61,9 +62,15 @@ const BrandFeed = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {creators?.map((creator: any) => (
             <Card key={creator.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="text-lg">{creator.profiles?.display_name || "Creator"}</CardTitle>
-                <p className="text-sm text-muted-foreground">{creator.location}</p>
+              <CardHeader className="flex flex-row items-center gap-3">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={creator.profiles?.avatar_url} />
+                  <AvatarFallback>{(creator.profiles?.display_name || "C").slice(0, 2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <CardTitle className="text-lg">{creator.profiles?.display_name || "Creator"}</CardTitle>
+                  <p className="text-sm text-muted-foreground">{creator.location}</p>
+                </div>
               </CardHeader>
               <CardContent className="flex flex-1 flex-col justify-between gap-4">
                 <p className="line-clamp-2 text-sm text-muted-foreground">{creator.profiles?.bio}</p>
