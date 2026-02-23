@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface VideoCardProps {
@@ -11,6 +11,19 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+
+  // Seek to 0.5s on metadata load to force a visible thumbnail frame
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const seekToThumb = () => {
+      if (video.currentTime === 0) video.currentTime = 0.5;
+    };
+    video.addEventListener("loadeddata", seekToThumb);
+    // If already loaded (cached), seek immediately
+    if (video.readyState >= 2) seekToThumb();
+    return () => video.removeEventListener("loadeddata", seekToThumb);
+  }, [src]);
 
   const handleMouseEnter = () => {
     onHover?.(true);
@@ -61,12 +74,12 @@ const VideoCard = ({ src, poster, onHover }: VideoCardProps) => {
     >
       <video
         ref={videoRef}
-        src={src + "#t=0.5"}
+        src={src}
         poster={poster}
         className="aspect-[9/16] w-full object-cover"
         playsInline
         loop
-        preload="auto"
+        preload="metadata"
       />
       {/* Play/Pause overlay */}
       <div className={`absolute inset-0 flex items-center justify-center transition-opacity ${
