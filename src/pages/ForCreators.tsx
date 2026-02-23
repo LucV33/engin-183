@@ -168,11 +168,11 @@ const brandNames = [
 
 const ForCreators = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Navbar />
 
-      {/* ═══════ HERO + FEATURE CARDS (single section, seamless bg) ═══════ */}
-      <section className="relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24 hero-gradient">
+      {/* ═══════ HERO + FEATURE CARDS ═══════ */}
+      <section className="relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24">
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           {/* Text — left aligned like reference */}
           <p className="text-sm font-medium text-muted-foreground">Become a Live Shopping Host</p>
