@@ -14,14 +14,14 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-border/30">
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/30">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           to="/"
           className="text-xl font-bold tracking-tight text-foreground"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
-          gmv.live
+          🤩 gmv.live
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -37,7 +37,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button size="sm" asChild>
+          <Button size="sm" className="rounded-full" asChild>
             <Link to="/waitlist">Join Waitlist</Link>
           </Button>
         </div>
@@ -64,7 +64,7 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="mt-3 flex flex-col gap-2">
-            <Button size="sm" asChild>
+            <Button size="sm" className="rounded-full" asChild>
               <Link to="/waitlist" onClick={() => setMobileOpen(false)}>Join Waitlist</Link>
             </Button>
           </div>

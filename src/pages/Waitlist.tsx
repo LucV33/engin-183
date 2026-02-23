@@ -26,8 +26,6 @@ const Waitlist = () => {
   const [role, setRole] = useState<"creator" | "brand" | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
-  // Dev access
   const [devMode, setDevMode] = useState(false);
   const [devPassword, setDevPassword] = useState("");
   const [devUnlocked, setDevUnlocked] = useState(false);
@@ -87,10 +85,10 @@ const Waitlist = () => {
   if (submitted) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
-        <Card className="w-full max-w-md text-center">
+        <Card className="w-full max-w-md text-center border-border bg-card">
           <CardHeader>
             <Link to="/" className="mb-2 text-xl font-bold text-foreground hover:text-primary transition-colors">
-              gmv.live
+              🤩 gmv.live
             </Link>
             <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
               <CheckCircle2 className="h-7 w-7 text-primary" />
@@ -113,10 +111,10 @@ const Waitlist = () => {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md space-y-4">
-        <Card>
+        <Card className="border-border bg-card">
           <CardHeader className="text-center">
             <Link to="/" className="mb-2 text-xl font-bold text-foreground hover:text-primary transition-colors">
-              gmv.live
+              🤩 gmv.live
             </Link>
             <CardTitle className="text-2xl">Join the Waitlist</CardTitle>
             <CardDescription>
@@ -125,7 +123,6 @@ const Waitlist = () => {
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-5">
-              {/* Role selector */}
               <div className="space-y-2">
                 <Label>I am a…</Label>
                 <div className="grid grid-cols-2 gap-3">
@@ -134,7 +131,7 @@ const Waitlist = () => {
                     onClick={() => setRole("creator")}
                     className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all ${
                       role === "creator"
-                        ? "border-primary bg-primary/5"
+                        ? "border-primary bg-primary/10"
                         : "border-border hover:border-primary/40"
                     }`}
                   >
@@ -148,7 +145,7 @@ const Waitlist = () => {
                     onClick={() => setRole("brand")}
                     className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all ${
                       role === "brand"
-                        ? "border-primary bg-primary/5"
+                        ? "border-primary bg-primary/10"
                         : "border-border hover:border-primary/40"
                     }`}
                   >
@@ -159,8 +156,6 @@ const Waitlist = () => {
                   </button>
                 </div>
               </div>
-
-              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="waitlist-email">Email</Label>
                 <Input
@@ -174,7 +169,7 @@ const Waitlist = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-3">
-              <Button type="submit" className="w-full" disabled={submitting}>
+              <Button type="submit" className="w-full rounded-full" disabled={submitting}>
                 {submitting ? "Joining…" : (
                   <>Join the Waitlist <ArrowRight className="ml-1 h-4 w-4" /></>
                 )}
@@ -190,7 +185,7 @@ const Waitlist = () => {
         </Card>
 
         {/* Dev Tool */}
-        <Card className="border-dashed border-muted-foreground/30">
+        <Card className="border-dashed border-muted-foreground/30 bg-card">
           {!devMode ? (
             <CardContent className="flex justify-center py-3">
               <Button variant="ghost" size="sm" className="text-xs text-muted-foreground gap-1" onClick={() => setDevMode(true)}>

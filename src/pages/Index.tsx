@@ -165,16 +165,16 @@ const Index = () => {
 
       {/* ═══════ HERO ═══════ */}
       <section className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
-        <div className="cloud-blob bg-primary/20 w-[500px] h-[500px] -top-40 -left-40 absolute" />
-        <div className="cloud-blob bg-accent/20 w-[600px] h-[600px] top-20 -right-60 absolute" />
-        <div className="cloud-blob bg-primary/10 w-[400px] h-[400px] bottom-0 left-1/3 absolute" />
+        <div className="cloud-blob bg-primary w-[500px] h-[500px] -top-40 -left-40 absolute" />
+        <div className="cloud-blob bg-accent w-[600px] h-[600px] top-20 -right-60 absolute" />
+        <div className="cloud-blob bg-primary w-[400px] h-[400px] bottom-0 left-1/3 absolute" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             <div className="max-w-xl">
               <Badge
                 variant="secondary"
-                className="mb-6 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-primary/10 text-primary border-0"
+                className="mb-6 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border-0"
               >
                 Live Shopping Network
               </Badge>
@@ -204,10 +204,10 @@ const Index = () => {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <Button size="lg" asChild>
+                <Button size="lg" className="rounded-full" asChild>
                   <Link to="/waitlist">Browse Hosts</Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild>
+                <Button size="lg" variant="outline" className="rounded-full" asChild>
                   <Link to="/waitlist">Apply as a Host</Link>
                 </Button>
               </div>
@@ -233,8 +233,8 @@ const Index = () => {
                         <Play className="h-4 w-4 ml-0.5" fill="currentColor" />
                       </div>
                     </div>
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/60 to-transparent p-3 pt-10">
-                      <span className="text-xs font-semibold text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/60 to-transparent p-3 pt-10">
+                      <span className="text-xs font-semibold text-foreground opacity-0 transition-opacity group-hover:opacity-100">
                         See Profile →
                       </span>
                     </div>
@@ -266,7 +266,7 @@ const Index = () => {
             {[...brandNames, ...brandNames].map((name, i) => (
               <span
                 key={i}
-                className="shrink-0 text-lg font-bold tracking-tight text-foreground/30 select-none"
+                className="shrink-0 text-lg font-bold tracking-tight text-foreground/20 select-none"
               >
                 {name}
               </span>
@@ -341,7 +341,7 @@ const Index = () => {
           </h2>
           <Accordion type="single" collapsible className="mt-10">
             {faqs.map((faq, i) => (
-              <AccordionItem key={i} value={`faq-${i}`}>
+              <AccordionItem key={i} value={`faq-${i}`} className="border-border">
                 <AccordionTrigger className="text-left text-base font-medium">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
               </AccordionItem>
@@ -361,7 +361,7 @@ const Index = () => {
             hosts, run campaigns, and drive real-time sales.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4">
-            <Button size="lg" asChild>
+            <Button size="lg" className="rounded-full" asChild>
               <Link to="/waitlist">
                 Get Started <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
@@ -381,7 +381,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold text-foreground">gmv.live</p>
+              <p className="text-lg font-bold text-foreground">🤩 gmv.live</p>
               <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
