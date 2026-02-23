@@ -4,8 +4,8 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const navLinks = [
-  { label: "For Brands", to: "/coming-soon" },
-  { label: "For Creators", to: "/for-creators" },
+  { label: "For Brands", to: "/for-brands" },
+  { label: "For Creators", to: "/" },
   { label: "Pricing", to: "/coming-soon" },
   { label: "Blog", to: "/coming-soon" },
 ];
