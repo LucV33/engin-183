@@ -16,7 +16,7 @@ const CreatorFeed = () => {
     queryFn: async () => {
       let q = supabase
         .from("products")
-        .select("*, profiles!products_brand_id_fkey(display_name, avatar_url)")
+        .select("*, profiles!products_brand_profile_fkey(display_name, avatar_url)")
         .eq("status", "active")
         .order("created_at", { ascending: false });
 

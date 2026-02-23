@@ -16,8 +16,8 @@ const Messages = () => {
         .from("conversations")
         .select(`
           *,
-          brand_profile:profiles!conversations_brand_user_id_fkey(display_name),
-          creator_profile:profiles!conversations_creator_user_id_fkey(display_name),
+          brand_profile:profiles!conversations_brand_profile_fkey(display_name),
+          creator_profile:profiles!conversations_creator_profile_fkey(display_name),
           product:products(title)
         `)
         .order("last_message_at", { ascending: false });
