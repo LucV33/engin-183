@@ -1,96 +1,61 @@
 
 
-## Video Carousel: Instant Thumbnails + Smart Background Loading
+## Static Video Carousel - Complete Redesign
 
-### What Changes
+### Overview
+Replace the infinite-scrolling marquee with a clean, static carousel showing 4 videos side-by-side with left/right arrow navigation. Click to play with sound; only one video plays at a time.
 
-**1. Save static thumbnail images to `public/images/thumbs/`**
+### Video Selection (8 videos with thumbnails available)
+Use the 8 videos that have matching poster thumbnails: `creator-1` through `creator-7` plus `creator-10`. Skip `creator-8` and `creator-9` (no thumbnails).
 
-Copy each uploaded PNG as a static thumbnail file. Also copy the new video file (`ssstik.io_@shophousemedia_1771884916326.mp4`) as `creator-10.mp4`. Mapping:
+### New Component: `StaticVideoCarousel.tsx`
+A self-contained carousel component replacing the current marquee section:
 
-| Thumbnail | Video |
-|---|---|
-| ssstik.io_@shophousemedia_1771884405012.png | creator-1 |
-| ssstik.io_@shophousemedia_1771884386813.png | creator-2 |
-| ssstik.io_@garyvee_1771884277237.png | creator-3 |
-| ssstik.io_@garyvee_1771884249395.png | creator-4 |
-| ssstik.io_@shophousemedia_1771884235985.png | creator-5 |
-| ssstik.io_@coralily.kin_1771884846822.png | creator-6 |
-| ssstik.io_@garyvee_1771884831410.png | creator-7 |
-| Screenshot_2026-02-23_at_2.49.36 PM.png | creator-8 |
-| Screenshot_2026-02-23_at_2.50.36 PM.png | creator-9 |
-| ssstik.io_@shophousemedia_1771884916326.png | creator-10 |
+- **Layout**: A horizontal row of video cards with overflow hidden, using CSS `translateX` for smooth sliding
+- **Navigation**: Left/right arrow buttons positioned on each side of the carousel
+- **Responsive**: 4 visible on desktop (>=1024px), 2 on tablet (>=640px), 1 on mobile
+- **Preloading**: Videos currently in the visible window get `preload="auto"`. Videos outside get `preload="none"`. When arrows are clicked and new videos slide into view, their preload switches to `"auto"`
+- **Click behavior**: Click a video to play unmuted. Click again to pause. If another video is already playing, pause it first (managed via a shared `activeIndex` state)
+- **Speaker icon overlay**: A small `Volume2` icon on each thumbnail so users know clicking plays with sound
+- **Arrows**: Styled with the existing `Button` component (`variant="outline"`, `size="icon"`), using `ChevronLeft`/`ChevronRight` icons. Disabled at the start/end of the list
 
-**2. Add the new video**
+### Rewrite `VideoCard.tsx`
+Simplified for the new click-to-play model (no hover logic):
 
-Copy the uploaded `.mp4` file to `public/videos/creator-10.mp4` and add it to the carousel.
+- Props: `src`, `poster`, `isActive` (controlled by parent), `preload`, `onTogglePlay`
+- Shows poster as CSS `background-image` (instant load)
+- When `isActive` becomes true: play unmuted. When false: pause and reset
+- Loading progress bar overlay shown while buffering after click
+- Speaker icon overlay when not playing
 
-**3. Update ForCreators.tsx**
-
-Change `creatorVideos` from a string array to an array of objects with `src` and `poster`:
-
-```text
-const creatorVideos = [
-  { src: "/videos/creator-1.mp4", poster: "/images/thumbs/creator-1.png" },
-  { src: "/videos/creator-2.mp4", poster: "/images/thumbs/creator-2.png" },
-  ...
-  { src: "/videos/creator-10.mp4", poster: "/images/thumbs/creator-10.png" },
-];
-```
-
-Pass both `src` and `poster` to each `VideoCard`.
-
-**4. Redesign VideoCard.tsx loading strategy**
-
-The core idea: thumbnails are always visible instantly (static images), videos load silently in the background, and playback begins on hover only when ready.
-
-- **Instant thumbnail**: Use the `poster` image as a CSS `background-image` on the container div. This loads as a regular image -- fast and reliable. The video element is hidden until ready.
-- **Smart background preloading**: A new `useVideoPreloader` hook in ForCreators manages a global loading queue:
-  - On page mount, start preloading videos sequentially (not all at once to avoid network congestion)
-  - Priority order: middle videos first (indices 3-5, where users are most likely to hover), then outward
-  - Each video loads the first 10 seconds initially (using `MediaSource` API range requests where supported, or just letting the browser buffer naturally with `preload="auto"`)
-  - After the first pass of 10s chunks, go back and finish loading the rest
-- **Progress overlay on hover**: When a user hovers a card that isn't fully buffered yet:
-  - The static thumbnail stays visible (no black screen ever)
-  - A semi-transparent overlay shows a progress bar with percentage
-  - Once `canplaythrough` fires, the overlay fades and video plays with sound
-- **If video is already buffered on hover**: Plays immediately with sound, no overlay
+### Changes to `ForCreators.tsx`
+- Remove `useVideoPreloader` import and `carouselPaused` state
+- Replace the marquee `<section>` with `<StaticVideoCarousel />`
+- Pass the 8 selected videos with their poster paths
 
 ### Technical Details
 
-**VideoCard.tsx rewrite:**
+**StaticVideoCarousel state:**
+- `currentIndex`: first visible video index (shifts by 1 on arrow click)
+- `activeVideoIndex`: which video is currently playing (null if none)
+- `visibleCount`: 4/2/1 based on window width (via media query or `useIsMobile` pattern)
 
-```text
-Component structure:
-- Container div with background-image set to poster (instant visibility)
-- Hidden video element (opacity-0 until playing)
-- Loading overlay (shown only during hover + buffering)
-- Play/pause overlay
-- Volume toggle
-- Bottom gradient
+**Sliding animation:**
+- Container holds all 8 cards in a flex row
+- Outer wrapper has `overflow-hidden`
+- Inner container uses `transform: translateX(-(currentIndex * cardWidthPercent)%)` with `transition-transform duration-300`
+- Each card takes `100/visibleCount`% width
 
-States:
-- isReady: video has enough data to play
-- isPlaying: currently playing
-- isMuted: sound muted
-- loadProgress: 0-100 buffer percentage
-- isHovering: mouse is over the card
+**Preload management:**
+- Videos at indices `currentIndex` to `currentIndex + visibleCount - 1` get `preload="auto"`
+- All others get `preload="none"`
 
-Behavior:
-- Mount: video has preload="none" (preloader handles loading separately)
-- Hover enter: if ready -> play immediately with sound; if not -> show progress overlay
-- Hover leave: pause, reset, show poster
-- Click: toggle play/pause
-```
+**Files to create:**
+- `src/components/StaticVideoCarousel.tsx`
 
-**Preloading strategy (in ForCreators.tsx):**
+**Files to modify:**
+- `src/components/VideoCard.tsx` (simplify for click-to-play)
+- `src/pages/ForCreators.tsx` (swap carousel section)
 
-Rather than using a complex MediaSource approach (browser support varies), use a simpler but effective strategy:
-
-1. Create hidden `<video>` elements or use `fetch` with `Range` headers for the priority videos
-2. Actually, the simplest effective approach: set `preload="auto"` on the real video elements but control the loading order via a staggered approach -- render videos with `preload="none"` initially, then a `useEffect` sets them to `preload="auto"` in priority order with small delays (200ms apart)
-3. Priority: center videos first (indices ~4-6 in the visible area), then expand outward
-4. Since the carousel triples the array (27 elements), only preload the unique 10 videos, not all 30 instances
-
-This gives instant thumbnails from static PNGs, progressive background loading prioritized for the most likely hover targets, and a smooth transition from thumbnail to video playback.
-
+**Files to delete (no longer needed):**
+- `src/hooks/useVideoPreloader.ts`
