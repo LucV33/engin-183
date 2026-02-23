@@ -63,7 +63,7 @@ const Login = () => {
       <div className="w-full max-w-md space-y-4">
         <Card>
           <CardHeader className="text-center">
-            <Link to="/" className="mb-2 text-xl font-bold text-foreground hover:text-primary transition-colors">Hostify</Link>
+            <Link to="/" className="mb-2 text-xl font-bold text-foreground hover:text-primary transition-colors">gmv.live</Link>
             <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>Sign in to your account</CardDescription>
           </CardHeader>
