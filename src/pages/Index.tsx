@@ -164,11 +164,11 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Navbar />
 
       {/* ═══════ HERO ═══════ */}
-      <section className="relative overflow-hidden hero-gradient pt-24 pb-16 sm:pt-32 sm:pb-24">
+      <section className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
         <div className="cloud-blob bg-primary/20 w-[500px] h-[500px] -top-40 -left-40 absolute" />
         <div className="cloud-blob bg-accent/20 w-[600px] h-[600px] top-20 -right-60 absolute" />
         <div className="cloud-blob bg-primary/10 w-[400px] h-[400px] bottom-0 left-1/3 absolute" />
