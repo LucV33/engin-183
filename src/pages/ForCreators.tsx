@@ -180,7 +180,7 @@ const ForCreators = () => {
             asChild
           >
             <Link to="/waitlist">
-              Don't Miss Out on the Opportunity 🔥 <ArrowRight className="ml-2 h-4 w-4" />
+              Don't Miss Out on the Opportunity <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
@@ -193,30 +193,19 @@ const ForCreators = () => {
 
         <section className="relative py-20 sm:py-28">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            {/* Platform logos */}
-            <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-8">
-                Every major platform is going live
+            {/* Big $600B+ stat on top */}
+            <div className="text-center mb-12">
+              <p className="text-6xl font-black tracking-tight text-primary sm:text-7xl lg:text-8xl">
+                $600B+
               </p>
-            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-                {platforms.map((p) => (
-                  <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40">
-                    <img
-                      src={p.img}
-                      alt={p.name}
-                      className="h-20 w-auto object-contain sm:h-28"
-                    />
-                  </div>
-                ))}
-              </div>
-              <p className="mx-auto mt-8 max-w-lg text-lg font-semibold text-foreground sm:text-xl">
-                All platforms are taking action. Now it's your turn!
+              <p className="mt-3 text-lg text-muted-foreground sm:text-xl">
+                Global live shopping market by 2027
               </p>
             </div>
 
             {/* Stats grid */}
-            <div className="mt-16 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-              {marketStats.map((stat) => (
+            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+              {marketStats.filter(s => s.value !== "$600B+").map((stat) => (
                 <div
                   key={stat.value}
                   className="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center"
@@ -232,10 +221,27 @@ const ForCreators = () => {
               ))}
             </div>
 
-            <p className="mx-auto mt-10 max-w-lg text-center text-base text-muted-foreground">
-              Live shopping is exploding worldwide. Thousands of creators are
-              already earning full-time income hosting live streams and the
-              opportunity is just getting started.
+            {/* Platform heading */}
+            <p className="mt-16 text-center text-sm font-semibold uppercase tracking-widest text-primary mb-8">
+              Every major platform is going live
+            </p>
+
+            {/* Platform logos */}
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+              {platforms.map((p) => (
+                <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40">
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className="h-20 w-auto object-contain sm:h-28"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Now it's your turn */}
+            <p className="mx-auto mt-10 max-w-lg text-center text-lg font-semibold text-foreground sm:text-xl">
+              All platforms are taking action. Now it's your turn!
             </p>
 
             <div className="mt-8 flex justify-center">
@@ -256,9 +262,9 @@ const ForCreators = () => {
       {/* ═══════ SECTION 4: BRAND TRUST (solid bg, infinite scroll) ═══════ */}
       <section className="py-16 sm:py-24 overflow-hidden">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <p className="mb-10 text-center text-sm font-semibold uppercase tracking-widest text-primary">
-            Brands already using live shopping
-          </p>
+          <h2 className="mb-12 text-center text-3xl font-bold tracking-tight sm:text-4xl">
+            Brands Already Using Live Shopping
+          </h2>
         </div>
         <div className="relative w-full">
           <div className="flex animate-scroll-logos w-max">
