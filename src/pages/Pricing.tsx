@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Check, X, ChevronRight, ShieldCheck, DollarSign, Users } from "lucide-react";
 
 const comparisonRows = [
-  { feature: "Free to start — no upfront cost", us: true, them: false },
+  { feature: "Free to start, no upfront cost", us: true, them: false },
   { feature: "Vetted college student creators", us: true, them: false },
   { feature: "Escrow payments with guaranteed refund", us: true, them: false },
   { feature: "Creator goes live or money back", us: true, them: false },
-  { feature: "Software-powered — low fees", us: true, them: false },
+  { feature: "Software-powered with low fees", us: true, them: false },
   { feature: "End-to-end campaign management", us: true, them: "Partial" },
   { feature: "Direct messaging with creators", us: true, them: "Partial" },
   { feature: "Real-time analytics dashboard", us: true, them: "Partial" },
@@ -30,7 +30,7 @@ const Pricing = () => {
             Free to Use. We Only Win When You Win.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            There's zero cost to get started. We make money by taking a small commission on successful matchmaking and campaign management — that's it. Your success is literally our business model.
+            There's zero cost to get started. We make money by taking a small commission on successful matchmaking and campaign management. That's it. Your success is literally our business model.
           </p>
         </div>
       </section>
@@ -55,7 +55,7 @@ const Pricing = () => {
               </div>
               <h3 className="text-lg font-semibold text-card-foreground">Escrow Protection</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Your payment is held in escrow. If the creator doesn't fulfill their part of the contract, you get your money back — guaranteed.
+                Your payment is held in escrow. If the creator doesn't fulfill their part of the contract, you get your money back. Guaranteed.
               </p>
             </div>
 
@@ -65,7 +65,7 @@ const Pricing = () => {
               </div>
               <h3 className="text-lg font-semibold text-card-foreground">Software-Powered</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Because we're a software platform — not an agency — our fees stay dramatically lower than traditional alternatives.
+                We're a software platform, not an agency. That means our fees stay dramatically lower than traditional alternatives.
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@ const Pricing = () => {
             Ready to Go Live?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Join the waitlist and start connecting with vetted college creators — completely free.
+            Join the waitlist and start connecting with vetted college creators. Completely free.
           </p>
           <div className="mt-10">
             <Button size="lg" className="rounded-full" asChild>
