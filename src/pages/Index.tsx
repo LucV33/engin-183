@@ -32,28 +32,20 @@ const rotatingWords = [
 
 const hosts = [
   {
-    name: "Mia Chen",
-    gmv: "$3,200",
-    rating: "4.9",
-    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=530&fit=crop",
+    img: "/images/hosts/boy-1.png",
+    logo: "/images/logos/cal.png",
   },
   {
-    name: "Jordan Lee",
-    gmv: "$4,800",
-    rating: "5.0",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=530&fit=crop",
+    img: "/images/hosts/girl-1.png",
+    logo: "/images/logos/ucla.png",
   },
   {
-    name: "Aisha Patel",
-    gmv: "$2,900",
-    rating: "4.8",
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=530&fit=crop",
+    img: "/images/hosts/girl-2.png",
+    logo: "/images/logos/lsu.png",
   },
   {
-    name: "Tyler Ross",
-    gmv: "$3,600",
-    rating: "4.9",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=530&fit=crop",
+    img: "/images/hosts/girl-3.png",
+    logo: "/images/logos/miami.png",
   },
 ];
 
@@ -198,9 +190,10 @@ const Index = () => {
               </h1>
 
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                Stop scrambling for live hosts. gmv.live matches your brand with
-                vetted creators who sell on camera, so you can go live faster and
-                sell more.
+                Tap into the most powerful sellers on the internet — college students.
+                Digital natives who know every trend, live on social media, and bring
+                authentic energy that drives real sales. <em>gmv.live</em> connects your
+                brand with campus creators ready to go live.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
@@ -217,14 +210,14 @@ const Index = () => {
             <div className="grid grid-cols-2 gap-4 sm:gap-5">
               {hosts.map((host, i) => (
                 <div
-                  key={host.name}
+                  key={i}
                   className="group relative overflow-hidden rounded-2xl bg-card shadow-md border border-border/50 transition-shadow hover:shadow-xl"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={host.img}
-                      alt={host.name}
+                      alt="College creator"
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
@@ -233,19 +226,13 @@ const Index = () => {
                         <Play className="h-4 w-4 ml-0.5" fill="currentColor" />
                       </div>
                     </div>
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/60 to-transparent p-3 pt-10">
-                      <span className="text-xs font-semibold text-foreground opacity-0 transition-opacity group-hover:opacity-100">
-                        See Profile →
-                      </span>
-                    </div>
                   </div>
-                  <div className="p-3">
-                    <p className="text-sm font-semibold text-card-foreground">{host.name}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Avg. {host.gmv} GMV per stream •{" "}
-                      <Star className="inline h-3 w-3 text-primary -mt-0.5" fill="currentColor" />{" "}
-                      {host.rating}
-                    </p>
+                  <div className="flex items-center justify-center p-3">
+                    <img
+                      src={host.logo}
+                      alt="University logo"
+                      className="h-8 w-auto object-contain sm:h-10"
+                    />
                   </div>
                 </div>
               ))}
@@ -305,7 +292,7 @@ const Index = () => {
             How It Works
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
-            From discovery to conversion — here's how gmv.live works for brands.
+            From discovery to conversion — here's how <em>gmv.live</em> works for brands.
           </p>
 
           <div className="mt-14 space-y-12">
@@ -357,7 +344,7 @@ const Index = () => {
             Start Selling Live Today
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Join hundreds of brands already using gmv.live to find top live shopping
+            Join hundreds of brands already using <em>gmv.live</em> to find top live shopping
             hosts, run campaigns, and drive real-time sales.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4">
@@ -381,7 +368,7 @@ const Index = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold text-foreground">🤩 gmv.live</p>
+              <p className="text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
               <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
@@ -395,7 +382,7 @@ const Index = () => {
             </div>
           </div>
           <p className="mt-8 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} gmv.live. All rights reserved.
+            © {new Date().getFullYear()} <em>gmv.live</em>. All rights reserved.
           </p>
         </div>
       </footer>
