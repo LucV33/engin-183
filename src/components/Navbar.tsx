@@ -7,7 +7,7 @@ const navLinks = [
   { label: "For Brands", to: "/for-brands" },
   { label: "For Creators", to: "/" },
   { label: "Pricing", to: "/pricing" },
-  { label: "Blog", to: "/coming-soon" },
+  { label: "Blog", to: "/blog" },
 ];
 
 const Navbar = () => {
