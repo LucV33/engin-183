@@ -371,7 +371,7 @@ const Index = () => {
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>
               <Link to="/" className="block hover:text-foreground">For Creators</Link>
-              <Link to="/coming-soon" className="block hover:text-foreground">Pricing</Link>
+              <Link to="/pricing" className="block hover:text-foreground">Pricing</Link>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/coming-soon" className="block hover:text-foreground">Privacy Policy</Link>
