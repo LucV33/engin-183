@@ -242,7 +242,7 @@ const Index = () => {
       <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
-            Trusted by 200+ e-commerce brands going live every week.
+            200+ e-commerce brands are already going live every week.
           </p>
         </div>
         <div className="relative overflow-hidden">
