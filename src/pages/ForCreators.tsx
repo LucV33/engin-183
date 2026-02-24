@@ -292,7 +292,7 @@ const ForCreators = () => {
               How It Works
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
-              From sign-up to payout. Here's how gmv.live works for creators.
+              From sign-up to payout. Here's how <em>gmv.live</em> works for creators.
             </p>
 
             <div className="mt-14 space-y-12">
@@ -404,7 +404,7 @@ const ForCreators = () => {
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
               Focus on selling live for the best brands with our optimized tools
-              and resources. Hundreds of hosts have already joined gmv.live and are
+              and resources. Hundreds of hosts have already joined <em>gmv.live</em> and are
               thriving. Now it's your turn!
             </p>
             <div className="mt-10 flex flex-col items-center gap-4">
@@ -414,7 +414,7 @@ const ForCreators = () => {
                 asChild
               >
                 <Link to="/waitlist">
-                  Join gmv.live <ChevronRight className="ml-1 h-4 w-4" />
+                  Join <em>gmv.live</em> <ChevronRight className="ml-1 h-4 w-4" />
                 </Link>
               </Button>
               <Link
@@ -433,7 +433,7 @@ const ForCreators = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold">🤩 gmv.live</p>
+              <p className="text-lg font-bold">🤩 <em>gmv.live</em></p>
               <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
@@ -447,7 +447,7 @@ const ForCreators = () => {
             </div>
           </div>
           <p className="mt-8 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} gmv.live. All rights reserved.
+            © {new Date().getFullYear()} <em>gmv.live</em>. All rights reserved.
           </p>
         </div>
       </footer>
