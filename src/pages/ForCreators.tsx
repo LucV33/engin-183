@@ -54,7 +54,6 @@ const brandLogos = [
   { name: "Sephora", img: "/images/brands/sephora.png" },
   { name: "Walmart", img: "/images/brands/walmart.png" },
   { name: "Samsung", img: "/images/brands/samsung.png" },
-  { name: "Rhode", img: "/images/brands/rhode.png" },
 ];
 
 /* ─── How it works steps ─── */
@@ -154,7 +153,7 @@ const ForCreators = () => {
         </section>
 
         {/* Perks (still inside gradient wrapper) */}
-        <section className="relative pb-20 sm:pb-28">
+        <section className="relative pb-10 sm:pb-14">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               {perks.map((p) => (
@@ -172,11 +171,19 @@ const ForCreators = () => {
       </div>
 
       {/* ═══════ SECTION 2: VIDEO PROOF (solid bg) ═══════ */}
-      <section className="py-10 sm:py-16">
+      <section className="pt-4 pb-12 sm:pt-6 sm:pb-16">
         <StaticVideoCarousel />
-        <p className="mt-8 text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          Don't miss out! 🔥
-        </p>
+        <div className="mt-6 flex justify-center">
+          <Button
+            size="lg"
+            className="rounded-full px-8 text-base font-bold"
+            asChild
+          >
+            <Link to="/waitlist">
+              Don't Miss Out on the Opportunity 🔥 <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
       </section>
 
       {/* ═══════ SECTION 3: MARKET PROOF (gradient bg) ═══════ */}
@@ -191,14 +198,15 @@ const ForCreators = () => {
               <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-8">
                 Every major platform is going live
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
                 {platforms.map((p) => (
-                  <img
-                    key={p.name}
-                    src={p.img}
-                    alt={p.name}
-                    className="h-12 w-auto object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity sm:h-16"
-                  />
+                  <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40">
+                    <img
+                      src={p.img}
+                      alt={p.name}
+                      className="h-20 w-auto object-contain sm:h-28"
+                    />
+                  </div>
                 ))}
               </div>
               <p className="mx-auto mt-8 max-w-lg text-lg font-semibold text-foreground sm:text-xl">
@@ -245,19 +253,21 @@ const ForCreators = () => {
         </section>
       </div>
 
-      {/* ═══════ SECTION 4: BRAND TRUST (solid bg) ═══════ */}
-      <section className="py-16 sm:py-24">
+      {/* ═══════ SECTION 4: BRAND TRUST (solid bg, infinite scroll) ═══════ */}
+      <section className="py-16 sm:py-24 overflow-hidden">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <p className="mb-10 text-center text-sm font-semibold uppercase tracking-widest text-primary">
             Brands already using live shopping
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-14 lg:gap-16">
-            {brandLogos.map((b) => (
+        </div>
+        <div className="relative w-full">
+          <div className="flex animate-scroll-logos w-max">
+            {[...brandLogos, ...brandLogos].map((b, i) => (
               <img
-                key={b.name}
+                key={`${b.name}-${i}`}
                 src={b.img}
                 alt={b.name}
-                className="h-8 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity sm:h-10"
+                className="h-8 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity sm:h-10 mx-8 sm:mx-12"
               />
             ))}
           </div>
