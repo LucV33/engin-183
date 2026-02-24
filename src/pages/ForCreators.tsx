@@ -11,6 +11,10 @@ import {
   Shield,
   FileText,
   Globe,
+  TrendingUp,
+  Users,
+  ShoppingBag,
+  Zap,
 } from "lucide-react";
 import {
   Accordion,
@@ -28,7 +32,30 @@ const perks = [
   { icon: FileText, title: "Contract Processing" },
 ];
 
+/* ─── Platform data ─── */
+const platforms = [
+  { name: "TikTok Shop", img: "/images/platforms/tiktok-shop.png" },
+  { name: "Amazon Live", img: "/images/platforms/amazon-live.png" },
+  { name: "eBay Live", img: "/images/platforms/ebay-live.png" },
+];
 
+/* ─── Market stats ─── */
+const marketStats = [
+  { value: "20%", label: "of all e-commerce will be live shopping by 2026", icon: ShoppingBag },
+  { value: "10x", label: "higher conversion rate vs traditional e-commerce", icon: TrendingUp },
+  { value: "500+", label: "new creator millionaires every month", icon: Users },
+  { value: "$600B+", label: "global live shopping market by 2027", icon: Zap },
+];
+
+/* ─── Brand logos ─── */
+const brandLogos = [
+  { name: "Adidas", img: "/images/brands/adidas.png" },
+  { name: "Crocs", img: "/images/brands/crocs.png" },
+  { name: "Sephora", img: "/images/brands/sephora.png" },
+  { name: "Walmart", img: "/images/brands/walmart.png" },
+  { name: "Samsung", img: "/images/brands/samsung.png" },
+  { name: "Rhode", img: "/images/brands/rhode.png" },
+];
 
 /* ─── How it works steps ─── */
 const steps = [
@@ -42,13 +69,13 @@ const steps = [
     step: 2,
     title: "Get Booked by Top Brands",
     description:
-      "Chat directly with brands, negotiate your rates, and lock in live stream deals — all inside gmv.live.",
+      "Chat directly with brands, negotiate your rates, and lock in live stream deals, all inside gmv.live.",
   },
   {
     step: 3,
     title: "Go Live & Earn",
     description:
-      "We handle payments, contracts, and invoicing so you can focus on what you do best — selling live.",
+      "We handle payments, contracts, and invoicing so you can focus on what you do best: selling live.",
   },
   {
     step: 4,
@@ -70,7 +97,7 @@ const faqs = [
   },
   {
     q: "Does gmv.live take a cut of my earnings?",
-    a: "gmv.live does not take a percentage of your sales commissions. We charge brands a platform fee — your rates stay yours.",
+    a: "gmv.live does not take a percentage of your sales commissions. We charge brands a platform fee. Your rates stay yours.",
   },
   {
     q: "What platforms does gmv.live support?",
@@ -82,233 +109,257 @@ const faqs = [
   },
 ];
 
-const communityNames = [
-  "Mia C.", "Jordan L.", "Aisha P.", "Tyler R.", "Priya S.", "Carlos M.",
-];
-
-const brandNames = [
-  "L'Oréal", "Sephora", "Nike", "Adidas", "Samsung", "Amazon",
-  "Glossier", "Fenty", "Shein", "Zara", "H&M", "Unilever",
-  "Estée Lauder", "TikTok", "Meta",
-];
-
 const ForCreators = () => {
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      {/* ═══════ HERO ═══════ */}
-      <section className="relative overflow-hidden pt-32 pb-12 sm:pt-40 sm:pb-16">
-        {/* Decorative blobs - TikTok colors */}
+      {/* ═══════ SECTION 1: HERO + PERKS (gradient bg) ═══════ */}
+      <div className="relative overflow-hidden">
+        {/* Gradient blobs */}
         <div className="cloud-blob bg-primary w-[500px] h-[500px] -top-32 -left-32 absolute" />
         <div className="cloud-blob bg-accent w-[500px] h-[500px] top-20 -right-40 absolute" />
 
-        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-            Become a Live Shopping Host
-          </p>
+        <section className="relative pt-32 pb-12 sm:pt-40 sm:pb-16">
+          <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary">
+              Become a Live Shopping Host
+            </p>
 
-          <h1 className="mt-6 text-5xl font-black leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
-            Where{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">Top Brands</span>
-              <span className="absolute bottom-1 left-0 right-0 h-3 bg-primary opacity-40 rounded-sm -z-0 sm:h-4" />
-            </span>{" "}
-            Find Their Live Shopping Hosts.
-          </h1>
+            <h1 className="mt-6 text-5xl font-black leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
+              Where{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10">Top Brands</span>
+                <span className="absolute bottom-1 left-0 right-0 h-3 bg-primary opacity-40 rounded-sm -z-0 sm:h-4" />
+              </span>{" "}
+              Find Their Live Shopping Hosts.
+            </h1>
 
-          <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
-            Get paid to share your passion online.
-          </p>
+            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
+              Get paid to share your passion online.
+            </p>
 
-          {/* CTA - before perks */}
-          <div className="mt-10 flex justify-center">
-            <Button
-              size="lg"
-              className="rounded-full px-8 text-base font-bold"
-              asChild
-            >
-              <Link to="/waitlist">
-                Join Now — It's Free <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="mt-10 flex justify-center">
+              <Button
+                size="lg"
+                className="rounded-full px-8 text-base font-bold"
+                asChild
+              >
+                <Link to="/waitlist">
+                  Join Now — It's Free <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* Perks (still inside gradient wrapper) */}
+        <section className="relative pb-20 sm:pb-28">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+              {perks.map((p) => (
+                <div
+                  key={p.title}
+                  className="flex items-center gap-2.5 rounded-xl border border-border bg-card px-4 py-3 backdrop-blur-sm"
+                >
+                  <p.icon className="h-5 w-5 shrink-0 text-accent" />
+                  <span className="text-sm font-medium text-foreground/80">{p.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ═══════ SECTION 2: VIDEO PROOF (solid bg) ═══════ */}
+      <section className="py-10 sm:py-16">
+        <StaticVideoCarousel />
+        <p className="mt-8 text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          Don't miss out! 🔥
+        </p>
       </section>
 
-      {/* ═══════ PERKS ═══════ */}
-      <section className="pb-10 sm:pb-14">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-            {perks.map((p) => (
-              <div
-                key={p.title}
-                className="flex items-center gap-2.5 rounded-xl border border-border bg-card px-4 py-3 backdrop-blur-sm"
-              >
-                <p.icon className="h-5 w-5 shrink-0 text-accent" />
-                <span className="text-sm font-medium text-foreground/80">{p.title}</span>
+      {/* ═══════ SECTION 3: MARKET PROOF (gradient bg) ═══════ */}
+      <div className="relative overflow-hidden">
+        <div className="cloud-blob bg-primary w-[600px] h-[600px] -top-40 -right-40 absolute" />
+        <div className="cloud-blob bg-accent w-[400px] h-[400px] bottom-0 -left-20 absolute" />
+
+        <section className="relative py-20 sm:py-28">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            {/* Platform logos */}
+            <div className="text-center">
+              <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-8">
+                Every major platform is going live
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+                {platforms.map((p) => (
+                  <img
+                    key={p.name}
+                    src={p.img}
+                    alt={p.name}
+                    className="h-12 w-auto object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity sm:h-16"
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+              <p className="mx-auto mt-8 max-w-lg text-lg font-semibold text-foreground sm:text-xl">
+                All platforms are taking action. Now it's your turn!
+              </p>
+            </div>
 
-      {/* ═══════ VIDEO CAROUSEL ═══════ */}
-      <StaticVideoCarousel />
+            {/* Stats grid */}
+            <div className="mt-16 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+              {marketStats.map((stat) => (
+                <div
+                  key={stat.value}
+                  className="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center"
+                >
+                  <stat.icon className="mx-auto h-6 w-6 text-accent mb-3" />
+                  <p className="text-3xl font-black tracking-tight text-primary sm:text-4xl">
+                    {stat.value}
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground leading-snug">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
 
-      {/* ═══════ LIVE SHOPPING MARKET STAT ═══════ */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-6xl font-black tracking-tight text-primary sm:text-7xl lg:text-8xl">
-            $600B+
-          </p>
-          <p className="mt-2 text-sm font-semibold uppercase tracking-widest text-primary/70">
-            global live shopping market by 2027
-          </p>
+            <p className="mx-auto mt-10 max-w-lg text-center text-base text-muted-foreground">
+              Live shopping is exploding worldwide. Thousands of creators are
+              already earning full-time income hosting live streams and the
+              opportunity is just getting started.
+            </p>
 
-          <div className="mt-8 flex justify-center -space-x-3">
-            {communityNames.map((name, i) => (
-              <div
-                key={name}
-                className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-background bg-secondary text-xs font-semibold text-muted-foreground"
-                style={{ zIndex: communityNames.length - i }}
+            <div className="mt-8 flex justify-center">
+              <Button
+                size="lg"
+                className="rounded-full px-8"
+                asChild
               >
-                {name.split(" ").map((n) => n[0]).join("")}
-              </div>
-            ))}
+                <Link to="/waitlist">
+                  Join the Revolution <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
+        </section>
+      </div>
 
-          <p className="mx-auto mt-6 max-w-lg text-base text-muted-foreground">
-            Live shopping is exploding worldwide. Thousands of creators are
-            already earning full-time income hosting live streams — and the
-            opportunity is just getting started.
-          </p>
-
-          <Button
-            size="lg"
-            className="mt-8 rounded-full px-8"
-            asChild
-          >
-            <Link to="/waitlist">
-              Join the Revolution <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </section>
-
-      {/* ═══════ BRAND TRUST BAR ═══════ */}
-      <section className="py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
-            200+ brands have already joined the live shopping revolution.
-          </p>
-        </div>
-        <div className="relative overflow-hidden">
-          <div className="flex animate-scroll-logos w-max gap-16 px-6">
-            {[...brandNames, ...brandNames].map((name, i) => (
-              <span
-                key={i}
-                className="shrink-0 text-lg font-bold tracking-tight text-foreground/20 select-none"
-              >
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════ HOW IT WORKS ═══════ */}
+      {/* ═══════ SECTION 4: BRAND TRUST (solid bg) ═══════ */}
       <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-            How It Works
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
-            From sign-up to payout — here's how gmv.live works for creators.
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-10 text-center text-sm font-semibold uppercase tracking-widest text-primary">
+            Brands already using live shopping
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-14 lg:gap-16">
+            {brandLogos.map((b) => (
+              <img
+                key={b.name}
+                src={b.img}
+                alt={b.name}
+                className="h-8 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity sm:h-10"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="mt-14 space-y-12">
-            {steps.map((s) => (
-              <div
-                key={s.step}
-                className="rounded-2xl border border-border bg-card p-6 sm:p-8"
-              >
-                <p className="text-sm font-mono font-semibold text-primary">{s.step}_</p>
-                <h3 className="mt-2 text-xl font-bold sm:text-2xl">{s.title}</h3>
-                <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
+      {/* ═══════ HOW IT WORKS (gradient bg) ═══════ */}
+      <div className="relative overflow-hidden">
+        <div className="cloud-blob bg-primary w-[500px] h-[500px] top-20 -left-40 absolute" />
+        <div className="cloud-blob bg-accent w-[400px] h-[400px] bottom-20 -right-32 absolute" />
 
-                {s.step === 1 && (
-                  <div className="mt-6 grid grid-cols-4 gap-2 rounded-xl overflow-hidden">
-                    {[
-                      "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=200&h=200&fit=crop",
-                      "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=200&h=200&fit=crop",
-                      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop",
-                      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop",
-                    ].map((src, i) => (
-                      <img key={i} src={src} alt="Portfolio example" className="aspect-square w-full object-cover rounded-lg" loading="lazy" />
-                    ))}
-                  </div>
-                )}
+        <section className="relative py-16 sm:py-24">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+              How It Works
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+              From sign-up to payout. Here's how gmv.live works for creators.
+            </p>
 
-                {s.step === 2 && (
-                  <div className="mt-6 rounded-xl border border-border bg-secondary p-4 space-y-3">
-                    <div className="flex items-start gap-3">
-                      <div className="h-8 w-8 shrink-0 rounded-full bg-primary/20" />
-                      <div className="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
-                        Hi! We'd love you to host a live stream for our new skincare line. Interested?
+            <div className="mt-14 space-y-12">
+              {steps.map((s) => (
+                <div
+                  key={s.step}
+                  className="rounded-2xl border border-border bg-card p-6 sm:p-8"
+                >
+                  <p className="text-sm font-mono font-semibold text-primary">{s.step}_</p>
+                  <h3 className="mt-2 text-xl font-bold sm:text-2xl">{s.title}</h3>
+                  <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
+
+                  {s.step === 1 && (
+                    <div className="mt-6 grid grid-cols-4 gap-2 rounded-xl overflow-hidden">
+                      {[
+                        "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=200&h=200&fit=crop",
+                        "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=200&h=200&fit=crop",
+                        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop",
+                        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop",
+                      ].map((src, i) => (
+                        <img key={i} src={src} alt="Portfolio example" className="aspect-square w-full object-cover rounded-lg" loading="lazy" />
+                      ))}
+                    </div>
+                  )}
+
+                  {s.step === 2 && (
+                    <div className="mt-6 rounded-xl border border-border bg-secondary p-4 space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="h-8 w-8 shrink-0 rounded-full bg-primary/20" />
+                        <div className="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
+                          Hi! We'd love you to host a live stream for our new skincare line. Interested?
+                        </div>
+                      </div>
+                      <div className="flex items-start justify-end gap-3">
+                        <div className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
+                          Sounds great! Here's my rate 🎬
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-start justify-end gap-3">
-                      <div className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">
-                        Sounds great! Here's my rate 🎬
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  )}
 
-                {s.step === 3 && (
-                  <div className="mt-6 space-y-3">
-                    <div className="rounded-xl bg-accent/10 border border-accent/20 p-4">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold">Your Payment</span>
-                        <span className="font-bold">$550</span>
-                      </div>
-                      <div className="mt-2 flex items-center gap-2 text-sm text-accent">
-                        <CheckCircle2 className="h-4 w-4" /> Secured
-                        <span className="ml-auto text-muted-foreground text-xs">1h ago</span>
-                      </div>
-                    </div>
-                    <div className="rounded-xl bg-accent/10 border border-accent/20 p-4">
-                      <span className="font-semibold">Your Contract</span>
-                      <div className="mt-2 space-y-1 text-sm text-accent">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4" /> Signed by you
+                  {s.step === 3 && (
+                    <div className="mt-6 space-y-3">
+                      <div className="rounded-xl bg-accent/10 border border-accent/20 p-4">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold">Your Payment</span>
+                          <span className="font-bold">$550</span>
+                        </div>
+                        <div className="mt-2 flex items-center gap-2 text-sm text-accent">
+                          <CheckCircle2 className="h-4 w-4" /> Secured
                           <span className="ml-auto text-muted-foreground text-xs">1h ago</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4" /> Signed by brand
-                          <span className="ml-auto text-muted-foreground text-xs">2h ago</span>
+                      </div>
+                      <div className="rounded-xl bg-accent/10 border border-accent/20 p-4">
+                        <span className="font-semibold">Your Contract</span>
+                        <div className="mt-2 space-y-1 text-sm text-accent">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4" /> Signed by you
+                            <span className="ml-auto text-muted-foreground text-xs">1h ago</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4" /> Signed by brand
+                            <span className="ml-auto text-muted-foreground text-xs">2h ago</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {s.step === 4 && (
-                  <div className="mt-6 flex flex-col items-center rounded-xl border border-border bg-secondary p-8 text-center">
-                    <p className="text-lg font-bold">Congratulations! 🎉</p>
-                    <p className="mt-4 text-4xl font-black text-primary">+ $550</p>
-                    <p className="mt-2 text-sm text-muted-foreground">The brand approved your live stream</p>
-                  </div>
-                )}
-              </div>
-            ))}
+                  {s.step === 4 && (
+                    <div className="mt-6 flex flex-col items-center rounded-xl border border-border bg-secondary p-8 text-center">
+                      <p className="text-lg font-bold">Congratulations! 🎉</p>
+                      <p className="mt-4 text-4xl font-black text-primary">+ $550</p>
+                      <p className="mt-2 text-sm text-muted-foreground">The brand approved your live stream</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* ═══════ FAQ ═══════ */}
+      {/* ═══════ FAQ (solid bg) ═══════ */}
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
@@ -325,38 +376,42 @@ const ForCreators = () => {
         </div>
       </section>
 
-      {/* ═══════ FINAL CTA ═══════ */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Join Hundreds of Live Hosts
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Focus on selling live for the best brands with our optimized tools
-            and resources. Hundreds of hosts have already joined gmv.live and are
-            thriving — now it's your turn!
-          </p>
-          <div className="mt-10 flex flex-col items-center gap-4">
-            <Button
-              size="lg"
-              className="rounded-full px-8"
-              asChild
-            >
-              <Link to="/waitlist">
-                Join gmv.live <ChevronRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-            <Link
-              to="/for-brands"
-              className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Are you a brand? <ChevronRight className="ml-1 h-3 w-3" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ═══════ FINAL CTA (gradient bg) ═══════ */}
+      <div className="relative overflow-hidden">
+        <div className="cloud-blob bg-primary w-[500px] h-[500px] top-0 left-1/3 absolute" />
 
-      {/* ═══════ FOOTER ═══════ */}
+        <section className="relative py-20 sm:py-28">
+          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Join Hundreds of Live Hosts
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+              Focus on selling live for the best brands with our optimized tools
+              and resources. Hundreds of hosts have already joined gmv.live and are
+              thriving. Now it's your turn!
+            </p>
+            <div className="mt-10 flex flex-col items-center gap-4">
+              <Button
+                size="lg"
+                className="rounded-full px-8"
+                asChild
+              >
+                <Link to="/waitlist">
+                  Join gmv.live <ChevronRight className="ml-1 h-4 w-4" />
+                </Link>
+              </Button>
+              <Link
+                to="/for-brands"
+                className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Are you a brand? <ChevronRight className="ml-1 h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ═══════ FOOTER (solid) ═══════ */}
       <footer className="border-t border-border py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
