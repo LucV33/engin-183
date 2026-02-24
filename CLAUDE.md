@@ -39,3 +39,16 @@
 ## Environment
 - Copy `.env.example` to `.env` and fill in your Supabase credentials
 - Never commit `.env` — it's in `.gitignore`
+
+## Deployment
+- **Vercel**: auto-deploys from `main`, preview URLs on every PR
+- **Vercel dashboard**: https://vercel.com (project: gmv.live)
+- Env vars are configured in Vercel for production and development
+
+## Supabase
+- Project is currently managed under Lovable's Supabase organization
+- Free tier: 500MB database, 1GB file storage, 50k monthly active users
+- **TODO before launch**: migrate to your own Supabase account for full control
+  - Create account at https://supabase.com
+  - Create new project, migrate schema + data
+  - Update env vars in `.env` and Vercel
