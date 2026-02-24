@@ -35,3 +35,7 @@
 - `src/pages/` — page components
 - `supabase/` — Supabase config and migrations
 - `public/` — static assets
+
+## Environment
+- Copy `.env.example` to `.env` and fill in your Supabase credentials
+- Never commit `.env` — it's in `.gitignore`
