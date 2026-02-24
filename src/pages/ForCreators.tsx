@@ -173,6 +173,11 @@ const ForCreators = () => {
       {/* ═══════ SECTION 2: VIDEO PROOF (solid bg) ═══════ */}
       <section className="pt-4 pb-12 sm:pt-6 sm:pb-16">
         <StaticVideoCarousel />
+        <div className="mx-auto max-w-2xl px-4 mt-8 text-center">
+          <p className="text-lg text-muted-foreground sm:text-xl">
+            Live shopping is the fastest-growing channel in e-commerce. The wave is here. Will you ride it?
+          </p>
+        </div>
         <div className="mt-6 flex justify-center">
           <Button
             size="lg"
@@ -222,8 +227,13 @@ const ForCreators = () => {
             </div>
 
             {/* Platform heading */}
+            {/* Now it's your turn */}
+            <p className="mx-auto mt-16 mb-8 max-w-lg text-center text-lg font-semibold text-foreground sm:text-xl">
+              All platforms are taking action. Now it's your turn!
+            </p>
+
             {/* Platform logos */}
-            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 mt-16">
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
               {platforms.map((p) => (
                 <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40">
                   <img
@@ -234,11 +244,6 @@ const ForCreators = () => {
                 </div>
               ))}
             </div>
-
-            {/* Now it's your turn */}
-            <p className="mx-auto mt-10 max-w-lg text-center text-lg font-semibold text-foreground sm:text-xl">
-              All platforms are taking action. Now it's your turn!
-            </p>
 
             <div className="mt-8 flex justify-center">
               <Button
