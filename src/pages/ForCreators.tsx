@@ -306,15 +306,13 @@ const ForCreators = () => {
                   <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
 
                   {s.step === 1 && (
-                    <div className="mt-6 grid grid-cols-4 gap-2 rounded-xl overflow-hidden">
-                      {[
-                        "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=200&h=200&fit=crop",
-                        "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=200&h=200&fit=crop",
-                        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop",
-                        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop",
-                      ].map((src, i) => (
-                        <img key={i} src={src} alt="Portfolio example" className="aspect-square w-full object-cover rounded-lg" loading="lazy" />
-                      ))}
+                    <div className="mt-6 overflow-hidden rounded-xl">
+                      <img
+                        src="/images/creator-profile.png"
+                        alt="Creator profile example"
+                        className="w-full object-cover rounded-lg"
+                        loading="lazy"
+                      />
                     </div>
                   )}
 

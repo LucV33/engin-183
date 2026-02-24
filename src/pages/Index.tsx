@@ -94,21 +94,21 @@ const steps = [
     title: "Find Your Host",
     description:
       "Browse vetted live shopping hosts. Filter by niche, selling style, platform, and past performance. Watch highlight reels before you book.",
-    img: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&h=340&fit=crop",
+    img: "/images/steps/find-host.png",
   },
   {
     step: 2,
     title: "Align & Book",
     description:
       "Message hosts directly. Share your product brief, agree on format and budget, and lock in your live date. No agencies, no middlemen.",
-    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=340&fit=crop",
+    img: "/images/steps/align-book.png",
   },
   {
     step: 3,
     title: "Go Live & Sell",
     description:
       "Ship your product, drop your talking points, and watch them sell. Track viewers, clicks, and conversions in real time.",
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=340&fit=crop",
+    img: "/images/steps/go-live.png",
   },
 ];
 
