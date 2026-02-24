@@ -101,14 +101,14 @@ const steps = [
     title: "Align & Book",
     description:
       "Message hosts directly. Share your product brief, agree on format and budget, and lock in your live date. No agencies, no middlemen.",
-    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=450&fit=crop",
+    img: "/images/steps/align-book.png",
   },
   {
     step: 3,
     title: "Go Live & Sell",
     description:
       "Ship your product, drop your talking points, and watch them sell. Track viewers, clicks, and conversions in real time.",
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=450&fit=crop",
+    img: "/images/steps/go-live.png",
   },
 ];
 
@@ -190,10 +190,7 @@ const Index = () => {
               </h1>
 
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                Tap into the most powerful sellers on the internet — college students.
-                Digital natives who know every trend, live on social media, and bring
-                authentic energy that drives real sales. <em>gmv.live</em> connects your
-                brand with campus creators ready to go live.
+                Connect your brand with campus creators ready to go live.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
