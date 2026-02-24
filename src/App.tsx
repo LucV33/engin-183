@@ -23,6 +23,7 @@ import Profile from "./pages/Profile";
 import ForCreators from "./pages/ForCreators";
 import Waitlist from "./pages/Waitlist";
 import Pricing from "./pages/Pricing";
+import Blog from "./pages/Blog";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/waitlist" element={<Waitlist />} />
             <Route path="/for-creators" element={<ForCreators />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
             <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
