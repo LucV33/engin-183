@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Clock, ArrowRight } from "lucide-react";
+import { ChevronRight, Clock } from "lucide-react";
 
 const articles = [
   {
@@ -68,9 +68,6 @@ const articles = [
 ];
 
 const Blog = () => {
-  const featured = articles[0];
-  const rest = articles.slice(1);
-
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -90,79 +87,31 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* ═══════ FEATURED ARTICLE ═══════ */}
-      <section className="py-8">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="group overflow-hidden rounded-2xl border border-border/50 bg-card shadow-sm transition-shadow hover:shadow-lg">
-            <div className="grid sm:grid-cols-2">
-              <div className="aspect-video sm:aspect-auto overflow-hidden">
-                <img
-                  src={featured.image}
-                  alt={featured.title}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
-                <Badge variant="secondary" className="mb-3 w-fit rounded-full text-xs">
-                  {featured.category}
-                </Badge>
-                <h2 className="text-xl font-bold text-card-foreground sm:text-2xl leading-tight">
-                  {featured.title}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {featured.excerpt}
-                </p>
-                <div className="mt-4 flex items-center gap-3 text-xs text-muted-foreground">
-                  <span>{featured.date}</span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" /> {featured.readTime}
-                  </span>
-                </div>
-                <div className="mt-5">
-                  <span className="inline-flex items-center text-sm font-medium text-primary group-hover:underline">
-                    Read article <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════ ARTICLE GRID ═══════ */}
-      <section className="py-12 sm:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((article) => (
-              <div
-                key={article.slug}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-sm transition-shadow hover:shadow-lg"
-              >
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col p-5">
-                  <Badge variant="secondary" className="mb-2 w-fit rounded-full text-xs">
+      {/* ═══════ HEADLINES ═══════ */}
+      <section className="py-8 sm:py-12">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="divide-y divide-border/50 rounded-2xl border border-border/50 bg-card shadow-sm overflow-hidden">
+            {articles.map((article) => (
+              <div key={article.slug} className="p-5 sm:p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="secondary" className="rounded-full text-xs">
                     {article.category}
                   </Badge>
-                  <h3 className="text-base font-semibold text-card-foreground leading-snug">
-                    {article.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm text-muted-foreground line-clamp-3">
-                    {article.excerpt}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{article.date}</span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" /> {article.readTime}
-                    </span>
-                  </div>
+                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 rounded-full">
+                    Coming Soon
+                  </Badge>
+                </div>
+                <h3 className="text-base font-semibold text-card-foreground leading-snug sm:text-lg">
+                  {article.title}
+                </h3>
+                <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2">
+                  {article.excerpt}
+                </p>
+                <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+                  <span>{article.date}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" /> {article.readTime}
+                  </span>
                 </div>
               </div>
             ))}
