@@ -222,18 +222,14 @@ const ForCreators = () => {
             </div>
 
             {/* Platform heading */}
-            <p className="mt-16 text-center text-sm font-semibold uppercase tracking-widest text-primary mb-8">
-              Every major platform is going live
-            </p>
-
             {/* Platform logos */}
-            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 mt-16">
               {platforms.map((p) => (
                 <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40">
                   <img
                     src={p.img}
                     alt={p.name}
-                    className="h-20 w-auto object-contain sm:h-28"
+                    className="h-24 w-auto object-contain sm:h-36"
                   />
                 </div>
               ))}
