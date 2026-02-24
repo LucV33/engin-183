@@ -101,14 +101,14 @@ const steps = [
     title: "Align & Book",
     description:
       "Message hosts directly. Share your product brief, agree on format and budget, and lock in your live date. No agencies, no middlemen.",
-    img: "/images/steps/align-book.png",
+    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&h=450&fit=crop",
   },
   {
     step: 3,
     title: "Go Live & Sell",
     description:
       "Ship your product, drop your talking points, and watch them sell. Track viewers, clicks, and conversions in real time.",
-    img: "/images/steps/go-live.png",
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=450&fit=crop",
   },
 ];
 
@@ -306,11 +306,11 @@ const Index = () => {
                   {s.title}
                 </h3>
                 <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
-                <div className="mt-6 overflow-hidden rounded-xl">
+                <div className="mt-6 overflow-hidden rounded-xl bg-muted/10">
                   <img
                     src={s.img}
                     alt={s.title}
-                    className="w-full aspect-video object-cover"
+                    className="w-full h-auto object-contain rounded-xl"
                     loading="lazy"
                   />
                 </div>
