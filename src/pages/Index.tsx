@@ -22,6 +22,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import StaticVideoCarousel from "@/components/StaticVideoCarousel";
+import HeroVideoStrip from "@/components/HeroVideoStrip";
 
 const rotatingWords = [
   "TikTok Shop.",
@@ -192,6 +194,9 @@ const Index = () => {
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Connect your brand with campus creators ready to go live.
               </p>
+              <p className="mt-2 text-base text-muted-foreground/90">
+                Real hosts. Real-time demos. Real sales.
+              </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <Button size="lg" className="rounded-full" asChild>
@@ -203,9 +208,14 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Host Cards */}
-            <div className="grid grid-cols-2 gap-4 sm:gap-5">
-              {hosts.map((host, i) => (
+            {/* Auto-playing videos + Host Cards */}
+            <div className="space-y-4">
+              <p className="text-center text-xs font-medium text-muted-foreground sm:text-sm">
+                Live shopping in action
+              </p>
+              <HeroVideoStrip />
+              <div className="grid grid-cols-2 gap-4 sm:gap-5">
+                {hosts.map((host, i) => (
                 <div
                   key={i}
                   className="group relative overflow-hidden rounded-2xl bg-card shadow-md border border-border/50 transition-shadow hover:shadow-xl"
@@ -233,9 +243,23 @@ const Index = () => {
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ═══════ SEE LIVE SHOPPING IN ACTION ═══════ */}
+      <section className="py-12 sm:py-16">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center mb-6">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            See live shopping in action
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Real hosts demonstrating and selling products in real time.
+          </p>
+        </div>
+        <StaticVideoCarousel />
       </section>
 
       {/* ═══════ SOCIAL PROOF ═══════ */}

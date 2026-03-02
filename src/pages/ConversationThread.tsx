@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import AppLayout from "@/components/AppLayout";
-import { Send, RefreshCw } from "lucide-react";
+import { Send, RefreshCw, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ConversationThread = () => {
@@ -78,6 +78,18 @@ const ConversationThread = () => {
     ? (conversation as any)?.creator_profile?.display_name
     : (conversation as any)?.brand_profile?.display_name;
 
+  const suggestedFirstMessages = role === "brand"
+    ? [
+        "Hi! I'd love to work with you on a live stream for our product. Here's a quick brief — let me know your rate and availability.",
+        "We're looking for a host for our upcoming campaign. Can you share your rates and which platforms you go live on?",
+        "I've attached our product details. Would you be interested in hosting a live shopping session?",
+      ]
+    : [
+        "Hi! I'd love to learn more about this opportunity. Can you share the product details and timeline?",
+        "I'm interested in hosting this. Here's my rate and availability — let me know if it works.",
+        "Thanks for reaching out! I have experience with live shopping on TikTok/Instagram. What are you looking for in terms of format and dates?",
+      ];
+
   return (
     <AppLayout>
       <div className="flex flex-col" style={{ height: "calc(100vh - 8rem)" }}>
@@ -99,7 +111,26 @@ const ConversationThread = () => {
           {isLoading ? (
             <p className="text-center text-muted-foreground">Loading…</p>
           ) : messages?.length === 0 ? (
-            <p className="text-center text-muted-foreground">No messages yet. Say hello!</p>
+            <div className="space-y-4">
+              <p className="text-center text-muted-foreground">No messages yet. Say hello — or try one of these:</p>
+              <div className="flex flex-col gap-2 max-w-md mx-auto">
+                <p className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <MessageCircle className="h-3.5 w-3.5" /> Suggested ways to start
+                </p>
+                {suggestedFirstMessages.map((text, i) => (
+                  <Button
+                    key={i}
+                    type="button"
+                    variant="outline"
+                    className="h-auto py-3 px-4 text-left text-sm font-normal whitespace-normal justify-start"
+                    onClick={() => sendMutation.mutate(text)}
+                    disabled={sendMutation.isPending}
+                  >
+                    {text}
+                  </Button>
+                ))}
+              </div>
+            </div>
           ) : (
             messages?.map((msg: any) => {
               const isOwn = msg.sender_id === user?.id;
