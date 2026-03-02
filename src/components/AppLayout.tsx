@@ -17,7 +17,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
     <div className="min-h-screen bg-background">
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/feed" className="text-lg font-bold text-foreground">Hostify</Link>
+          <Link to="/feed" className="text-lg font-bold text-foreground">GMV</Link>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
               <Link to="/feed">Feed</Link>
