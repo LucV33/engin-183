@@ -185,6 +185,22 @@ const CreatorFeed = () => {
 
                 {/* Info section */}
                 <div className="flex flex-col gap-3 p-4">
+                  {/* Comparison row: easy to scan across cards */}
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                    {(product.budget_min != null || product.budget_max != null) && (
+                      <span className="flex items-center gap-1 font-medium text-foreground">
+                        <DollarSign className="h-3.5 w-3.5" />
+                        ${product.budget_min ?? "?"} – ${product.budget_max ?? "?"}
+                      </span>
+                    )}
+                    {product.category && (
+                      <span>{product.category}</span>
+                    )}
+                    {product.target_platforms?.length > 0 && (
+                      <span>{product.target_platforms.slice(0, 2).join(", ")}</span>
+                    )}
+                  </div>
+
                   {/* Brand avatar + product title */}
                   <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9 border-2 border-background shadow-sm">
@@ -215,17 +231,6 @@ const CreatorFeed = () => {
                     {product.target_platforms?.slice(0, 3).map((p: string) => (
                       <Badge key={p} variant="outline" className="text-xs">{p}</Badge>
                     ))}
-                  </div>
-
-                  {/* Footer: budget */}
-                  <div className="flex items-center justify-between border-t border-border pt-3 text-sm">
-                    {(product.budget_min || product.budget_max) && (
-                      <span className="flex items-center gap-1 font-medium text-foreground">
-                        <DollarSign className="h-3.5 w-3.5 text-muted-foreground" />
-                        ${product.budget_min ?? "?"} – ${product.budget_max ?? "?"}
-                      </span>
-                    )}
-                    <span className="text-xs text-muted-foreground">Budget range</span>
                   </div>
                 </div>
               </Link>

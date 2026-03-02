@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import StaticVideoCarousel from "@/components/StaticVideoCarousel";
+import HeroVideoStrip from "@/components/HeroVideoStrip";
 import {
   Sparkles,
   ArrowRight,
@@ -119,50 +120,78 @@ const ForCreators = () => {
         <div className="cloud-blob bg-primary w-[500px] h-[500px] -top-32 -left-32 absolute" />
         <div className="cloud-blob bg-accent w-[500px] h-[500px] top-20 -right-40 absolute" />
 
-        <section className="relative pt-32 pb-12 sm:pt-40 sm:pb-16">
-          <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-              Become a Live Shopping Host
-            </p>
+        <section className="relative pt-24 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+              {/* Left: Copy */}
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-primary">
+                  Become a Live Shopping Host
+                </p>
 
-            <h1 className="mt-6 text-5xl font-black leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
-              Where{" "}
-              <span className="relative inline-block">
-                <span className="relative z-10">Top Brands</span>
-                <span className="absolute bottom-1 left-0 right-0 h-3 bg-primary opacity-40 rounded-sm -z-0 sm:h-4" />
-              </span>{" "}
-              Find Their Live Shopping Hosts.
-            </h1>
+                <h1 className="mt-4 sm:mt-5 text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
+                  Where{" "}
+                  <span className="relative inline-block">
+                    <span className="relative z-10">Top Brands</span>
+                    <span className="absolute bottom-1 left-0 right-0 h-2.5 sm:h-3 bg-primary opacity-40 rounded-sm -z-0" />
+                  </span>{" "}
+                  Find Their Live Shopping Hosts.
+                </h1>
 
-            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
-              Get paid to share your passion online.
-            </p>
+                <p className="mt-4 sm:mt-6 text-base sm:text-lg text-muted-foreground leading-relaxed">
+                  Get paid to share your passion online. Join the fastest-growing channel in e-commerce.
+                </p>
 
-            <div className="mt-10 flex justify-center">
-              <Button
-                size="lg"
-                className="rounded-full px-8 text-base font-bold"
-                asChild
-              >
-                <Link to="/waitlist">
-                  Join Now — It's Free <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+                <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-4">
+                  <Button
+                    size="lg"
+                    className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold shadow-lg shadow-primary/20"
+                    asChild
+                  >
+                    <Link to="/waitlist">
+                      Join Now — It's Free <ArrowRight className="ml-1.5 sm:ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+
+                {/* Perks inline — visible all breakpoints */}
+                <div className="mt-8 sm:mt-10 flex flex-wrap gap-2 sm:gap-3">
+                  {perks.slice(0, 4).map((p) => (
+                    <span
+                      key={p.title}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/80 px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-medium text-foreground/90 backdrop-blur-sm"
+                    >
+                      <p.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-primary shrink-0" />
+                      <span className="truncate">{p.title}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right: Live shopping videos */}
+              <div className="min-w-0 flex flex-col items-center lg:items-end">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 sm:mb-3">
+                  Live shopping in action
+                </p>
+                <div className="flex justify-center lg:justify-end overflow-x-auto pb-2 lg:pb-0 w-full max-w-[360px] sm:max-w-[420px] lg:max-w-none">
+                  <HeroVideoStrip variant="featured" size="lg" align="end" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Perks (still inside gradient wrapper) */}
-        <section className="relative pb-10 sm:pb-14">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+        {/* Perks row — full list as cards (complement to hero pills) */}
+        <section className="relative pb-12 sm:pb-16 lg:pb-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 lg:gap-4">
               {perks.map((p) => (
                 <div
                   key={p.title}
-                  className="flex items-center gap-2.5 rounded-xl border border-border bg-card px-4 py-3 backdrop-blur-sm"
+                  className="flex items-center gap-2 sm:gap-2.5 rounded-xl border border-border bg-card px-3 py-2.5 sm:px-4 sm:py-3 backdrop-blur-sm min-w-0"
                 >
-                  <p.icon className="h-5 w-5 shrink-0 text-accent" />
-                  <span className="text-sm font-medium text-foreground/80">{p.title}</span>
+                  <p.icon className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-accent" />
+                  <span className="text-xs sm:text-sm font-medium text-foreground/80 truncate">{p.title}</span>
                 </div>
               ))}
             </div>
@@ -171,23 +200,25 @@ const ForCreators = () => {
       </div>
 
       {/* ═══════ SECTION 2: VIDEO PROOF (solid bg) ═══════ */}
-      <section className="pt-4 pb-12 sm:pt-6 sm:pb-16">
-        <StaticVideoCarousel />
-        <div className="mx-auto max-w-2xl px-4 mt-8 text-center">
-          <p className="text-lg text-muted-foreground sm:text-xl">
-            Live shopping is the fastest-growing channel in e-commerce. The wave is here. Will you ride it?
-          </p>
-        </div>
-        <div className="mt-6 flex justify-center">
-          <Button
-            size="lg"
-            className="rounded-full px-8 text-base font-bold"
-            asChild
-          >
-            <Link to="/waitlist">
-              Don't Miss Out on the Opportunity <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <StaticVideoCarousel />
+          <div className="mt-6 sm:mt-8 max-w-2xl mx-auto text-center">
+            <p className="text-base sm:text-lg text-muted-foreground">
+              Live shopping is the fastest-growing channel in e-commerce. Will you ride it?
+            </p>
+            <div className="mt-4 sm:mt-6 flex justify-center">
+              <Button
+                size="lg"
+                className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold"
+                asChild
+              >
+                <Link to="/waitlist">
+                  Don't Miss Out <ArrowRight className="ml-1.5 sm:ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -196,63 +227,58 @@ const ForCreators = () => {
         <div className="cloud-blob bg-primary w-[600px] h-[600px] -top-40 -right-40 absolute" />
         <div className="cloud-blob bg-accent w-[400px] h-[400px] bottom-0 -left-20 absolute" />
 
-        <section className="relative py-20 sm:py-28">
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            {/* Big $600B+ stat on top */}
-            <div className="text-center mb-12">
-              <p className="text-6xl font-black tracking-tight text-primary sm:text-7xl lg:text-8xl">
+        <section className="relative py-12 sm:py-16 lg:py-20 xl:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10 sm:mb-12">
+              <p className="text-5xl font-black tracking-tight text-primary sm:text-6xl lg:text-7xl xl:text-8xl">
                 $600B+
               </p>
-              <p className="mt-3 text-lg text-muted-foreground sm:text-xl">
+              <p className="mt-2 sm:mt-3 text-base sm:text-lg text-muted-foreground">
                 Global live shopping market by 2027
               </p>
             </div>
 
-            {/* Stats grid */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               {marketStats.filter(s => s.value !== "$600B+").map((stat) => (
                 <div
                   key={stat.value}
-                  className="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-6 text-center"
+                  className="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-4 sm:p-6 text-center min-w-0"
                 >
-                  <stat.icon className="mx-auto h-6 w-6 text-accent mb-3" />
-                  <p className="text-3xl font-black tracking-tight text-primary sm:text-4xl">
+                  <stat.icon className="mx-auto h-5 w-5 sm:h-6 sm:w-6 text-accent mb-2 sm:mb-3" />
+                  <p className="text-2xl font-black tracking-tight text-primary sm:text-3xl lg:text-4xl">
                     {stat.value}
                   </p>
-                  <p className="mt-2 text-sm text-muted-foreground leading-snug">
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-muted-foreground leading-snug">
                     {stat.label}
                   </p>
                 </div>
               ))}
             </div>
 
-            {/* Platform heading */}
-            {/* Now it's your turn */}
-            <p className="mx-auto mt-16 mb-8 max-w-lg text-center text-lg font-semibold text-foreground sm:text-xl">
+            <p className="mx-auto mt-12 sm:mt-16 mb-6 sm:mb-8 max-w-lg text-center text-base sm:text-lg font-semibold text-foreground">
               All platforms are taking action. Now it's your turn!
             </p>
 
-            {/* Platform logos */}
-            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-10">
               {platforms.map((p) => (
-                <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40">
+                <div key={p.name} className="rounded-xl overflow-hidden border border-border bg-card/40 shrink-0">
                   <img
                     src={p.img}
                     alt={p.name}
-                    className="h-24 w-auto object-contain sm:h-36"
+                    className="h-20 w-auto object-contain sm:h-24 lg:h-28"
                   />
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-6 sm:mt-8 flex justify-center">
               <Button
                 size="lg"
-                className="rounded-full px-8"
+                className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold"
                 asChild
               >
                 <Link to="/waitlist">
-                  Join the Revolution <ArrowRight className="ml-1 h-4 w-4" />
+                  Join the Revolution <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -260,10 +286,10 @@ const ForCreators = () => {
         </section>
       </div>
 
-      {/* ═══════ SECTION 4: BRAND TRUST (solid bg, infinite scroll) ═══════ */}
-      <section className="py-16 sm:py-24 overflow-hidden">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-12 text-center text-3xl font-bold tracking-tight sm:text-4xl">
+      {/* ═══════ SECTION 4: BRAND TRUST (solid bg) ═══════ */}
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-24 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-8 sm:mb-12">
+          <h2 className="text-center text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
             Brands Already Using Live Shopping
           </h2>
         </div>
@@ -274,7 +300,7 @@ const ForCreators = () => {
                 key={`${b.name}-${i}`}
                 src={b.img}
                 alt={b.name}
-                className="h-8 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity sm:h-10 mx-8 sm:mx-12"
+                className="h-8 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity sm:h-10 mx-6 sm:mx-8 lg:mx-12"
               />
             ))}
           </div>
@@ -286,27 +312,27 @@ const ForCreators = () => {
         <div className="cloud-blob bg-primary w-[500px] h-[500px] top-20 -left-40 absolute" />
         <div className="cloud-blob bg-accent w-[400px] h-[400px] bottom-20 -right-32 absolute" />
 
-        <section className="relative py-16 sm:py-24">
+        <section className="relative py-12 sm:py-16 lg:py-20 xl:py-24">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-center text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
               How It Works
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+            <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-center text-sm sm:text-base text-muted-foreground">
               From sign-up to payout. Here's how <em>gmv.live</em> works for creators.
             </p>
 
-            <div className="mt-14 space-y-12">
+            <div className="mt-10 sm:mt-14 space-y-8 sm:space-y-12">
               {steps.map((s) => (
                 <div
                   key={s.step}
-                  className="rounded-2xl border border-border bg-card p-6 sm:p-8"
+                  className="rounded-2xl border border-border bg-card p-4 sm:p-6 lg:p-8 min-w-0"
                 >
                   <p className="text-sm font-mono font-semibold text-primary">{s.step}_</p>
-                  <h3 className="mt-2 text-xl font-bold sm:text-2xl">{s.title}</h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
+                  <h3 className="mt-2 text-lg font-bold sm:text-xl lg:text-2xl">{s.title}</h3>
+                  <p className="mt-2 sm:mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">{s.description}</p>
 
                   {s.step === 1 && (
-                    <div className="mt-6 overflow-hidden rounded-xl">
+                    <div className="mt-4 sm:mt-6 overflow-hidden rounded-xl">
                       <img
                         src="/images/creator-profile.png"
                         alt="Creator profile example"
@@ -317,10 +343,10 @@ const ForCreators = () => {
                   )}
 
                   {s.step === 2 && (
-                    <div className="mt-6 rounded-xl border border-border bg-secondary p-4 space-y-3">
+                    <div className="mt-4 sm:mt-6 rounded-xl border border-border bg-secondary p-3 sm:p-4 space-y-3">
                       <div className="flex items-start gap-3">
                         <div className="h-8 w-8 shrink-0 rounded-full bg-primary/20" />
-                        <div className="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
+                        <div className="rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground min-w-0">
                           Hi! We'd love you to host a live stream for our new skincare line. Interested?
                         </div>
                       </div>
@@ -333,27 +359,27 @@ const ForCreators = () => {
                   )}
 
                   {s.step === 3 && (
-                    <div className="mt-6 space-y-3">
-                      <div className="rounded-xl bg-accent/10 border border-accent/20 p-4">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold">Your Payment</span>
-                          <span className="font-bold">$550</span>
+                    <div className="mt-4 sm:mt-6 space-y-3">
+                      <div className="rounded-xl bg-accent/10 border border-accent/20 p-3 sm:p-4">
+                        <div className="flex items-center justify-between gap-2 min-w-0">
+                          <span className="font-semibold text-sm sm:text-base">Your Payment</span>
+                          <span className="font-bold shrink-0">$550</span>
                         </div>
                         <div className="mt-2 flex items-center gap-2 text-sm text-accent">
-                          <CheckCircle2 className="h-4 w-4" /> Secured
-                          <span className="ml-auto text-muted-foreground text-xs">1h ago</span>
+                          <CheckCircle2 className="h-4 w-4 shrink-0" /> Secured
+                          <span className="ml-auto text-muted-foreground text-xs shrink-0">1h ago</span>
                         </div>
                       </div>
-                      <div className="rounded-xl bg-accent/10 border border-accent/20 p-4">
-                        <span className="font-semibold">Your Contract</span>
+                      <div className="rounded-xl bg-accent/10 border border-accent/20 p-3 sm:p-4">
+                        <span className="font-semibold text-sm sm:text-base">Your Contract</span>
                         <div className="mt-2 space-y-1 text-sm text-accent">
                           <div className="flex items-center gap-2">
-                            <CheckCircle2 className="h-4 w-4" /> Signed by you
-                            <span className="ml-auto text-muted-foreground text-xs">1h ago</span>
+                            <CheckCircle2 className="h-4 w-4 shrink-0" /> Signed by you
+                            <span className="ml-auto text-muted-foreground text-xs shrink-0">1h ago</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <CheckCircle2 className="h-4 w-4" /> Signed by brand
-                            <span className="ml-auto text-muted-foreground text-xs">2h ago</span>
+                            <CheckCircle2 className="h-4 w-4 shrink-0" /> Signed by brand
+                            <span className="ml-auto text-muted-foreground text-xs shrink-0">2h ago</span>
                           </div>
                         </div>
                       </div>
@@ -361,9 +387,9 @@ const ForCreators = () => {
                   )}
 
                   {s.step === 4 && (
-                    <div className="mt-6 flex flex-col items-center rounded-xl border border-border bg-secondary p-8 text-center">
-                      <p className="text-lg font-bold">Congratulations! 🎉</p>
-                      <p className="mt-4 text-4xl font-black text-primary">+ $550</p>
+                    <div className="mt-4 sm:mt-6 flex flex-col items-center rounded-xl border border-border bg-secondary p-6 sm:p-8 text-center">
+                      <p className="text-base sm:text-lg font-bold">Congratulations! 🎉</p>
+                      <p className="mt-3 sm:mt-4 text-3xl sm:text-4xl font-black text-primary">+ $550</p>
                       <p className="mt-2 text-sm text-muted-foreground">The brand approved your live stream</p>
                     </div>
                   )}
@@ -375,16 +401,16 @@ const ForCreators = () => {
       </div>
 
       {/* ═══════ FAQ (solid bg) ═══════ */}
-      <section className="py-16 sm:py-24">
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-center text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
             Still Have Questions?
           </h2>
-          <Accordion type="single" collapsible className="mt-10">
+          <Accordion type="single" collapsible className="mt-8 sm:mt-10">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`} className="border-border">
-                <AccordionTrigger className="text-left text-base font-medium">{faq.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
+                <AccordionTrigger className="text-left text-sm sm:text-base font-medium py-4 sm:py-5">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm sm:text-base pb-4 sm:pb-5">{faq.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -395,24 +421,22 @@ const ForCreators = () => {
       <div className="relative overflow-hidden">
         <div className="cloud-blob bg-primary w-[500px] h-[500px] top-0 left-1/3 absolute" />
 
-        <section className="relative py-20 sm:py-28">
+        <section className="relative py-12 sm:py-16 lg:py-20 xl:py-28">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
               Join Hundreds of Live Hosts
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Focus on selling live for the best brands with our optimized tools
-              and resources. Hundreds of hosts have already joined <em>gmv.live</em> and are
-              thriving. Now it's your turn!
+            <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted-foreground">
+              Focus on selling live for the best brands. Hundreds of hosts have already joined <em>gmv.live</em>. Now it's your turn!
             </p>
-            <div className="mt-10 flex flex-col items-center gap-4">
+            <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4">
               <Button
                 size="lg"
-                className="rounded-full px-8"
+                className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold"
                 asChild
               >
                 <Link to="/waitlist">
-                  Join <em>gmv.live</em> <ChevronRight className="ml-1 h-4 w-4" />
+                  Join <em>gmv.live</em> <ChevronRight className="ml-1.5 h-4 w-4" />
                 </Link>
               </Button>
               <Link
@@ -426,18 +450,18 @@ const ForCreators = () => {
         </section>
       </div>
 
-      {/* ═══════ FOOTER (solid) ═══════ */}
-      <footer className="border-t border-border py-12">
+      {/* ═══════ FOOTER ═══════ */}
+      <footer className="border-t border-border py-10 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold">🤩 <em>gmv.live</em></p>
-              <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
+              <p className="text-base sm:text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>
               <Link to="/" className="block hover:text-foreground">For Creators</Link>
-              <Link to="/coming-soon" className="block hover:text-foreground">Pricing</Link>
+              <Link to="/pricing" className="block hover:text-foreground">Pricing</Link>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/coming-soon" className="block hover:text-foreground">Privacy Policy</Link>

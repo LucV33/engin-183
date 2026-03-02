@@ -22,7 +22,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
 const rotatingWords = [
   "TikTok Shop.",
   "Brand Campaigns.",
@@ -152,28 +151,28 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
       {/* ═══════ HERO ═══════ */}
-      <section className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+      <section className="relative overflow-hidden pt-24 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24">
         <div className="cloud-blob bg-primary w-[500px] h-[500px] -top-40 -left-40 absolute" />
         <div className="cloud-blob bg-accent w-[600px] h-[600px] top-20 -right-60 absolute" />
         <div className="cloud-blob bg-primary w-[400px] h-[400px] bottom-0 left-1/3 absolute" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-            <div className="max-w-xl">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+            <div className="min-w-0">
               <Badge
                 variant="secondary"
-                className="mb-6 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border-0"
+                className="mb-4 sm:mb-6 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wider border-0"
               >
                 Live Shopping Network
               </Badge>
 
-              <h1 className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+              <h1 className="text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
                 Match and Manage the Best Live Hosts For Your{" "}
-                <span className="relative inline-block" style={{ minWidth: "280px" }}>
+                <span className="relative inline-block" style={{ minWidth: "min(100%, 280px)" }}>
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={currentWord}
@@ -189,93 +188,97 @@ const Index = () => {
                 </span>
               </h1>
 
-              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground">
                 Connect your brand with campus creators ready to go live.
               </p>
+              <p className="mt-2 text-sm sm:text-base text-muted-foreground/90">
+                Real hosts. Real-time demos. Real sales.
+              </p>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Button size="lg" className="rounded-full" asChild>
+              <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-4">
+                <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
                   <Link to="/waitlist">Browse Hosts</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="rounded-full" asChild>
+                <Button size="lg" variant="outline" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
                   <Link to="/waitlist">Apply as a Host</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Host Cards */}
-            <div className="grid grid-cols-2 gap-4 sm:gap-5">
-              {hosts.map((host, i) => (
-                <div
-                  key={i}
-                  className="group relative overflow-hidden rounded-2xl bg-card shadow-md border border-border/50 transition-shadow hover:shadow-xl"
-                  style={{ animationDelay: `${i * 100}ms` }}
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <img
-                      src={host.img}
-                      alt="College creator"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/80 text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100">
-                        <Play className="h-4 w-4 ml-0.5" fill="currentColor" />
+            {/* Right: Host cards */}
+            <div className="min-w-0 flex justify-center lg:justify-end">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5 w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[440px]">
+                {hosts.map((host, i) => (
+                  <div
+                    key={i}
+                    className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-card shadow-md border border-border/50 transition-shadow hover:shadow-xl min-w-0"
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                      <img
+                        src={host.img}
+                        alt="College creator"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary/80 text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100">
+                          <Play className="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-0.5" fill="currentColor" />
+                        </div>
                       </div>
                     </div>
+                    <div className="flex items-center justify-center p-2 sm:p-3">
+                      <img
+                        src={host.logo}
+                        alt="University logo"
+                        className="h-6 w-auto object-contain sm:h-8 lg:h-10"
+                      />
+                    </div>
                   </div>
-                  <div className="flex items-center justify-center p-3">
-                    <img
-                      src={host.logo}
-                      alt="University logo"
-                      className="h-8 w-auto object-contain sm:h-10"
-                    />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ═══════ SOCIAL PROOF ═══════ */}
-      <section className="py-10">
+      <section className="py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
+          <p className="mb-6 sm:mb-8 text-center text-sm sm:text-base font-medium text-muted-foreground">
             200+ e-commerce brands are already going live every week.
           </p>
-        </div>
-        <div className="relative overflow-hidden">
-          <div className="flex animate-scroll-logos w-max gap-16 px-6">
-            {[...brandNames, ...brandNames].map((name, i) => (
-              <span
-                key={i}
-                className="shrink-0 text-lg font-bold tracking-tight text-foreground/20 select-none"
-              >
-                {name}
-              </span>
-            ))}
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll-logos w-max gap-12 sm:gap-16 px-4">
+              {[...brandNames, ...brandNames].map((name, i) => (
+                <span
+                  key={i}
+                  className="shrink-0 text-base sm:text-lg font-bold tracking-tight text-foreground/20 select-none"
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ═══════ FEATURE CARDS ═══════ */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-12">
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl mb-8 sm:mb-12">
             Everything You Need to Go Live
           </h2>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <div
                 key={f.title}
-                className="group rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-shadow hover:shadow-lg"
+                className="rounded-2xl border border-border/50 bg-card p-4 sm:p-6 shadow-sm transition-shadow hover:shadow-lg min-w-0"
               >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <f.icon className="h-5 w-5" />
+                <div className="mb-3 sm:mb-4 flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <f.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <h3 className="text-base font-semibold text-card-foreground">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.description}</p>
+                <h3 className="text-sm sm:text-base font-semibold text-card-foreground">{f.title}</h3>
+                <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">{f.description}</p>
               </div>
             ))}
           </div>
@@ -283,27 +286,25 @@ const Index = () => {
       </section>
 
       {/* ═══════ HOW IT WORKS ═══════ */}
-      <section className="py-20 sm:py-28">
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             How It Works
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-muted-foreground">
+          <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-center text-sm sm:text-base text-muted-foreground">
             From discovery to conversion — here's how <em>gmv.live</em> works for brands.
           </p>
 
-          <div className="mt-14 space-y-12">
+          <div className="mt-10 sm:mt-14 space-y-8 sm:space-y-12">
             {steps.map((s) => (
               <div
                 key={s.step}
-                className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm sm:p-8"
+                className="rounded-2xl border border-border/50 bg-card p-4 sm:p-6 lg:p-8 shadow-sm min-w-0"
               >
                 <p className="text-sm font-mono font-semibold text-primary">{s.step}_</p>
-                <h3 className="mt-2 text-xl font-bold text-card-foreground sm:text-2xl">
-                  {s.title}
-                </h3>
-                <p className="mt-3 leading-relaxed text-muted-foreground">{s.description}</p>
-                <div className="mt-6 overflow-hidden rounded-xl bg-muted/10">
+                <h3 className="mt-2 text-lg font-bold text-card-foreground sm:text-xl lg:text-2xl">{s.title}</h3>
+                <p className="mt-2 sm:mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">{s.description}</p>
+                <div className="mt-4 sm:mt-6 overflow-hidden rounded-xl bg-muted/10">
                   <img
                     src={s.img}
                     alt={s.title}
@@ -318,16 +319,16 @@ const Index = () => {
       </section>
 
       {/* ═══════ FAQ ═══════ */}
-      <section className="py-16 sm:py-24">
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Still Have Questions?
           </h2>
-          <Accordion type="single" collapsible className="mt-10">
+          <Accordion type="single" collapsible className="mt-8 sm:mt-10">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`} className="border-border">
-                <AccordionTrigger className="text-left text-base font-medium">{faq.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
+                <AccordionTrigger className="text-left text-sm sm:text-base font-medium py-4 sm:py-5">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm sm:text-base pb-4 sm:pb-5">{faq.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -335,19 +336,19 @@ const Index = () => {
       </section>
 
       {/* ═══════ FINAL CTA ═══════ */}
-      <section className="py-20 sm:py-28">
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-28">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Start Selling Live Today
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted-foreground">
             Join hundreds of brands already using <em>gmv.live</em> to find top live shopping
             hosts, run campaigns, and drive real-time sales.
           </p>
-          <div className="mt-10 flex flex-col items-center gap-4">
-            <Button size="lg" className="rounded-full" asChild>
+          <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4">
+            <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
               <Link to="/waitlist">
-                Get Started <ChevronRight className="ml-1 h-4 w-4" />
+                Get Started <ChevronRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>
             <Link
@@ -361,12 +362,12 @@ const Index = () => {
       </section>
 
       {/* ═══════ FOOTER ═══════ */}
-      <footer className="border-t border-border py-12">
+      <footer className="border-t border-border py-10 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
-              <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
+              <p className="text-base sm:text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>
