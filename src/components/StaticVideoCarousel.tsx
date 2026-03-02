@@ -58,33 +58,32 @@ const StaticVideoCarousel = () => {
   const cardWidth = 100 / visibleCount;
 
   return (
-    <section className="py-10 sm:py-16">
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Left arrow */}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handlePrev}
-          className="absolute -left-1 top-1/2 z-10 -translate-y-1/2 rounded-full border-border bg-card/80 backdrop-blur-sm sm:left-0"
-          aria-label="Previous video"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
+    <div className="relative w-full">
+      {/* Left arrow */}
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={handlePrev}
+        className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border-border bg-card/80 backdrop-blur-sm shadow-md"
+        aria-label="Previous video"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </Button>
 
-        {/* Right arrow */}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleNext}
-          className="absolute -right-1 top-1/2 z-10 -translate-y-1/2 rounded-full border-border bg-card/80 backdrop-blur-sm sm:right-0"
-          aria-label="Next video"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </Button>
+      {/* Right arrow */}
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={handleNext}
+        className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border-border bg-card/80 backdrop-blur-sm shadow-md"
+        aria-label="Next video"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </Button>
 
-        {/* Carousel viewport */}
-        <div className="overflow-hidden rounded-2xl mx-8 sm:mx-12">
-          <div className="flex gap-3 sm:gap-4">
+      {/* Carousel viewport — horizontal margin for arrows on small screens */}
+      <div className="overflow-hidden rounded-2xl mx-10 sm:mx-12">
+        <div className="flex gap-2 sm:gap-3 lg:gap-4">
             {visibleIndices.map((vi) => {
               const v = videos[vi];
               return (
@@ -105,8 +104,7 @@ const StaticVideoCarousel = () => {
             })}
           </div>
         </div>
-      </div>
-    </section>
+    </div>
   );
 };
 

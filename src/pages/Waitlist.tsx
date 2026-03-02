@@ -118,40 +118,47 @@ const Waitlist = () => {
             </Link>
             <CardTitle className="text-2xl">Join the Waitlist</CardTitle>
             <CardDescription>
-              Be the first to know when we launch. Get early access to the live shopping network.
+              Be the first to know when we launch. Choose your path below — we'll notify you and you can start using the platform.
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-5">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label>I am a…</Label>
+                <p className="text-xs text-muted-foreground">Choose what happens next:</p>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
                     onClick={() => setRole("creator")}
-                    className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all ${
+                    className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 text-left transition-all ${
                       role === "creator"
                         ? "border-primary bg-primary/10"
                         : "border-border hover:border-primary/40"
                     }`}
                   >
-                    <Video className={`h-6 w-6 ${role === "creator" ? "text-primary" : "text-muted-foreground"}`} />
+                    <Video className={`h-6 w-6 shrink-0 ${role === "creator" ? "text-primary" : "text-muted-foreground"}`} />
                     <span className={`text-sm font-medium ${role === "creator" ? "text-primary" : "text-foreground"}`}>
                       Creator / Host
+                    </span>
+                    <span className="text-xs text-muted-foreground text-center leading-snug">
+                      Join the waitlist → get discovered by brands and receive live stream opportunities.
                     </span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setRole("brand")}
-                    className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all ${
+                    className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 text-left transition-all ${
                       role === "brand"
                         ? "border-primary bg-primary/10"
                         : "border-border hover:border-primary/40"
                     }`}
                   >
-                    <ShoppingBag className={`h-6 w-6 ${role === "brand" ? "text-primary" : "text-muted-foreground"}`} />
+                    <ShoppingBag className={`h-6 w-6 shrink-0 ${role === "brand" ? "text-primary" : "text-muted-foreground"}`} />
                     <span className={`text-sm font-medium ${role === "brand" ? "text-primary" : "text-foreground"}`}>
                       Brand
+                    </span>
+                    <span className="text-xs text-muted-foreground text-center leading-snug">
+                      Join the waitlist → get early access to browse and message vetted live shopping hosts.
                     </span>
                   </button>
                 </div>

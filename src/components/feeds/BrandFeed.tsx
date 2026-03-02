@@ -180,7 +180,24 @@ const BrandFeed = () => {
 
                 {/* Info section */}
                 <div className="flex flex-col gap-3 p-4">
-                  {/* Avatar + Name + Rating row */}
+                  {/* Comparison row: easy to scan across cards */}
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-0.5 font-medium text-foreground">
+                      <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                      {Number(creator.rating || 0).toFixed(1)}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3.5 w-3.5" />
+                      {(creator.follower_count ?? 0).toLocaleString()} followers
+                    </span>
+                    {creator.avg_gmv > 0 && (
+                      <span className="font-medium text-foreground">
+                        ${Number(creator.avg_gmv).toLocaleString()} avg GMV
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Avatar + Name + Location row */}
                   <div className="flex items-center gap-3">
                     <Avatar className="h-11 w-11 border-2 border-background shadow-sm">
                       <AvatarImage src={creator.profiles?.avatar_url} />
@@ -189,17 +206,9 @@ const BrandFeed = () => {
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="truncate text-base font-semibold text-foreground">
-                          {creator.profiles?.display_name || "Creator"}
-                        </span>
-                        <div className="flex items-center gap-0.5 text-sm">
-                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                          <span className="font-medium text-foreground">
-                            {Number(creator.rating || 0).toFixed(1)}
-                          </span>
-                        </div>
-                      </div>
+                      <span className="truncate text-base font-semibold text-foreground block">
+                        {creator.profiles?.display_name || "Creator"}
+                      </span>
                       {creator.location && (
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                           <MapPin className="h-3 w-3" />
@@ -208,6 +217,13 @@ const BrandFeed = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* One-line highlight for fast comparison */}
+                  {(creator.niches?.length || creator.platforms?.length) ? (
+                    <p className="text-xs text-muted-foreground">
+                      {[...(creator.niches || []).slice(0, 2), ...(creator.platforms || []).slice(0, 2)].join(" · ")}
+                    </p>
+                  ) : null}
 
                   {/* Bio */}
                   {creator.profiles?.bio && (
@@ -222,19 +238,6 @@ const BrandFeed = () => {
                     {creator.platforms?.slice(0, 2).map((p: string) => (
                       <Badge key={p} variant="outline" className="text-xs">{p}</Badge>
                     ))}
-                  </div>
-
-                  {/* Footer stats */}
-                  <div className="flex items-center justify-between border-t border-border pt-3 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3.5 w-3.5" />
-                      {(creator.follower_count ?? 0).toLocaleString()} followers
-                    </span>
-                    {creator.avg_gmv > 0 && (
-                      <span className="font-medium text-foreground">
-                        ${Number(creator.avg_gmv).toLocaleString()} avg GMV
-                      </span>
-                    )}
                   </div>
                 </div>
               </Link>
