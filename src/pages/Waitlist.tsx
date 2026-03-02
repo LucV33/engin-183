@@ -84,7 +84,7 @@ const Waitlist = () => {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <Card className="w-full max-w-md text-center border-border bg-card">
           <CardHeader>
             <Link to="/" className="mb-2 text-xl font-bold text-foreground hover:text-primary transition-colors">

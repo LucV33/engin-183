@@ -69,30 +69,30 @@ const articles = [
 
 const Blog = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
       {/* ═══════ HEADER ═══════ */}
-      <section className="relative overflow-hidden pt-28 pb-12 sm:pt-36 sm:pb-16">
+      <section className="relative overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-14 lg:pt-40 lg:pb-16">
         <div className="cloud-blob bg-primary w-[500px] h-[500px] -top-40 -left-40 absolute" />
         <div className="cloud-blob bg-accent w-[400px] h-[400px] top-20 -right-40 absolute" />
 
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h1 className="text-2xl font-black tracking-tight text-foreground sm:text-3xl lg:text-4xl xl:text-5xl">
             The Live Commerce Blog
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted-foreground">
             Guides, trends, and strategies to help your brand win with live shopping.
           </p>
         </div>
       </section>
 
       {/* ═══════ HEADLINES ═══════ */}
-      <section className="py-8 sm:py-12">
+      <section className="py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="divide-y divide-border/50 rounded-2xl border border-border/50 bg-card shadow-sm overflow-hidden">
             {articles.map((article) => (
-              <div key={article.slug} className="p-5 sm:p-6">
+              <div key={article.slug} className="p-4 sm:p-5 lg:p-6 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   <Badge variant="secondary" className="rounded-full text-xs">
                     {article.category}
@@ -120,18 +120,18 @@ const Blog = () => {
       </section>
 
       {/* ═══════ CTA ═══════ */}
-      <section className="py-16 sm:py-24">
+      <section className="py-12 sm:py-16 lg:py-20 xl:py-24">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Ready to Put Live Shopping to Work?
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted-foreground">
             Join the waitlist and get matched with vetted college creators who can sell your products live.
           </p>
-          <div className="mt-8">
-            <Button size="lg" className="rounded-full" asChild>
+          <div className="mt-6 sm:mt-8">
+            <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
               <Link to="/waitlist">
-                Get Started <ChevronRight className="ml-1 h-4 w-4" />
+                Get Started <ChevronRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -139,12 +139,12 @@ const Blog = () => {
       </section>
 
       {/* ═══════ FOOTER ═══════ */}
-      <footer className="border-t border-border py-12">
+      <footer className="border-t border-border py-10 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
-              <p className="mt-2 text-sm text-muted-foreground">support@gmv.live</p>
+              <p className="text-base sm:text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
+              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>

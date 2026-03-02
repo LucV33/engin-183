@@ -122,9 +122,9 @@ const ForCreators = () => {
 
         <section className="relative pt-24 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24">
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-8 sm:gap-10 lg:grid-cols-[1fr_auto] lg:gap-12 xl:gap-16 items-center">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 items-center">
               {/* Left: Copy */}
-              <div className="min-w-0 max-w-xl order-2 lg:order-1">
+              <div className="min-w-0">
                 <p className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-primary">
                   Become a Live Shopping Host
                 </p>
@@ -169,11 +169,11 @@ const ForCreators = () => {
               </div>
 
               {/* Right: Live shopping videos */}
-              <div className="order-1 lg:order-2 min-w-0 flex flex-col items-center lg:items-end w-full lg:w-auto">
+              <div className="min-w-0 flex flex-col items-center lg:items-end">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 sm:mb-3">
                   Live shopping in action
                 </p>
-                <div className="w-full flex justify-center lg:justify-end min-w-0 overflow-x-auto pb-2 lg:pb-0">
+                <div className="flex justify-center lg:justify-end overflow-x-auto pb-2 lg:pb-0 w-full max-w-[360px] sm:max-w-[420px] lg:max-w-none">
                   <HeroVideoStrip variant="featured" size="lg" align="end" />
                 </div>
               </div>
@@ -455,13 +455,13 @@ const ForCreators = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
-              <p className="text-base sm:text-lg font-bold">🤩 <em>gmv.live</em></p>
+              <p className="text-base sm:text-lg font-bold text-foreground">🤩 <em>gmv.live</em></p>
               <p className="mt-2 text-xs sm:text-sm text-muted-foreground">support@gmv.live</p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/for-brands" className="block hover:text-foreground">For Brands</Link>
               <Link to="/" className="block hover:text-foreground">For Creators</Link>
-              <Link to="/coming-soon" className="block hover:text-foreground">Pricing</Link>
+              <Link to="/pricing" className="block hover:text-foreground">Pricing</Link>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">
               <Link to="/coming-soon" className="block hover:text-foreground">Privacy Policy</Link>
