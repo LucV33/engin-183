@@ -2,6 +2,7 @@
 
 ## Project Origin
 - Project was created and started in **Lovable** (AI app builder)
+- GitHub repo: `LucV33/engin-183` (locally cloned as `gmv-live` — same repo, renamed)
 - Lovable has 2-way sync with GitHub — changes in Lovable push to the `lovable` branch, and merges to `main` sync back
 - Lovable handles **hosting and deployment** (no separate hosting needed)
 - **Landing page and UI design** work happens in Lovable
