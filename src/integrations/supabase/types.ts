@@ -151,12 +151,172 @@ export type Database = {
           },
         ]
       }
+      deal_offers: {
+        Row: {
+          commission_percentage: number
+          created_at: string
+          deal_id: string
+          hourly_rate: number
+          hours: number
+          id: string
+          note: string | null
+          sender_id: string
+          status: Database["public"]["Enums"]["offer_status"]
+        }
+        Insert: {
+          commission_percentage: number
+          created_at?: string
+          deal_id: string
+          hourly_rate: number
+          hours: number
+          id?: string
+          note?: string | null
+          sender_id: string
+          status?: Database["public"]["Enums"]["offer_status"]
+        }
+        Update: {
+          commission_percentage?: number
+          created_at?: string
+          deal_id?: string
+          hourly_rate?: number
+          hours?: number
+          id?: string
+          note?: string | null
+          sender_id?: string
+          status?: Database["public"]["Enums"]["offer_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_offers_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_signatures: {
+        Row: {
+          deal_id: string
+          full_name: string
+          id: string
+          signed_at: string
+          user_id: string
+        }
+        Insert: {
+          deal_id: string
+          full_name: string
+          id?: string
+          signed_at?: string
+          user_id: string
+        }
+        Update: {
+          deal_id?: string
+          full_name?: string
+          id?: string
+          signed_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_signatures_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals: {
+        Row: {
+          commission_percentage: number | null
+          conversation_id: string
+          created_at: string
+          hourly_rate: number | null
+          hours: number | null
+          id: string
+          status: Database["public"]["Enums"]["deal_status"]
+          total_amount: number | null
+          updated_at: string
+        }
+        Insert: {
+          commission_percentage?: number | null
+          conversation_id: string
+          created_at?: string
+          hourly_rate?: number | null
+          hours?: number | null
+          id?: string
+          status?: Database["public"]["Enums"]["deal_status"]
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Update: {
+          commission_percentage?: number | null
+          conversation_id?: string
+          created_at?: string
+          hourly_rate?: number | null
+          hours?: number | null
+          id?: string
+          status?: Database["public"]["Enums"]["deal_status"]
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: true
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      escrow_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          deal_id: string
+          funded_at: string | null
+          id: string
+          released_at: string | null
+          status: Database["public"]["Enums"]["escrow_status"]
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          deal_id: string
+          funded_at?: string | null
+          id?: string
+          released_at?: string | null
+          status?: Database["public"]["Enums"]["escrow_status"]
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          deal_id?: string
+          funded_at?: string | null
+          id?: string
+          released_at?: string | null
+          status?: Database["public"]["Enums"]["escrow_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "escrow_payments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: true
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
           conversation_id: string
           created_at: string
           id: string
+          message_type: string
+          metadata: Json | null
           read_at: string | null
           sender_id: string
         }
@@ -165,6 +325,8 @@ export type Database = {
           conversation_id: string
           created_at?: string
           id?: string
+          message_type?: string
+          metadata?: Json | null
           read_at?: string | null
           sender_id: string
         }
@@ -173,6 +335,8 @@ export type Database = {
           conversation_id?: string
           created_at?: string
           id?: string
+          message_type?: string
+          metadata?: Json | null
           read_at?: string | null
           sender_id?: string
         }
@@ -269,6 +433,47 @@ export type Database = {
         }
         Relationships: []
       }
+      shipments: {
+        Row: {
+          carrier: string | null
+          created_at: string
+          deal_id: string
+          delivered_at: string | null
+          id: string
+          shipped_at: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string | null
+        }
+        Insert: {
+          carrier?: string | null
+          created_at?: string
+          deal_id: string
+          delivered_at?: string | null
+          id?: string
+          shipped_at?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          tracking_number?: string | null
+        }
+        Update: {
+          carrier?: string | null
+          created_at?: string
+          deal_id?: string
+          delivered_at?: string | null
+          id?: string
+          shipped_at?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          tracking_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -323,7 +528,23 @@ export type Database = {
     }
     Enums: {
       app_role: "creator" | "brand"
+      deal_status:
+        | "negotiating"
+        | "agreed"
+        | "signed"
+        | "escrow_funded"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      escrow_status: "pending" | "funded" | "released" | "refunded"
+      offer_status:
+        | "pending"
+        | "accepted"
+        | "rejected"
+        | "countered"
+        | "expired"
       product_status: "active" | "paused" | "closed"
+      shipment_status: "pending" | "shipped" | "in_transit" | "delivered"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -452,7 +673,19 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["creator", "brand"],
+      deal_status: [
+        "negotiating",
+        "agreed",
+        "signed",
+        "escrow_funded",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      escrow_status: ["pending", "funded", "released", "refunded"],
+      offer_status: ["pending", "accepted", "rejected", "countered", "expired"],
       product_status: ["active", "paused", "closed"],
+      shipment_status: ["pending", "shipped", "in_transit", "delivered"],
     },
   },
 } as const
