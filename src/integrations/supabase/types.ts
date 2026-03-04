@@ -151,12 +151,172 @@ export type Database = {
           },
         ]
       }
+      deals: {
+        Row: {
+          id: string
+          conversation_id: string
+          status: Database["public"]["Enums"]["deal_status"]
+          hourly_rate: number | null
+          commission_percentage: number | null
+          hours: number | null
+          total_amount: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          status?: Database["public"]["Enums"]["deal_status"]
+          hourly_rate?: number | null
+          commission_percentage?: number | null
+          hours?: number | null
+          total_amount?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          status?: Database["public"]["Enums"]["deal_status"]
+          hourly_rate?: number | null
+          commission_percentage?: number | null
+          hours?: number | null
+          total_amount?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: true
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_offers: {
+        Row: {
+          id: string
+          deal_id: string
+          sender_id: string
+          hourly_rate: number
+          commission_percentage: number
+          hours: number
+          note: string | null
+          status: Database["public"]["Enums"]["offer_status"]
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          deal_id: string
+          sender_id: string
+          hourly_rate: number
+          commission_percentage: number
+          hours: number
+          note?: string | null
+          status?: Database["public"]["Enums"]["offer_status"]
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          deal_id?: string
+          sender_id?: string
+          hourly_rate?: number
+          commission_percentage?: number
+          hours?: number
+          note?: string | null
+          status?: Database["public"]["Enums"]["offer_status"]
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_offers_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_signatures: {
+        Row: {
+          id: string
+          deal_id: string
+          user_id: string
+          full_name: string
+          signed_at: string
+        }
+        Insert: {
+          id?: string
+          deal_id: string
+          user_id: string
+          full_name: string
+          signed_at?: string
+        }
+        Update: {
+          id?: string
+          deal_id?: string
+          user_id?: string
+          full_name?: string
+          signed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_signatures_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      escrow_payments: {
+        Row: {
+          id: string
+          deal_id: string
+          amount: number
+          status: Database["public"]["Enums"]["escrow_status"]
+          funded_at: string | null
+          released_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          deal_id: string
+          amount: number
+          status?: Database["public"]["Enums"]["escrow_status"]
+          funded_at?: string | null
+          released_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          deal_id?: string
+          amount?: number
+          status?: Database["public"]["Enums"]["escrow_status"]
+          funded_at?: string | null
+          released_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "escrow_payments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: true
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
           conversation_id: string
           created_at: string
           id: string
+          message_type: string
+          metadata: Record<string, unknown> | null
           read_at: string | null
           sender_id: string
         }
@@ -165,6 +325,8 @@ export type Database = {
           conversation_id: string
           created_at?: string
           id?: string
+          message_type?: string
+          metadata?: Record<string, unknown> | null
           read_at?: string | null
           sender_id: string
         }
@@ -173,6 +335,8 @@ export type Database = {
           conversation_id?: string
           created_at?: string
           id?: string
+          message_type?: string
+          metadata?: Record<string, unknown> | null
           read_at?: string | null
           sender_id?: string
         }
@@ -182,6 +346,47 @@ export type Database = {
             columns: ["conversation_id"]
             isOneToOne: false
             referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipments: {
+        Row: {
+          id: string
+          deal_id: string
+          tracking_number: string | null
+          carrier: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          shipped_at: string | null
+          delivered_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          deal_id: string
+          tracking_number?: string | null
+          carrier?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          shipped_at?: string | null
+          delivered_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          deal_id?: string
+          tracking_number?: string | null
+          carrier?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          shipped_at?: string | null
+          delivered_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
@@ -323,7 +528,11 @@ export type Database = {
     }
     Enums: {
       app_role: "creator" | "brand"
+      deal_status: "negotiating" | "agreed" | "signed" | "escrow_funded" | "in_progress" | "completed" | "cancelled"
+      escrow_status: "pending" | "funded" | "released" | "refunded"
+      offer_status: "pending" | "accepted" | "rejected" | "countered" | "expired"
       product_status: "active" | "paused" | "closed"
+      shipment_status: "pending" | "shipped" | "in_transit" | "delivered"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -452,7 +661,11 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["creator", "brand"],
+      deal_status: ["negotiating", "agreed", "signed", "escrow_funded", "in_progress", "completed", "cancelled"],
+      escrow_status: ["pending", "funded", "released", "refunded"],
+      offer_status: ["pending", "accepted", "rejected", "countered", "expired"],
       product_status: ["active", "paused", "closed"],
+      shipment_status: ["pending", "shipped", "in_transit", "delivered"],
     },
   },
 } as const
