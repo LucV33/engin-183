@@ -1,17 +1,27 @@
 import { ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { LogOut, MessageSquare, Package, Settings, Handshake } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const { role, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
   };
+
+  const isActive = (path: string) => location.pathname.startsWith(path);
+
+  const navLinkClass = (path: string) =>
+    cn(
+      isActive(path) &&
+        "text-primary shadow-[0_0_12px_2px_hsl(var(--primary)/0.5)] bg-primary/10 border border-primary/30"
+    );
 
   return (
     <div className="min-h-screen bg-background">
@@ -19,21 +29,21 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/feed" className="text-lg font-bold text-foreground">GMV</Link>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className={navLinkClass("/feed")}>
               <Link to="/feed">Feed</Link>
             </Button>
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className={navLinkClass("/deals")}>
               <Link to="/deals"><Handshake className="mr-1 h-4 w-4" />Deals</Link>
             </Button>
             {role === "brand" && (
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" asChild className={navLinkClass("/my-products")}>
                 <Link to="/my-products"><Package className="mr-1 h-4 w-4" />Products</Link>
               </Button>
             )}
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className={navLinkClass("/messages")}>
               <Link to="/messages"><MessageSquare className="mr-1 h-4 w-4" />Messages</Link>
             </Button>
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className={navLinkClass("/settings")}>
               <Link to="/settings/profile"><Settings className="mr-1 h-4 w-4" />Settings</Link>
             </Button>
             <Button variant="ghost" size="icon" onClick={handleSignOut} title="Sign out">
