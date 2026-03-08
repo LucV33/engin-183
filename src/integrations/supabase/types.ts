@@ -58,6 +58,44 @@ export type Database = {
           },
         ]
       }
+      contracts: {
+        Row: {
+          brand_signed_at: string | null
+          created_at: string
+          creator_signed_at: string | null
+          deal_id: string
+          id: string
+          pdf_url: string | null
+          terms: Json
+        }
+        Insert: {
+          brand_signed_at?: string | null
+          created_at?: string
+          creator_signed_at?: string | null
+          deal_id: string
+          id?: string
+          pdf_url?: string | null
+          terms?: Json
+        }
+        Update: {
+          brand_signed_at?: string | null
+          created_at?: string
+          creator_signed_at?: string | null
+          deal_id?: string
+          id?: string
+          pdf_url?: string | null
+          terms?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: true
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversations: {
         Row: {
           brand_user_id: string
@@ -168,34 +206,46 @@ export type Database = {
           commission_percentage: number
           created_at: string
           deal_id: string
+          deliverables: string | null
           hourly_rate: number
           hours: number
           id: string
+          live_date: string | null
           note: string | null
+          rate: number | null
           sender_id: string
           status: Database["public"]["Enums"]["offer_status"]
+          usage_rights: string[] | null
         }
         Insert: {
           commission_percentage: number
           created_at?: string
           deal_id: string
+          deliverables?: string | null
           hourly_rate: number
           hours: number
           id?: string
+          live_date?: string | null
           note?: string | null
+          rate?: number | null
           sender_id: string
           status?: Database["public"]["Enums"]["offer_status"]
+          usage_rights?: string[] | null
         }
         Update: {
           commission_percentage?: number
           created_at?: string
           deal_id?: string
+          deliverables?: string | null
           hourly_rate?: number
           hours?: number
           id?: string
+          live_date?: string | null
           note?: string | null
+          rate?: number | null
           sender_id?: string
           status?: Database["public"]["Enums"]["offer_status"]
+          usage_rights?: string[] | null
         }
         Relationships: [
           {
@@ -244,34 +294,46 @@ export type Database = {
           commission_percentage: number | null
           conversation_id: string
           created_at: string
+          deliverables: string | null
           hourly_rate: number | null
           hours: number | null
           id: string
+          live_date: string | null
+          rate: number | null
           status: Database["public"]["Enums"]["deal_status"]
           total_amount: number | null
           updated_at: string
+          usage_rights: string[] | null
         }
         Insert: {
           commission_percentage?: number | null
           conversation_id: string
           created_at?: string
+          deliverables?: string | null
           hourly_rate?: number | null
           hours?: number | null
           id?: string
+          live_date?: string | null
+          rate?: number | null
           status?: Database["public"]["Enums"]["deal_status"]
           total_amount?: number | null
           updated_at?: string
+          usage_rights?: string[] | null
         }
         Update: {
           commission_percentage?: number | null
           conversation_id?: string
           created_at?: string
+          deliverables?: string | null
           hourly_rate?: number | null
           hours?: number | null
           id?: string
+          live_date?: string | null
+          rate?: number | null
           status?: Database["public"]["Enums"]["deal_status"]
           total_amount?: number | null
           updated_at?: string
+          usage_rights?: string[] | null
         }
         Relationships: [
           {
@@ -314,6 +376,62 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "escrow_payments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: true
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_analytics: {
+        Row: {
+          approved_at: string | null
+          created_at: string
+          creator_id: string
+          deal_id: string
+          gmv: number | null
+          id: string
+          likes: number | null
+          orders: number | null
+          peak_viewers: number | null
+          stream_link: string | null
+          submitted_at: string | null
+          total_viewers: number | null
+          watch_time_avg: number | null
+        }
+        Insert: {
+          approved_at?: string | null
+          created_at?: string
+          creator_id: string
+          deal_id: string
+          gmv?: number | null
+          id?: string
+          likes?: number | null
+          orders?: number | null
+          peak_viewers?: number | null
+          stream_link?: string | null
+          submitted_at?: string | null
+          total_viewers?: number | null
+          watch_time_avg?: number | null
+        }
+        Update: {
+          approved_at?: string | null
+          created_at?: string
+          creator_id?: string
+          deal_id?: string
+          gmv?: number | null
+          id?: string
+          likes?: number | null
+          orders?: number | null
+          peak_viewers?: number | null
+          stream_link?: string | null
+          submitted_at?: string | null
+          total_viewers?: number | null
+          watch_time_avg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_analytics_deal_id_fkey"
             columns: ["deal_id"]
             isOneToOne: true
             referencedRelation: "deals"
@@ -554,6 +672,12 @@ export type Database = {
         | "in_progress"
         | "completed"
         | "cancelled"
+        | "contracted"
+        | "funded"
+        | "shipped"
+        | "delivered"
+        | "live"
+        | "disputed"
       escrow_status: "pending" | "funded" | "released" | "refunded"
       offer_status:
         | "pending"
@@ -699,6 +823,12 @@ export const Constants = {
         "in_progress",
         "completed",
         "cancelled",
+        "contracted",
+        "funded",
+        "shipped",
+        "delivered",
+        "live",
+        "disputed",
       ],
       escrow_status: ["pending", "funded", "released", "refunded"],
       offer_status: ["pending", "accepted", "rejected", "countered", "expired"],
