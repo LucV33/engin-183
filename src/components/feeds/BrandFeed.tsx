@@ -182,6 +182,7 @@ const BrandFeed = () => {
                       {Number(creator.rating).toFixed(1)}
                     </Badge>
                   )}
+                </div>
 
                 {/* Info section */}
                 <div className="flex flex-col gap-3 p-4">
