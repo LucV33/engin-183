@@ -57,7 +57,7 @@ const OfferModal = ({ open, onClose, onSubmit, isPending, defaultValues, title =
           </div>
           <div className="space-y-2">
             <Label>Usage Rights</Label>
-            <ChipSelector options={USAGE_OPTIONS} selected={usageRights} onToggle={(v) => setUsageRights(prev => prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v])} />
+            <ChipSelector options={USAGE_OPTIONS} selected={usageRights} onChange={setUsageRights} />
           </div>
           <div className="space-y-2">
             <Label>Note (optional)</Label>
