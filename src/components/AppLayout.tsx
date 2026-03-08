@@ -22,6 +22,9 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
             <Button variant="ghost" size="sm" asChild>
               <Link to="/feed">Feed</Link>
             </Button>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/deals"><Handshake className="mr-1 h-4 w-4" />Deals</Link>
+            </Button>
             {role === "brand" && (
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/my-products"><Package className="mr-1 h-4 w-4" />Products</Link>
