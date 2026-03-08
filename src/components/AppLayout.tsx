@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, MessageSquare, Package, Settings } from "lucide-react";
+import { LogOut, MessageSquare, Package, Settings, Handshake } from "lucide-react";
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const { role, signOut } = useAuth();
