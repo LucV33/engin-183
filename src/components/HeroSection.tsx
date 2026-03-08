@@ -70,7 +70,7 @@ const HeroSection = () => {
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link to="/waitlist">Browse Hosts</Link>
+                <Link to="/auth">Browse Hosts</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link to="/waitlist">Apply as a Host</Link>
