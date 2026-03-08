@@ -56,6 +56,10 @@ const OnboardingCreator = () => {
         setPlatforms(cp.platforms || ["TikTok"]);
         setNiches(cp.niches || []);
         if ((cp as any).tiktok_handle) setTiktokHandle((cp as any).tiktok_handle);
+        if ((cp as any).instagram_handle) setInstagramHandle((cp as any).instagram_handle);
+        if ((cp as any).youtube_handle) setYoutubeHandle((cp as any).youtube_handle);
+        if ((cp as any).twitter_handle) setTwitterHandle((cp as any).twitter_handle);
+        if ((cp as any).facebook_handle) setFacebookHandle((cp as any).facebook_handle);
         if ((cp as any).audience_type) setAudience([(cp as any).audience_type]);
       }
     };
