@@ -72,6 +72,10 @@ const Settings = () => {
           setPlatforms(cp.platforms || []);
           setNiches(cp.niches || []);
           setTiktokHandle((cp as any).tiktok_handle || "");
+          setInstagramHandle((cp as any).instagram_handle || "");
+          setYoutubeHandle((cp as any).youtube_handle || "");
+          setTwitterHandle((cp as any).twitter_handle || "");
+          setFacebookHandle((cp as any).facebook_handle || "");
           setAudience((cp as any).audience_type ? [(cp as any).audience_type] : []);
         }
       }
