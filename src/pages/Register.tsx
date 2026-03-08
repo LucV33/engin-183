@@ -30,7 +30,7 @@ const Register = () => {
     }
     setSubmitting(true);
     try {
-      await signUp(email, password, role, displayName);
+      await signUp(email, password, displayName);
       setRegistered(true);
     } catch (err: any) {
       toast({ title: "Signup failed", description: err.message, variant: "destructive" });

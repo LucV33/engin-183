@@ -16,27 +16,33 @@ export type Database = {
     Tables: {
       brand_profiles: {
         Row: {
+          campaign_images: string[] | null
           company_name: string
           created_at: string
           id: string
+          industries: string[] | null
           industry: string | null
           logo_url: string | null
           user_id: string
           website: string | null
         }
         Insert: {
+          campaign_images?: string[] | null
           company_name?: string
           created_at?: string
           id?: string
+          industries?: string[] | null
           industry?: string | null
           logo_url?: string | null
           user_id: string
           website?: string | null
         }
         Update: {
+          campaign_images?: string[] | null
           company_name?: string
           created_at?: string
           id?: string
+          industries?: string[] | null
           industry?: string | null
           logo_url?: string | null
           user_id?: string
@@ -103,6 +109,7 @@ export type Database = {
       }
       creator_profiles: {
         Row: {
+          audience_type: string | null
           avg_gmv: number | null
           created_at: string
           follower_count: number | null
@@ -113,9 +120,11 @@ export type Database = {
           platforms: string[] | null
           portfolio_urls: string[] | null
           rating: number | null
+          tiktok_handle: string | null
           user_id: string
         }
         Insert: {
+          audience_type?: string | null
           avg_gmv?: number | null
           created_at?: string
           follower_count?: number | null
@@ -126,9 +135,11 @@ export type Database = {
           platforms?: string[] | null
           portfolio_urls?: string[] | null
           rating?: number | null
+          tiktok_handle?: string | null
           user_id: string
         }
         Update: {
+          audience_type?: string | null
           avg_gmv?: number | null
           created_at?: string
           follower_count?: number | null
@@ -139,6 +150,7 @@ export type Database = {
           platforms?: string[] | null
           portfolio_urls?: string[] | null
           rating?: number | null
+          tiktok_handle?: string | null
           user_id?: string
         }
         Relationships: [
@@ -413,6 +425,8 @@ export type Database = {
           created_at: string
           display_name: string
           id: string
+          onboarding_completed: boolean
+          onboarding_step: string | null
           role: Database["public"]["Enums"]["app_role"]
         }
         Insert: {
@@ -421,6 +435,8 @@ export type Database = {
           created_at?: string
           display_name?: string
           id: string
+          onboarding_completed?: boolean
+          onboarding_step?: string | null
           role: Database["public"]["Enums"]["app_role"]
         }
         Update: {
@@ -429,6 +445,8 @@ export type Database = {
           created_at?: string
           display_name?: string
           id?: string
+          onboarding_completed?: boolean
+          onboarding_step?: string | null
           role?: Database["public"]["Enums"]["app_role"]
         }
         Relationships: []
