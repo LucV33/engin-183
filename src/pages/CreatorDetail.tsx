@@ -26,6 +26,20 @@ import {
   Zap,
 } from "lucide-react";
 
+const getSocialUrl = (platform: string, creator: any): string | null => {
+  const map: Record<string, { handle: string | null; urlPrefix: string }> = {
+    TikTok: { handle: creator.tiktok_handle, urlPrefix: "https://tiktok.com/@" },
+    Instagram: { handle: (creator as any).instagram_handle, urlPrefix: "https://instagram.com/" },
+    YouTube: { handle: (creator as any).youtube_handle, urlPrefix: "https://youtube.com/@" },
+    Facebook: { handle: (creator as any).facebook_handle, urlPrefix: "https://facebook.com/" },
+    "X (Twitter)": { handle: (creator as any).twitter_handle, urlPrefix: "https://x.com/" },
+    Twitter: { handle: (creator as any).twitter_handle, urlPrefix: "https://x.com/" },
+  };
+  const entry = map[platform];
+  if (!entry?.handle) return null;
+  return entry.urlPrefix + entry.handle.replace(/^@/, "");
+};
+
 const CreatorDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user, role } = useAuth();
