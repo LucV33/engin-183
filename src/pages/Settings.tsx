@@ -114,7 +114,13 @@ const Settings = () => {
 
       if (role === "creator") {
         await supabase.from("creator_profiles").update({
-          platforms, niches, tiktok_handle: tiktokHandle || null, audience_type: audience[0] || null,
+          platforms, niches,
+          tiktok_handle: tiktokHandle || null,
+          instagram_handle: instagramHandle || null,
+          youtube_handle: youtubeHandle || null,
+          twitter_handle: twitterHandle || null,
+          facebook_handle: facebookHandle || null,
+          audience_type: audience[0] || null,
         } as any).eq("user_id", user.id);
       }
 
