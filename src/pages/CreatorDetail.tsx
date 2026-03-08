@@ -293,6 +293,68 @@ const CreatorDetail = () => {
 
           {/* Right column: Details sidebar */}
           <div className="space-y-4">
+            {/* Social Handles */}
+            {(creator.tiktok_handle || (creator as any).instagram_handle || (creator as any).youtube_handle) && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Socials</h2>
+                  <div className="space-y-2.5">
+                    {creator.tiktok_handle && (
+                      <a
+                        href={`https://tiktok.com/@${creator.tiktok_handle}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary group-hover:bg-primary/10 transition-colors">
+                          <Play className="h-4 w-4 text-foreground" />
+                        </div>
+                        <div>
+                          <span className="font-medium text-foreground block text-xs">TikTok</span>
+                          <span className="text-xs">@{creator.tiktok_handle}</span>
+                        </div>
+                        <ExternalLink className="h-3 w-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    )}
+                    {(creator as any).instagram_handle && (
+                      <a
+                        href={`https://instagram.com/${(creator as any).instagram_handle}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary group-hover:bg-primary/10 transition-colors">
+                          <Users className="h-4 w-4 text-foreground" />
+                        </div>
+                        <div>
+                          <span className="font-medium text-foreground block text-xs">Instagram</span>
+                          <span className="text-xs">@{(creator as any).instagram_handle}</span>
+                        </div>
+                        <ExternalLink className="h-3 w-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    )}
+                    {(creator as any).youtube_handle && (
+                      <a
+                        href={`https://youtube.com/@${(creator as any).youtube_handle}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary group-hover:bg-primary/10 transition-colors">
+                          <Play className="h-4 w-4 text-foreground" />
+                        </div>
+                        <div>
+                          <span className="font-medium text-foreground block text-xs">YouTube</span>
+                          <span className="text-xs">@{(creator as any).youtube_handle}</span>
+                        </div>
+                        <ExternalLink className="h-3 w-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Niches */}
             {creator.niches && creator.niches.length > 0 && (
               <Card className="border-border bg-card">
