@@ -347,7 +347,7 @@ const Index = () => {
           </p>
           <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4">
             <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
-              <Link to="/waitlist">
+              <Link to="/auth">
                 Get Started <ChevronRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>

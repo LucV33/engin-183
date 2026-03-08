@@ -73,7 +73,7 @@ const HeroSection = () => {
                 <Link to="/auth">Browse Hosts</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/waitlist">Apply as a Host</Link>
+                <Link to="/auth">Apply as a Host</Link>
               </Button>
             </div>
           </div>
