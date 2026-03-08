@@ -82,7 +82,14 @@ const OnboardingCreator = () => {
     try {
       await supabase.from("profiles").update({ display_name: displayName, onboarding_step: "creator-2" }).eq("id", user.id);
       const { data: existing } = await supabase.from("creator_profiles").select("id").eq("user_id", user.id).single();
-      const payload = { platforms, tiktok_handle: tiktokHandle || null } as any;
+      const payload = {
+        platforms,
+        tiktok_handle: tiktokHandle || null,
+        instagram_handle: instagramHandle || null,
+        youtube_handle: youtubeHandle || null,
+        twitter_handle: twitterHandle || null,
+        facebook_handle: facebookHandle || null,
+      } as any;
       if (existing) {
         await supabase.from("creator_profiles").update(payload).eq("user_id", user.id);
       } else {
