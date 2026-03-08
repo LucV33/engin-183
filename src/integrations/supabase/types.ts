@@ -150,6 +150,7 @@ export type Database = {
           audience_type: string | null
           avg_gmv: number | null
           created_at: string
+          facebook_handle: string | null
           follower_count: number | null
           id: string
           instagram_handle: string | null
@@ -160,6 +161,7 @@ export type Database = {
           portfolio_urls: string[] | null
           rating: number | null
           tiktok_handle: string | null
+          twitter_handle: string | null
           user_id: string
           youtube_handle: string | null
         }
@@ -167,6 +169,7 @@ export type Database = {
           audience_type?: string | null
           avg_gmv?: number | null
           created_at?: string
+          facebook_handle?: string | null
           follower_count?: number | null
           id?: string
           instagram_handle?: string | null
@@ -177,6 +180,7 @@ export type Database = {
           portfolio_urls?: string[] | null
           rating?: number | null
           tiktok_handle?: string | null
+          twitter_handle?: string | null
           user_id: string
           youtube_handle?: string | null
         }
@@ -184,6 +188,7 @@ export type Database = {
           audience_type?: string | null
           avg_gmv?: number | null
           created_at?: string
+          facebook_handle?: string | null
           follower_count?: number | null
           id?: string
           instagram_handle?: string | null
@@ -194,6 +199,7 @@ export type Database = {
           portfolio_urls?: string[] | null
           rating?: number | null
           tiktok_handle?: string | null
+          twitter_handle?: string | null
           user_id?: string
           youtube_handle?: string | null
         }
