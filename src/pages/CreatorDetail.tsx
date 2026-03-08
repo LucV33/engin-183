@@ -1,15 +1,30 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import AppLayout from "@/components/AppLayout";
-import { ArrowLeft, MessageSquare, Send } from "lucide-react";
 import OfferModal from "@/components/deals/OfferModal";
 import { useState } from "react";
+import {
+  ArrowLeft,
+  MessageSquare,
+  Send,
+  MapPin,
+  Star,
+  Users,
+  TrendingUp,
+  Play,
+  ExternalLink,
+  CheckCircle2,
+  Zap,
+} from "lucide-react";
 
 const CreatorDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -62,7 +77,6 @@ const CreatorDetail = () => {
   const sendOfferMutation = useMutation({
     mutationFn: async (offer: { rate: number; deliverables: string; liveDate: string; usageRights: string[]; note: string }) => {
       if (!user || !creator) return;
-      // Find or create conversation
       let convoId: string;
       const { data: existing } = await supabase
         .from("conversations")
@@ -83,7 +97,6 @@ const CreatorDetail = () => {
         convoId = convo.id;
       }
 
-      // Create deal
       const { data: deal, error: dealErr } = await supabase
         .from("deals")
         .insert({ conversation_id: convoId, status: "negotiating" as any })
@@ -91,7 +104,6 @@ const CreatorDetail = () => {
         .single();
       if (dealErr) throw dealErr;
 
-      // Create offer
       await supabase.from("deal_offers").insert({
         deal_id: deal.id,
         sender_id: user.id,
@@ -106,7 +118,6 @@ const CreatorDetail = () => {
         status: "pending",
       } as any);
 
-      // Send message
       await supabase.from("messages").insert({
         conversation_id: convoId,
         sender_id: user.id,
@@ -120,42 +131,237 @@ const CreatorDetail = () => {
     onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
-  if (isLoading) return <AppLayout><p>Loading…</p></AppLayout>;
-  if (!creator) return <AppLayout><p>Creator not found.</p></AppLayout>;
+  if (isLoading) {
+    return (
+      <AppLayout>
+        <div className="space-y-6 animate-pulse">
+          <div className="h-48 rounded-2xl bg-muted" />
+          <div className="flex gap-4 items-end -mt-12 ml-6">
+            <div className="h-24 w-24 rounded-full bg-muted border-4 border-background" />
+            <div className="space-y-2 pb-2">
+              <div className="h-6 w-40 rounded bg-muted" />
+              <div className="h-4 w-24 rounded bg-muted" />
+            </div>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (!creator) {
+    return (
+      <AppLayout>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="text-lg text-muted-foreground">Creator not found.</p>
+          <Button variant="ghost" onClick={() => navigate(-1)} className="mt-4">
+            <ArrowLeft className="mr-1 h-4 w-4" /> Go Back
+          </Button>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  const profile = (creator as any).profiles;
+  const displayName = profile?.display_name || "Creator";
+  const initials = displayName.slice(0, 2).toUpperCase();
+  const portfolioImages = creator.portfolio_urls?.filter(Boolean) || [];
+  const heroImage = portfolioImages[0];
+
+  const stats = [
+    { icon: Users, label: "Followers", value: (creator.follower_count ?? 0).toLocaleString(), color: "text-accent" },
+    { icon: TrendingUp, label: "Avg GMV", value: `$${Number(creator.avg_gmv || 0).toLocaleString()}`, color: "text-primary" },
+    { icon: Star, label: "Rating", value: `${Number(creator.rating || 0).toFixed(1)}/5`, color: "text-amber-400" },
+    { icon: Play, label: "Streams", value: creator.past_collabs?.length?.toString() || "0", color: "text-accent" },
+  ];
 
   return (
     <AppLayout>
-      <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4">
-        <ArrowLeft className="mr-1 h-4 w-4" /> Back
-      </Button>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">{(creator as any).profiles?.display_name}</CardTitle>
-          <p className="text-muted-foreground">{creator.location}</p>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>{(creator as any).profiles?.bio}</p>
-          <div className="flex flex-wrap gap-2">
-            {creator.niches?.map((n: string) => <Badge key={n}>{n}</Badge>)}
-            {creator.platforms?.map((p: string) => <Badge key={p} variant="outline">{p}</Badge>)}
+      <div className="mx-auto max-w-4xl space-y-6">
+        {/* Back button */}
+        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="mr-1 h-4 w-4" /> Back
+        </Button>
+
+        {/* Hero Banner */}
+        <div className="relative overflow-hidden rounded-2xl">
+          <div className="aspect-[3/1] w-full overflow-hidden bg-gradient-to-br from-primary/20 via-card to-accent/20">
+            {heroImage && (
+              <img
+                src={heroImage}
+                alt={`${displayName} portfolio`}
+                className="h-full w-full object-cover opacity-60"
+              />
+            )}
           </div>
-          <div className="grid grid-cols-3 gap-4 text-sm">
-            <div><strong>Followers</strong><br />{creator.follower_count?.toLocaleString()}</div>
-            <div><strong>Avg GMV</strong><br />${Number(creator.avg_gmv).toLocaleString()}</div>
-            <div><strong>Rating</strong><br />{Number(creator.rating).toFixed(1)}/5</div>
+          {/* Gradient overlay at bottom */}
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
+        </div>
+
+        {/* Avatar + Name + CTA row */}
+        <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-16 relative z-10 px-2">
+          <Avatar className="h-28 w-28 border-4 border-background shadow-xl ring-2 ring-primary/30">
+            <AvatarImage src={profile?.avatar_url} alt={displayName} />
+            <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex-1 min-w-0 pb-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{displayName}</h1>
+              <CheckCircle2 className="h-5 w-5 text-accent shrink-0" />
+            </div>
+            {creator.tiktok_handle && (
+              <p className="text-sm text-muted-foreground mt-0.5">@{creator.tiktok_handle}</p>
+            )}
+            {creator.location && (
+              <p className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                <MapPin className="h-3.5 w-3.5" /> {creator.location}
+              </p>
+            )}
           </div>
-          <div className="flex gap-3 mt-4">
-            <Button onClick={handleStartConversation}>
-              <MessageSquare className="mr-2 h-4 w-4" /> Message
+
+          {/* CTA buttons */}
+          <div className="flex gap-2 sm:pb-1 shrink-0">
+            <Button variant="outline" onClick={handleStartConversation} className="gap-2">
+              <MessageSquare className="h-4 w-4" /> Message
             </Button>
             {role === "brand" && (
-              <Button variant="secondary" onClick={() => setOfferOpen(true)}>
-                <Send className="mr-2 h-4 w-4" /> Send Offer
+              <Button onClick={() => setOfferOpen(true)} className="gap-2">
+                <Send className="h-4 w-4" /> Send Offer
               </Button>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {stats.map((stat) => (
+            <Card key={stat.label} className="border-border bg-card/50 backdrop-blur-sm">
+              <CardContent className="flex flex-col items-center justify-center p-4 text-center">
+                <stat.icon className={`h-5 w-5 ${stat.color} mb-1.5`} />
+                <span className="text-lg font-bold text-foreground">{stat.value}</span>
+                <span className="text-xs text-muted-foreground">{stat.label}</span>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Bio + Details */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Left column: Bio + Tags */}
+          <div className="lg:col-span-2 space-y-5">
+            {profile?.bio && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">About</h2>
+                  <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">{profile.bio}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Portfolio Gallery */}
+            {portfolioImages.length > 0 && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Portfolio</h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {portfolioImages.map((url: string, idx: number) => (
+                      <a
+                        key={idx}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative aspect-square overflow-hidden rounded-lg bg-muted"
+                      >
+                        <img
+                          src={url}
+                          alt={`${displayName} portfolio ${idx + 1}`}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/30 transition-colors flex items-center justify-center">
+                          <ExternalLink className="h-5 w-5 text-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Right column: Details sidebar */}
+          <div className="space-y-4">
+            {/* Niches */}
+            {creator.niches && creator.niches.length > 0 && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Niches</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {creator.niches.map((n: string) => (
+                      <Badge key={n} className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">{n}</Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Platforms */}
+            {creator.platforms && creator.platforms.length > 0 && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Platforms</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {creator.platforms.map((p: string) => (
+                      <Badge key={p} variant="outline" className="border-accent/30 text-accent">{p}</Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Audience Type */}
+            {creator.audience_type && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Audience</h2>
+                  <p className="text-sm text-muted-foreground">{creator.audience_type}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Past Collabs */}
+            {creator.past_collabs && creator.past_collabs.length > 0 && (
+              <Card className="border-border bg-card">
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Past Collabs</h2>
+                  <div className="space-y-2">
+                    {creator.past_collabs.map((collab: string, idx: number) => (
+                      <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Zap className="h-3.5 w-3.5 text-primary shrink-0" />
+                        <span>{collab}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Quick Offer CTA (sticky feel on desktop) */}
+            {role === "brand" && (
+              <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5">
+                <CardContent className="p-5 text-center">
+                  <p className="text-sm font-medium text-foreground mb-3">Ready to collaborate?</p>
+                  <Button onClick={() => setOfferOpen(true)} className="w-full gap-2">
+                    <Send className="h-4 w-4" /> Send Offer
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      </div>
 
       <OfferModal
         open={offerOpen}
