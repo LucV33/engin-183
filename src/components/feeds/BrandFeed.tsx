@@ -223,12 +223,6 @@ const BrandFeed = () => {
                     </div>
                   </div>
 
-                  {/* One-line highlight for fast comparison */}
-                  {(creator.niches?.length || creator.platforms?.length) ? (
-                    <p className="text-xs text-muted-foreground">
-                      {[...(creator.niches || []).slice(0, 2), ...(creator.platforms || []).slice(0, 2)].join(" · ")}
-                    </p>
-                  ) : null}
 
                   {/* Bio */}
                   {creator.profiles?.bio && (
