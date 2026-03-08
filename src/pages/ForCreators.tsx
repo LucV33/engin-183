@@ -148,7 +148,7 @@ const ForCreators = () => {
                     className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold shadow-lg shadow-primary/20"
                     asChild
                   >
-                    <Link to="/waitlist">
+                    <Link to="/auth">
                       Join Now — It's Free <ArrowRight className="ml-1.5 sm:ml-2 h-4 w-4" />
                     </Link>
                   </Button>
