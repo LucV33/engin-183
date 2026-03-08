@@ -163,7 +163,7 @@ const BrandFeed = () => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-lg"
               >
                 {/* Hero photo */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+                <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
                   {creator.portfolio_urls?.[0] ? (
                     <img
                       src={creator.portfolio_urls[0]}
