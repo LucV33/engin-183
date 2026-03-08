@@ -176,7 +176,12 @@ const BrandFeed = () => {
                       <Users className="h-12 w-12 text-muted-foreground/30" />
                     </div>
                   )}
-                </div>
+                  {creator.rating > 0 && (
+                    <Badge className="absolute right-3 top-3 shadow-sm">
+                      <Star className="mr-1 h-3 w-3 fill-current" />
+                      {Number(creator.rating).toFixed(1)}
+                    </Badge>
+                  )}
 
                 {/* Info section */}
                 <div className="flex flex-col gap-3 p-4">
