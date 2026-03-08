@@ -43,6 +43,10 @@ const Settings = () => {
   const [platforms, setPlatforms] = useState<string[]>([]);
   const [niches, setNiches] = useState<string[]>([]);
   const [tiktokHandle, setTiktokHandle] = useState("");
+  const [instagramHandle, setInstagramHandle] = useState("");
+  const [youtubeHandle, setYoutubeHandle] = useState("");
+  const [twitterHandle, setTwitterHandle] = useState("");
+  const [facebookHandle, setFacebookHandle] = useState("");
   const [audience, setAudience] = useState<string[]>([]);
 
   // Brand
