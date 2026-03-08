@@ -156,9 +156,26 @@ const OnboardingCreator = () => {
             <Label>Platforms</Label>
             <ChipSelector options={PLATFORM_OPTIONS} selected={platforms} onChange={setPlatforms} />
           </div>
+          <h3 className="text-sm font-medium text-muted-foreground pt-2">Social Media Handles</h3>
           <div className="space-y-2">
-            <Label>TikTok Handle</Label>
+            <Label>TikTok</Label>
             <Input value={tiktokHandle} onChange={(e) => setTiktokHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>Instagram</Label>
+            <Input value={instagramHandle} onChange={(e) => setInstagramHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>YouTube</Label>
+            <Input value={youtubeHandle} onChange={(e) => setYoutubeHandle(e.target.value)} placeholder="@yourchannel" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>X (Twitter)</Label>
+            <Input value={twitterHandle} onChange={(e) => setTwitterHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>Facebook</Label>
+            <Input value={facebookHandle} onChange={(e) => setFacebookHandle(e.target.value)} placeholder="yourpage" className="min-h-[44px]" />
           </div>
           <Button onClick={saveStep1} disabled={saving} className="w-full min-h-[44px]">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue"}
