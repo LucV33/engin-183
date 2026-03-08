@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, MessageSquare, Package, User } from "lucide-react";
+import { LogOut, MessageSquare, Package, User, Settings } from "lucide-react";
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const { role, signOut } = useAuth();
@@ -31,7 +31,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
               <Link to="/messages"><MessageSquare className="mr-1 h-4 w-4" />Messages</Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/profile"><User className="mr-1 h-4 w-4" />Profile</Link>
+              <Link to="/settings/profile"><Settings className="mr-1 h-4 w-4" />Settings</Link>
             </Button>
             <Button variant="ghost" size="icon" onClick={handleSignOut} title="Sign out">
               <LogOut className="h-4 w-4" />

@@ -2,15 +2,17 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Auth from "./pages/Auth";
+import OnboardingRole from "./pages/OnboardingRole";
+import OnboardingBrand from "./pages/OnboardingBrand";
+import OnboardingCreator from "./pages/OnboardingCreator";
 import Onboarding from "./pages/Onboarding";
 import Feed from "./pages/Feed";
 import ProductDetail from "./pages/ProductDetail";
@@ -20,6 +22,7 @@ import NewProduct from "./pages/NewProduct";
 import Messages from "./pages/Messages";
 import ConversationThread from "./pages/ConversationThread";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import ForCreators from "./pages/ForCreators";
 import Waitlist from "./pages/Waitlist";
 import Pricing from "./pages/Pricing";
@@ -38,13 +41,17 @@ const App = () => (
           <Routes>
             <Route path="/" element={<ForCreators />} />
             <Route path="/for-brands" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Navigate to="/auth" replace />} />
+            <Route path="/register" element={<Navigate to="/auth" replace />} />
             <Route path="/waitlist" element={<Waitlist />} />
             <Route path="/for-creators" element={<ForCreators />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/onboarding/role" element={<OnboardingRole />} />
+            <Route path="/onboarding/brand" element={<OnboardingBrand />} />
+            <Route path="/onboarding/creator" element={<OnboardingCreator />} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
             <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
             <Route path="/products/:id" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
@@ -54,6 +61,7 @@ const App = () => (
             <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
             <Route path="/messages/:id" element={<ProtectedRoute><ConversationThread /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/settings/profile" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
