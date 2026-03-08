@@ -144,7 +144,7 @@ const BrandFeed = () => {
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="animate-pulse rounded-xl border border-border bg-card">
-                <div className="aspect-[4/3] rounded-t-xl bg-muted" />
+                <div className="aspect-[3/2] rounded-t-xl bg-muted" />
                 <div className="space-y-3 p-4">
                   <div className="h-5 w-2/3 rounded bg-muted" />
                   <div className="h-4 w-1/2 rounded bg-muted" />
@@ -163,7 +163,7 @@ const BrandFeed = () => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-lg"
               >
                 {/* Hero photo */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+                <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
                   {creator.portfolio_urls?.[0] ? (
                     <img
                       src={creator.portfolio_urls[0]}
@@ -175,6 +175,12 @@ const BrandFeed = () => {
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">
                       <Users className="h-12 w-12 text-muted-foreground/30" />
                     </div>
+                  )}
+                  {creator.rating > 0 && (
+                    <Badge className="absolute right-3 top-3 shadow-sm">
+                      <Star className="mr-1 h-3 w-3 fill-current" />
+                      {Number(creator.rating).toFixed(1)}
+                    </Badge>
                   )}
                 </div>
 
@@ -199,7 +205,7 @@ const BrandFeed = () => {
 
                   {/* Avatar + Name + Location row */}
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-11 w-11 border-2 border-background shadow-sm">
+                    <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
                       <AvatarImage src={creator.profiles?.avatar_url} />
                       <AvatarFallback className="text-xs font-medium">
                         {(creator.profiles?.display_name || "C").slice(0, 2).toUpperCase()}
@@ -218,12 +224,6 @@ const BrandFeed = () => {
                     </div>
                   </div>
 
-                  {/* One-line highlight for fast comparison */}
-                  {(creator.niches?.length || creator.platforms?.length) ? (
-                    <p className="text-xs text-muted-foreground">
-                      {[...(creator.niches || []).slice(0, 2), ...(creator.platforms || []).slice(0, 2)].join(" · ")}
-                    </p>
-                  ) : null}
 
                   {/* Bio */}
                   {creator.profiles?.bio && (

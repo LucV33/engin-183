@@ -203,7 +203,7 @@ const CreatorFeed = () => {
 
                   {/* Brand avatar + product title */}
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9 border-2 border-background shadow-sm">
+                    <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
                       <AvatarImage src={product.profiles?.avatar_url} />
                       <AvatarFallback className="text-xs">
                         {(product.profiles?.display_name || "B").slice(0, 2).toUpperCase()}
