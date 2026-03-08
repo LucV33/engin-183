@@ -30,6 +30,10 @@ const OnboardingCreator = () => {
   const [displayName, setDisplayName] = useState("");
   const [platforms, setPlatforms] = useState<string[]>(["TikTok"]);
   const [tiktokHandle, setTiktokHandle] = useState("");
+  const [instagramHandle, setInstagramHandle] = useState("");
+  const [youtubeHandle, setYoutubeHandle] = useState("");
+  const [twitterHandle, setTwitterHandle] = useState("");
+  const [facebookHandle, setFacebookHandle] = useState("");
 
   // Step 2
   const [niches, setNiches] = useState<string[]>([]);
@@ -56,6 +60,10 @@ const OnboardingCreator = () => {
         setPlatforms(cp.platforms || ["TikTok"]);
         setNiches(cp.niches || []);
         if ((cp as any).tiktok_handle) setTiktokHandle((cp as any).tiktok_handle);
+        if ((cp as any).instagram_handle) setInstagramHandle((cp as any).instagram_handle);
+        if ((cp as any).youtube_handle) setYoutubeHandle((cp as any).youtube_handle);
+        if ((cp as any).twitter_handle) setTwitterHandle((cp as any).twitter_handle);
+        if ((cp as any).facebook_handle) setFacebookHandle((cp as any).facebook_handle);
         if ((cp as any).audience_type) setAudience([(cp as any).audience_type]);
       }
     };
@@ -78,7 +86,14 @@ const OnboardingCreator = () => {
     try {
       await supabase.from("profiles").update({ display_name: displayName, onboarding_step: "creator-2" }).eq("id", user.id);
       const { data: existing } = await supabase.from("creator_profiles").select("id").eq("user_id", user.id).single();
-      const payload = { platforms, tiktok_handle: tiktokHandle || null } as any;
+      const payload = {
+        platforms,
+        tiktok_handle: tiktokHandle || null,
+        instagram_handle: instagramHandle || null,
+        youtube_handle: youtubeHandle || null,
+        twitter_handle: twitterHandle || null,
+        facebook_handle: facebookHandle || null,
+      } as any;
       if (existing) {
         await supabase.from("creator_profiles").update(payload).eq("user_id", user.id);
       } else {
@@ -145,9 +160,26 @@ const OnboardingCreator = () => {
             <Label>Platforms</Label>
             <ChipSelector options={PLATFORM_OPTIONS} selected={platforms} onChange={setPlatforms} />
           </div>
+          <h3 className="text-sm font-medium text-muted-foreground pt-2">Social Media Handles</h3>
           <div className="space-y-2">
-            <Label>TikTok Handle</Label>
+            <Label>TikTok</Label>
             <Input value={tiktokHandle} onChange={(e) => setTiktokHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>Instagram</Label>
+            <Input value={instagramHandle} onChange={(e) => setInstagramHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>YouTube</Label>
+            <Input value={youtubeHandle} onChange={(e) => setYoutubeHandle(e.target.value)} placeholder="@yourchannel" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>X (Twitter)</Label>
+            <Input value={twitterHandle} onChange={(e) => setTwitterHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+          </div>
+          <div className="space-y-2">
+            <Label>Facebook</Label>
+            <Input value={facebookHandle} onChange={(e) => setFacebookHandle(e.target.value)} placeholder="yourpage" className="min-h-[44px]" />
           </div>
           <Button onClick={saveStep1} disabled={saving} className="w-full min-h-[44px]">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue"}

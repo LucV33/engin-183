@@ -26,6 +26,20 @@ import {
   Zap,
 } from "lucide-react";
 
+const getSocialUrl = (platform: string, creator: any): string | null => {
+  const map: Record<string, { handle: string | null; urlPrefix: string }> = {
+    TikTok: { handle: creator.tiktok_handle, urlPrefix: "https://tiktok.com/@" },
+    Instagram: { handle: (creator as any).instagram_handle, urlPrefix: "https://instagram.com/" },
+    YouTube: { handle: (creator as any).youtube_handle, urlPrefix: "https://youtube.com/@" },
+    Facebook: { handle: (creator as any).facebook_handle, urlPrefix: "https://facebook.com/" },
+    "X (Twitter)": { handle: (creator as any).twitter_handle, urlPrefix: "https://x.com/" },
+    Twitter: { handle: (creator as any).twitter_handle, urlPrefix: "https://x.com/" },
+  };
+  const entry = map[platform];
+  if (!entry?.handle) return null;
+  return entry.urlPrefix + entry.handle.replace(/^@/, "");
+};
+
 const CreatorDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user, role } = useAuth();
@@ -375,9 +389,19 @@ const CreatorDetail = () => {
                 <CardContent className="p-5">
                   <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">Platforms</h2>
                   <div className="flex flex-wrap gap-2">
-                    {creator.platforms.map((p: string) => (
-                      <Badge key={p} variant="outline" className="border-accent/30 text-accent">{p}</Badge>
-                    ))}
+                    {creator.platforms.map((p: string) => {
+                      const handle = getSocialUrl(p, creator);
+                      if (handle) {
+                        return (
+                          <a key={p} href={handle} target="_blank" rel="noopener noreferrer">
+                            <Badge variant="outline" className="border-accent/30 text-accent hover:bg-accent/10 cursor-pointer gap-1">
+                              {p} <ExternalLink className="h-3 w-3" />
+                            </Badge>
+                          </a>
+                        );
+                      }
+                      return <Badge key={p} variant="outline" className="border-accent/30 text-accent">{p}</Badge>;
+                    })}
                   </div>
                 </CardContent>
               </Card>

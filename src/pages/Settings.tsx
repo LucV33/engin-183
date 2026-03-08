@@ -43,6 +43,10 @@ const Settings = () => {
   const [platforms, setPlatforms] = useState<string[]>([]);
   const [niches, setNiches] = useState<string[]>([]);
   const [tiktokHandle, setTiktokHandle] = useState("");
+  const [instagramHandle, setInstagramHandle] = useState("");
+  const [youtubeHandle, setYoutubeHandle] = useState("");
+  const [twitterHandle, setTwitterHandle] = useState("");
+  const [facebookHandle, setFacebookHandle] = useState("");
   const [audience, setAudience] = useState<string[]>([]);
 
   // Brand
@@ -68,6 +72,10 @@ const Settings = () => {
           setPlatforms(cp.platforms || []);
           setNiches(cp.niches || []);
           setTiktokHandle((cp as any).tiktok_handle || "");
+          setInstagramHandle((cp as any).instagram_handle || "");
+          setYoutubeHandle((cp as any).youtube_handle || "");
+          setTwitterHandle((cp as any).twitter_handle || "");
+          setFacebookHandle((cp as any).facebook_handle || "");
           setAudience((cp as any).audience_type ? [(cp as any).audience_type] : []);
         }
       }
@@ -106,7 +114,13 @@ const Settings = () => {
 
       if (role === "creator") {
         await supabase.from("creator_profiles").update({
-          platforms, niches, tiktok_handle: tiktokHandle || null, audience_type: audience[0] || null,
+          platforms, niches,
+          tiktok_handle: tiktokHandle || null,
+          instagram_handle: instagramHandle || null,
+          youtube_handle: youtubeHandle || null,
+          twitter_handle: twitterHandle || null,
+          facebook_handle: facebookHandle || null,
+          audience_type: audience[0] || null,
         } as any).eq("user_id", user.id);
       }
 
@@ -208,9 +222,26 @@ const Settings = () => {
                       <Label>Platforms</Label>
                       <ChipSelector options={PLATFORM_OPTIONS} selected={platforms} onChange={setPlatforms} />
                     </div>
+                    <h3 className="text-sm font-medium text-muted-foreground pt-2">Social Media Handles</h3>
                     <div className="space-y-2">
-                      <Label>TikTok Handle</Label>
+                      <Label>TikTok</Label>
                       <Input value={tiktokHandle} onChange={(e) => setTiktokHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Instagram</Label>
+                      <Input value={instagramHandle} onChange={(e) => setInstagramHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>YouTube</Label>
+                      <Input value={youtubeHandle} onChange={(e) => setYoutubeHandle(e.target.value)} placeholder="@yourchannel" className="min-h-[44px]" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>X (Twitter)</Label>
+                      <Input value={twitterHandle} onChange={(e) => setTwitterHandle(e.target.value)} placeholder="@yourhandle" className="min-h-[44px]" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Facebook</Label>
+                      <Input value={facebookHandle} onChange={(e) => setFacebookHandle(e.target.value)} placeholder="yourpage" className="min-h-[44px]" />
                     </div>
                     <div className="space-y-2">
                       <Label>Content Niches</Label>
