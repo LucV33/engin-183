@@ -152,6 +152,7 @@ export type Database = {
           created_at: string
           follower_count: number | null
           id: string
+          instagram_handle: string | null
           location: string | null
           niches: string[] | null
           past_collabs: string[] | null
@@ -160,6 +161,7 @@ export type Database = {
           rating: number | null
           tiktok_handle: string | null
           user_id: string
+          youtube_handle: string | null
         }
         Insert: {
           audience_type?: string | null
@@ -167,6 +169,7 @@ export type Database = {
           created_at?: string
           follower_count?: number | null
           id?: string
+          instagram_handle?: string | null
           location?: string | null
           niches?: string[] | null
           past_collabs?: string[] | null
@@ -175,6 +178,7 @@ export type Database = {
           rating?: number | null
           tiktok_handle?: string | null
           user_id: string
+          youtube_handle?: string | null
         }
         Update: {
           audience_type?: string | null
@@ -182,6 +186,7 @@ export type Database = {
           created_at?: string
           follower_count?: number | null
           id?: string
+          instagram_handle?: string | null
           location?: string | null
           niches?: string[] | null
           past_collabs?: string[] | null
@@ -190,6 +195,7 @@ export type Database = {
           rating?: number | null
           tiktok_handle?: string | null
           user_id?: string
+          youtube_handle?: string | null
         }
         Relationships: [
           {
