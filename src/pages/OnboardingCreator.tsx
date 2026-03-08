@@ -30,6 +30,10 @@ const OnboardingCreator = () => {
   const [displayName, setDisplayName] = useState("");
   const [platforms, setPlatforms] = useState<string[]>(["TikTok"]);
   const [tiktokHandle, setTiktokHandle] = useState("");
+  const [instagramHandle, setInstagramHandle] = useState("");
+  const [youtubeHandle, setYoutubeHandle] = useState("");
+  const [twitterHandle, setTwitterHandle] = useState("");
+  const [facebookHandle, setFacebookHandle] = useState("");
 
   // Step 2
   const [niches, setNiches] = useState<string[]>([]);
