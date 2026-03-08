@@ -197,7 +197,7 @@ const Index = () => {
 
               <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-4">
                 <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
-                  <Link to="/waitlist">Browse Hosts</Link>
+                  <Link to="/auth">Browse Hosts</Link>
                 </Button>
                 <Button size="lg" variant="outline" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>
                   <Link to="/waitlist">Apply as a Host</Link>
