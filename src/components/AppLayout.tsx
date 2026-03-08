@@ -19,8 +19,10 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
 
   const navLinkClass = (path: string) =>
     cn(
-      isActive(path) &&
-        "text-primary shadow-[0_0_12px_2px_hsl(var(--primary)/0.5)] bg-primary/10 border border-primary/30"
+      "transition-all duration-300",
+      isActive(path)
+        ? "text-primary shadow-[0_0_20px_hsl(var(--primary)/0.4)] bg-primary/10 border border-primary/30"
+        : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
     );
 
   return (
