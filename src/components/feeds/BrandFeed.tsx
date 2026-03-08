@@ -144,7 +144,7 @@ const BrandFeed = () => {
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="animate-pulse rounded-xl border border-border bg-card">
-                <div className="aspect-[4/3] rounded-t-xl bg-muted" />
+                <div className="aspect-[3/2] rounded-t-xl bg-muted" />
                 <div className="space-y-3 p-4">
                   <div className="h-5 w-2/3 rounded bg-muted" />
                   <div className="h-4 w-1/2 rounded bg-muted" />
