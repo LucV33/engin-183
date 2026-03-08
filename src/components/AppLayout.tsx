@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, MessageSquare, Package, Settings } from "lucide-react";
+import { LogOut, MessageSquare, Package, Settings, Handshake } from "lucide-react";
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const { role, signOut } = useAuth();
@@ -21,6 +21,9 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
               <Link to="/feed">Feed</Link>
+            </Button>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/deals"><Handshake className="mr-1 h-4 w-4" />Deals</Link>
             </Button>
             {role === "brand" && (
               <Button variant="ghost" size="sm" asChild>
