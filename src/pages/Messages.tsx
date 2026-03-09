@@ -10,7 +10,7 @@ import { formatDistanceToNow } from "date-fns";
 import { DollarSign } from "lucide-react";
 
 const Messages = () => {
-  const { user, role } = useAuth();
+  const { user } = useAuth();
 
   const { data: conversations, isLoading } = useQuery({
     queryKey: ["conversations"],
