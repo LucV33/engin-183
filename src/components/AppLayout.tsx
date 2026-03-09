@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, MessageSquare, Package, Settings, Handshake } from "lucide-react";
+import { LogOut, MessageSquare, Package, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
@@ -34,17 +34,14 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
             <Button variant="ghost" size="sm" asChild className={navLinkClass("/feed")}>
               <Link to="/feed">Feed</Link>
             </Button>
-            <Button variant="ghost" size="sm" asChild className={navLinkClass("/deals")}>
-              <Link to="/deals"><Handshake className="mr-1 h-4 w-4" />Deals</Link>
+            <Button variant="ghost" size="sm" asChild className={navLinkClass("/messages")}>
+              <Link to="/messages"><MessageSquare className="mr-1 h-4 w-4" />Messages</Link>
             </Button>
             {role === "brand" && (
               <Button variant="ghost" size="sm" asChild className={navLinkClass("/my-products")}>
                 <Link to="/my-products"><Package className="mr-1 h-4 w-4" />Products</Link>
               </Button>
             )}
-            <Button variant="ghost" size="sm" asChild className={navLinkClass("/messages")}>
-              <Link to="/messages"><MessageSquare className="mr-1 h-4 w-4" />Messages</Link>
-            </Button>
             <Button variant="ghost" size="sm" asChild className={navLinkClass("/settings")}>
               <Link to="/settings/profile"><Settings className="mr-1 h-4 w-4" />Settings</Link>
             </Button>
