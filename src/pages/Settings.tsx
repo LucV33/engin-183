@@ -133,7 +133,7 @@ const Settings = () => {
         for (let i = 0; i < campaignImages.length; i++) {
           const item = campaignImages[i];
           if (item.file) {
-            const url = await uploadImage(item.file, "product-images", `campaign/${user.id}/${i}`);
+            const url = await uploadImage(item.file, "product-images", `${user.id}/campaign-${i}`);
             uploadedCampaign.push(url);
           } else {
             uploadedCampaign.push(item.previewUrl);
