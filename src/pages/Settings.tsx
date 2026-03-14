@@ -108,7 +108,7 @@ const Settings = () => {
     try {
       let avatarUrl = avatarPreview;
       if (avatarFile) {
-        avatarUrl = await uploadImage(avatarFile, "avatars", `${role === "creator" ? "creators" : "brands"}/${user.id}`);
+        avatarUrl = await uploadImage(avatarFile, "avatars", `${user.id}/avatar`);
       }
       await supabase.from("profiles").update({ display_name: displayName, bio, avatar_url: avatarUrl }).eq("id", user.id);
 
