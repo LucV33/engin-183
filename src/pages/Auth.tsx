@@ -8,7 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Code, Video, ShoppingBag } from "lucide-react";
+
+const DEMO_ACCOUNTS = {
+  creator: { email: "creator1@demo.com", password: "demo1234", label: "Creator (Sarah Chen)" },
+  brand: { email: "brand1@demo.com", password: "demo1234", label: "Brand (GlowUp Beauty)" },
+};
 
 const Auth = () => {
   const { user, onboardingCompleted, loading } = useAuth();
