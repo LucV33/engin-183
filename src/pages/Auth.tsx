@@ -28,9 +28,6 @@ const Auth = () => {
   const [devMode, setDevMode] = useState(false);
   const [devPassword, setDevPassword] = useState("");
   const [devUnlocked, setDevUnlocked] = useState(false);
-  const [displayName, setDisplayName] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [tab, setTab] = useState<string>("signup");
 
   useEffect(() => {
     if (!loading && user) {
