@@ -76,13 +76,30 @@ const Auth = () => {
     }
   };
   const handleDevLogin = async (role: "creator" | "brand") => {
-    const account = DEMO_ACCOUNTS[role];
     setSubmitting(true);
     try {
-      await signIn(account.email, account.password);
-      navigate("/feed");
+      // Generate a unique test email each time
+      const timestamp = Date.now();
+      const testEmail = `test-${role}-${timestamp}@dev.local`;
+      const testPassword = "devtest1234";
+
+      // Sign up with auto-confirm enabled — account is immediately active
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: testEmail,
+        password: testPassword,
+        options: {
+          data: { display_name: `Test ${role.charAt(0).toUpperCase() + role.slice(1)}` },
+        },
+      });
+      if (signUpError) throw signUpError;
+
+      // Small delay to let the trigger create the profile
+      await new Promise((r) => setTimeout(r, 500));
+
+      // Navigate to onboarding
+      navigate("/onboarding/role");
     } catch (err: any) {
-      toast({ title: "Demo login failed", description: err.message, variant: "destructive" });
+      toast({ title: "Dev login failed", description: err.message, variant: "destructive" });
     } finally {
       setSubmitting(false);
     }
