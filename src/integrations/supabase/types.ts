@@ -546,6 +546,7 @@ export type Database = {
           description: string | null
           id: string
           images: string[] | null
+          past_month_gmv: number | null
           preferred_date: string | null
           status: Database["public"]["Enums"]["product_status"]
           target_platforms: string[] | null
@@ -561,6 +562,7 @@ export type Database = {
           description?: string | null
           id?: string
           images?: string[] | null
+          past_month_gmv?: number | null
           preferred_date?: string | null
           status?: Database["public"]["Enums"]["product_status"]
           target_platforms?: string[] | null
@@ -576,6 +578,7 @@ export type Database = {
           description?: string | null
           id?: string
           images?: string[] | null
+          past_month_gmv?: number | null
           preferred_date?: string | null
           status?: Database["public"]["Enums"]["product_status"]
           target_platforms?: string[] | null

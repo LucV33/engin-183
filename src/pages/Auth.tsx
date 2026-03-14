@@ -78,13 +78,11 @@ const Auth = () => {
   const handleDevLogin = async (role: "creator" | "brand") => {
     setSubmitting(true);
     try {
-      // Generate a unique test email each time
       const timestamp = Date.now();
       const testEmail = `test-${role}-${timestamp}@dev.local`;
       const testPassword = "devtest1234";
 
-      // Sign up with auto-confirm enabled — account is immediately active
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: testEmail,
         password: testPassword,
         options: {
@@ -93,11 +91,21 @@ const Auth = () => {
       });
       if (signUpError) throw signUpError;
 
-      // Small delay to let the trigger create the profile
-      await new Promise((r) => setTimeout(r, 500));
+      // Wait for the session to be fully established
+      if (!signUpData.session) {
+        // If no session returned, sign in explicitly
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: testEmail,
+          password: testPassword,
+        });
+        if (signInError) throw signInError;
+      }
 
-      // Navigate to onboarding
-      navigate("/onboarding/role");
+      // Wait for auth state change to propagate and profile to be created
+      await new Promise((r) => setTimeout(r, 800));
+
+      // Don't navigate — the useEffect in this component will redirect
+      // once the auth state settles and user is detected
     } catch (err: any) {
       toast({ title: "Dev login failed", description: err.message, variant: "destructive" });
     } finally {
