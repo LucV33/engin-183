@@ -267,7 +267,7 @@ const Auth = () => {
           </CardContent>
         ) : (
           <CardContent className="space-y-3 pt-4">
-            <p className="text-sm font-medium text-center text-muted-foreground">Quick login as…</p>
+            <p className="text-sm font-medium text-center text-muted-foreground">Start onboarding as…</p>
             <div className="grid grid-cols-2 gap-2">
               <Button
                 variant="outline"
@@ -277,7 +277,7 @@ const Auth = () => {
               >
                 <Video className="h-5 w-5 text-primary" />
                 <span className="text-xs">Creator</span>
-                <span className="text-[10px] text-muted-foreground">Sarah Chen</span>
+                <span className="text-[10px] text-muted-foreground">New test account</span>
               </Button>
               <Button
                 variant="outline"
@@ -287,7 +287,7 @@ const Auth = () => {
               >
                 <ShoppingBag className="h-5 w-5 text-primary" />
                 <span className="text-xs">Brand</span>
-                <span className="text-[10px] text-muted-foreground">GlowUp Beauty</span>
+                <span className="text-[10px] text-muted-foreground">New test account</span>
               </Button>
             </div>
           </CardContent>
