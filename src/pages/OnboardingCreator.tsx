@@ -137,7 +137,7 @@ const OnboardingCreator = () => {
     let avatarUrl = avatarPreview;
     if (avatarFile && user) {
       try {
-        avatarUrl = await uploadImage(avatarFile, "avatars", `creators/${user.id}`);
+        avatarUrl = await uploadImage(avatarFile, "avatars", `${user.id}/avatar`);
       } catch {
         toast({ title: "Failed to upload photo", variant: "destructive" });
         return;
