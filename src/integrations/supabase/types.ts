@@ -171,15 +171,20 @@ export type Database = {
           audience_type: string | null
           avg_gmv: number | null
           created_at: string
+          experience_level: string | null
           facebook_handle: string | null
+          first_name: string | null
           follower_count: number | null
+          has_tiktok_affiliate: string | null
           id: string
           instagram_handle: string | null
+          last_name: string | null
           location: string | null
           niches: string[] | null
           past_collabs: string[] | null
           platforms: string[] | null
           portfolio_urls: string[] | null
+          product_interests: string[] | null
           rating: number | null
           tiktok_handle: string | null
           twitter_handle: string | null
@@ -190,15 +195,20 @@ export type Database = {
           audience_type?: string | null
           avg_gmv?: number | null
           created_at?: string
+          experience_level?: string | null
           facebook_handle?: string | null
+          first_name?: string | null
           follower_count?: number | null
+          has_tiktok_affiliate?: string | null
           id?: string
           instagram_handle?: string | null
+          last_name?: string | null
           location?: string | null
           niches?: string[] | null
           past_collabs?: string[] | null
           platforms?: string[] | null
           portfolio_urls?: string[] | null
+          product_interests?: string[] | null
           rating?: number | null
           tiktok_handle?: string | null
           twitter_handle?: string | null
@@ -209,15 +219,20 @@ export type Database = {
           audience_type?: string | null
           avg_gmv?: number | null
           created_at?: string
+          experience_level?: string | null
           facebook_handle?: string | null
+          first_name?: string | null
           follower_count?: number | null
+          has_tiktok_affiliate?: string | null
           id?: string
           instagram_handle?: string | null
+          last_name?: string | null
           location?: string | null
           niches?: string[] | null
           past_collabs?: string[] | null
           platforms?: string[] | null
           portfolio_urls?: string[] | null
+          product_interests?: string[] | null
           rating?: number | null
           tiktok_handle?: string | null
           twitter_handle?: string | null
@@ -592,6 +607,7 @@ export type Database = {
           id: string
           onboarding_completed: boolean
           onboarding_step: string | null
+          profile_images: string[] | null
           role: Database["public"]["Enums"]["app_role"]
         }
         Insert: {
@@ -602,6 +618,7 @@ export type Database = {
           id: string
           onboarding_completed?: boolean
           onboarding_step?: string | null
+          profile_images?: string[] | null
           role: Database["public"]["Enums"]["app_role"]
         }
         Update: {
@@ -612,6 +629,7 @@ export type Database = {
           id?: string
           onboarding_completed?: boolean
           onboarding_step?: string | null
+          profile_images?: string[] | null
           role?: Database["public"]["Enums"]["app_role"]
         }
         Relationships: []
