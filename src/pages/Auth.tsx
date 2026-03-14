@@ -75,7 +75,7 @@ const Auth = () => {
     }
   };
 
-  const { signUp, signIn } = useAuth();
+  
 
   if (loading) {
     return (
