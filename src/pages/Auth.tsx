@@ -223,6 +223,58 @@ const Auth = () => {
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* Dev Tool */}
+      <Card className="w-full max-w-md mt-4 border-dashed border-muted-foreground/30">
+        {!devMode ? (
+          <CardContent className="flex justify-center py-3">
+            <Button variant="ghost" size="sm" className="text-xs text-muted-foreground gap-1" onClick={() => setDevMode(true)}>
+              <Code className="h-3 w-3" /> Dev Access
+            </Button>
+          </CardContent>
+        ) : !devUnlocked ? (
+          <CardContent className="space-y-3 pt-4">
+            <p className="text-sm font-medium text-muted-foreground text-center">Enter dev password</p>
+            <div className="flex gap-2">
+              <Input
+                type="password"
+                value={devPassword}
+                onChange={(e) => setDevPassword(e.target.value)}
+                placeholder="Password"
+                onKeyDown={(e) => e.key === "Enter" && handleDevUnlock()}
+                className="flex-1"
+              />
+              <Button size="sm" onClick={handleDevUnlock}>Unlock</Button>
+            </div>
+          </CardContent>
+        ) : (
+          <CardContent className="space-y-3 pt-4">
+            <p className="text-sm font-medium text-center text-muted-foreground">Quick login as…</p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3"
+                onClick={() => handleDevLogin("creator")}
+                disabled={submitting}
+              >
+                <Video className="h-5 w-5 text-primary" />
+                <span className="text-xs">Creator</span>
+                <span className="text-[10px] text-muted-foreground">Sarah Chen</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3"
+                onClick={() => handleDevLogin("brand")}
+                disabled={submitting}
+              >
+                <ShoppingBag className="h-5 w-5 text-primary" />
+                <span className="text-xs">Brand</span>
+                <span className="text-[10px] text-muted-foreground">GlowUp Beauty</span>
+              </Button>
+            </div>
+          </CardContent>
+        )}
+      </Card>
     </div>
   );
 };
