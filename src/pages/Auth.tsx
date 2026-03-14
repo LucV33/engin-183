@@ -16,12 +16,18 @@ const DEMO_ACCOUNTS = {
 };
 
 const Auth = () => {
-  const { user, onboardingCompleted, loading } = useAuth();
+  const { user, onboardingCompleted, loading, signUp, signIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [tab, setTab] = useState<string>("signup");
+  const [devMode, setDevMode] = useState(false);
+  const [devPassword, setDevPassword] = useState("");
+  const [devUnlocked, setDevUnlocked] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [tab, setTab] = useState<string>("signup");
