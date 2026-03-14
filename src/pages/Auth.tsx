@@ -74,8 +74,26 @@ const Auth = () => {
       setSubmitting(false);
     }
   };
+  const handleDevLogin = async (role: "creator" | "brand") => {
+    const account = DEMO_ACCOUNTS[role];
+    setSubmitting(true);
+    try {
+      await signIn(account.email, account.password);
+      navigate("/feed");
+    } catch (err: any) {
+      toast({ title: "Demo login failed", description: err.message, variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-  
+  const handleDevUnlock = () => {
+    if (devPassword === "123") {
+      setDevUnlocked(true);
+    } else {
+      toast({ title: "Wrong password", variant: "destructive" });
+    }
+  };
 
   if (loading) {
     return (
