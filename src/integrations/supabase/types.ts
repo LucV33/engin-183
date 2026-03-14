@@ -56,6 +56,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "brand_profiles_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       contracts: {
@@ -130,10 +137,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "conversations_brand_profile_fkey"
+            columns: ["brand_user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "conversations_creator_profile_fkey"
             columns: ["creator_user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_creator_profile_fkey"
+            columns: ["creator_user_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -209,6 +230,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creator_profiles_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -546,6 +574,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "products_brand_profile_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -663,9 +698,34 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          display_name: string | null
+          id: string | null
+          role: Database["public"]["Enums"]["app_role"] | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          display_name?: string | null
+          id?: string | null
+          role?: Database["public"]["Enums"]["app_role"] | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          display_name?: string | null
+          id?: string | null
+          role?: Database["public"]["Enums"]["app_role"] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      approve_analytics: { Args: { _deal_id: string }; Returns: undefined }
+      fund_escrow: { Args: { _deal_id: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -673,6 +733,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      release_escrow: { Args: { _deal_id: string }; Returns: undefined }
       set_user_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: undefined

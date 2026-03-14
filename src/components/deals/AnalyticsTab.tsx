@@ -66,9 +66,9 @@ const AnalyticsTab = ({ dealId, conversationId, isBrand }: AnalyticsTabProps) =>
 
   const approveMutation = useMutation({
     mutationFn: async () => {
-      await supabase.from("live_analytics").update({ approved_at: new Date().toISOString() }).eq("deal_id", dealId);
-      // Release escrow (simulated)
-      await supabase.from("escrow_payments").update({ status: "released" as any, released_at: new Date().toISOString() }).eq("deal_id", dealId);
+      // Use secure RPC functions instead of direct table updates
+      await supabase.rpc("approve_analytics", { _deal_id: dealId });
+      await supabase.rpc("release_escrow", { _deal_id: dealId });
       await supabase.from("deals").update({ status: "completed" as any }).eq("id", dealId);
       await supabase.from("messages").insert({
         conversation_id: conversationId, sender_id: user!.id,
