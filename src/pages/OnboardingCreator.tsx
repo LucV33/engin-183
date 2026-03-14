@@ -137,7 +137,7 @@ const OnboardingCreator = () => {
     let avatarUrl = avatarPreview;
     if (avatarFile && user) {
       try {
-        avatarUrl = await uploadImage(avatarFile, "avatars", `creators/${user.id}`);
+        avatarUrl = await uploadImage(avatarFile, "avatars", `${user.id}/avatar`);
       } catch {
         toast({ title: "Failed to upload photo", variant: "destructive" });
         return;
@@ -188,7 +188,7 @@ const OnboardingCreator = () => {
       for (let i = 0; i < photos.length; i++) {
         const p = photos[i];
         if (p.file) {
-          const url = await uploadImage(p.file, "portfolio", `creators/${user.id}/${i}`);
+          const url = await uploadImage(p.file, "portfolio", `${user.id}/${i}`);
           urls.push(url);
         } else {
           urls.push(p.previewUrl);

@@ -108,7 +108,7 @@ const Settings = () => {
     try {
       let avatarUrl = avatarPreview;
       if (avatarFile) {
-        avatarUrl = await uploadImage(avatarFile, "avatars", `${role === "creator" ? "creators" : "brands"}/${user.id}`);
+        avatarUrl = await uploadImage(avatarFile, "avatars", `${user.id}/avatar`);
       }
       await supabase.from("profiles").update({ display_name: displayName, bio, avatar_url: avatarUrl }).eq("id", user.id);
 
@@ -127,13 +127,13 @@ const Settings = () => {
       if (role === "brand") {
         let logoUrl = logoPreview;
         if (logoFile) {
-          logoUrl = await uploadImage(logoFile, "avatars", `brand-logos/${user.id}`);
+          logoUrl = await uploadImage(logoFile, "avatars", `${user.id}/logo`);
         }
         const uploadedCampaign: string[] = [];
         for (let i = 0; i < campaignImages.length; i++) {
           const item = campaignImages[i];
           if (item.file) {
-            const url = await uploadImage(item.file, "product-images", `campaign/${user.id}/${i}`);
+            const url = await uploadImage(item.file, "product-images", `${user.id}/campaign-${i}`);
             uploadedCampaign.push(url);
           } else {
             uploadedCampaign.push(item.previewUrl);
