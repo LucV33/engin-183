@@ -15,17 +15,8 @@ const OnboardingRole = () => {
     try {
       // Update profile role
       await supabase.from("profiles").update({ role, onboarding_step: `${role}-1` }).eq("id", user.id);
-      // Check if user_role already exists
-      const { data: existing } = await supabase
-        .from("user_roles")
-        .select("id, role")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (existing) {
-        await supabase.from("user_roles").update({ role }).eq("id", existing.id);
-      } else {
-        await supabase.from("user_roles").insert({ user_id: user.id, role });
-      }
+      // Set role via security definer function
+      await supabase.rpc("set_user_role", { _role: role });
       await refreshProfile();
       navigate(`/onboarding/${role}`);
     } catch (err: any) {
