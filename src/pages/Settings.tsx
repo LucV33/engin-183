@@ -127,7 +127,7 @@ const Settings = () => {
       if (role === "brand") {
         let logoUrl = logoPreview;
         if (logoFile) {
-          logoUrl = await uploadImage(logoFile, "avatars", `brand-logos/${user.id}`);
+          logoUrl = await uploadImage(logoFile, "avatars", `${user.id}/logo`);
         }
         const uploadedCampaign: string[] = [];
         for (let i = 0; i < campaignImages.length; i++) {
