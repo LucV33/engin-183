@@ -32,19 +32,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .single();
-    if (roleData) setRole(roleData.role as AppRole);
+    try {
+      const [{ data: roleData }, { data: profile }] = await Promise.all([
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userId)
+          .maybeSingle(),
+        supabase
+          .from("profiles")
+          .select("onboarding_completed")
+          .eq("id", userId)
+          .maybeSingle(),
+      ]);
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("onboarding_completed")
-      .eq("id", userId)
-      .single();
-    if (profile) setOnboardingCompleted(!!profile.onboarding_completed);
+      setRole((roleData?.role as AppRole) ?? null);
+      setOnboardingCompleted(!!profile?.onboarding_completed);
+    } catch (error) {
+      console.error("Failed to fetch profile state:", error);
+      setRole(null);
+      setOnboardingCompleted(false);
+    }
   };
 
   const refreshProfile = async () => {
@@ -54,30 +62,54 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchProfile(session.user.id);
+    let isMounted = true;
+
+    const applySession = (nextSession: Session | null) => {
+      if (!isMounted) return;
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
+    };
+
+    const bootstrap = async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (!isMounted) return;
+
+        applySession(data.session);
+
+        if (data.session?.user) {
+          await fetchProfile(data.session.user.id);
         } else {
           setRole(null);
           setOnboardingCompleted(false);
         }
-        setLoading(false);
+      } finally {
+        if (isMounted) setLoading(false);
       }
-    );
+    };
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await fetchProfile(session.user.id);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      applySession(nextSession);
+
+      if (!nextSession?.user) {
+        setRole(null);
+        setOnboardingCompleted(false);
+        setLoading(false);
+        return;
       }
-      setLoading(false);
+
+      // Fire-and-forget to avoid deadlocks in auth event processing
+      void fetchProfile(nextSession.user.id).finally(() => {
+        if (isMounted) setLoading(false);
+      });
     });
 
-    return () => subscription.unsubscribe();
+    void bootstrap();
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, displayName: string) => {
