@@ -29,6 +29,7 @@ import Pricing from "./pages/Pricing";
 import Blog from "./pages/Blog";
 import DealInbox from "./pages/DealInbox";
 import DealRoom from "./pages/DealRoom";
+import EditProduct from "./pages/EditProduct";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/creators/:id" element={<ProtectedRoute><CreatorDetail /></ProtectedRoute>} />
             <Route path="/my-products" element={<ProtectedRoute requiredRole="brand"><MyProducts /></ProtectedRoute>} />
             <Route path="/products/new" element={<ProtectedRoute requiredRole="brand"><NewProduct /></ProtectedRoute>} />
+            <Route path="/products/:id/edit" element={<ProtectedRoute requiredRole="brand"><EditProduct /></ProtectedRoute>} />
             <Route path="/deals" element={<ProtectedRoute><DealInbox /></ProtectedRoute>} />
             <Route path="/deals/:id" element={<ProtectedRoute><DealRoom /></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
