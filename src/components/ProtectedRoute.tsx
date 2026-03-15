@@ -7,7 +7,7 @@ interface Props {
 }
 
 const ProtectedRoute = ({ children, requiredRole }: Props) => {
-  const { user, role, loading } = useAuth();
+  const { user, role, loading, onboardingCompleted } = useAuth();
 
   if (loading) {
     return (
@@ -17,7 +17,8 @@ const ProtectedRoute = ({ children, requiredRole }: Props) => {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/auth" replace />;
+  if (!onboardingCompleted) return <Navigate to="/onboarding/role" replace />;
   if (requiredRole && role !== requiredRole) return <Navigate to="/feed" replace />;
 
   return <>{children}</>;

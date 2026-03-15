@@ -8,10 +8,17 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Star, Users } from "lucide-react";
+import { Search, MapPin, Star, Users, Sparkles } from "lucide-react";
 
 const NICHE_OPTIONS = ["Beauty", "Fashion", "Tech", "Food", "Fitness", "Lifestyle", "Gaming", "Home"];
 const PLATFORM_OPTIONS = ["TikTok", "Instagram", "YouTube", "Facebook"];
+
+const EXPERIENCE_LABELS: Record<string, string> = {
+  new: "New Creator",
+  some: "Getting Started",
+  experienced: "Experienced",
+  pro: "Pro",
+};
 
 const BrandFeed = () => {
   const [search, setSearch] = useState("");
@@ -47,6 +54,11 @@ const BrandFeed = () => {
     if ((c.follower_count ?? 0) < followerRange[0] || (c.follower_count ?? 0) > followerRange[1]) return false;
     return true;
   });
+
+  const getDisplayRating = (rating: number | null) => {
+    const r = Number(rating || 0);
+    return r > 0 ? r.toFixed(1) : "4.0";
+  };
 
   return (
     <div className="flex gap-6">
@@ -144,7 +156,7 @@ const BrandFeed = () => {
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="animate-pulse rounded-xl border border-border bg-card">
-                <div className="aspect-[4/3] rounded-t-xl bg-muted" />
+                <div className="aspect-[3/2] rounded-t-xl bg-muted" />
                 <div className="space-y-3 p-4">
                   <div className="h-5 w-2/3 rounded bg-muted" />
                   <div className="h-4 w-1/2 rounded bg-muted" />
@@ -163,7 +175,7 @@ const BrandFeed = () => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-lg"
               >
                 {/* Hero photo */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+                <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
                   {creator.portfolio_urls?.[0] ? (
                     <img
                       src={creator.portfolio_urls[0]}
@@ -176,20 +188,36 @@ const BrandFeed = () => {
                       <Users className="h-12 w-12 text-muted-foreground/30" />
                     </div>
                   )}
+                  <Badge className="absolute right-3 top-3 shadow-sm">
+                    <Star className="mr-1 h-3 w-3 fill-current" />
+                    {getDisplayRating(creator.rating)}
+                  </Badge>
                 </div>
 
                 {/* Info section */}
                 <div className="flex flex-col gap-3 p-4">
-                  {/* Comparison row: easy to scan across cards */}
+                  {/* Stats row */}
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                     <span className="flex items-center gap-0.5 font-medium text-foreground">
                       <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                      {Number(creator.rating || 0).toFixed(1)}
+                      {getDisplayRating(creator.rating)}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3.5 w-3.5" />
-                      {(creator.follower_count ?? 0).toLocaleString()} followers
-                    </span>
+                    {(creator.follower_count ?? 0) > 0 ? (
+                      <span className="flex items-center gap-1">
+                        <Users className="h-3.5 w-3.5" />
+                        {(creator.follower_count).toLocaleString()} followers
+                      </span>
+                    ) : creator.experience_level ? (
+                      <Badge variant="secondary" className="text-xs">
+                        <Sparkles className="mr-1 h-3 w-3" />
+                        {EXPERIENCE_LABELS[creator.experience_level] || creator.experience_level}
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary" className="text-xs">
+                        <Sparkles className="mr-1 h-3 w-3" />
+                        New Creator
+                      </Badge>
+                    )}
                     {creator.avg_gmv > 0 && (
                       <span className="font-medium text-foreground">
                         ${Number(creator.avg_gmv).toLocaleString()} avg GMV
@@ -197,9 +225,9 @@ const BrandFeed = () => {
                     )}
                   </div>
 
-                  {/* Avatar + Name + Location row */}
+                  {/* Avatar + Name + Location */}
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-11 w-11 border-2 border-background shadow-sm">
+                    <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
                       <AvatarImage src={creator.profiles?.avatar_url} />
                       <AvatarFallback className="text-xs font-medium">
                         {(creator.profiles?.display_name || "C").slice(0, 2).toUpperCase()}
@@ -218,25 +246,21 @@ const BrandFeed = () => {
                     </div>
                   </div>
 
-                  {/* One-line highlight for fast comparison */}
-                  {(creator.niches?.length || creator.platforms?.length) ? (
-                    <p className="text-xs text-muted-foreground">
-                      {[...(creator.niches || []).slice(0, 2), ...(creator.platforms || []).slice(0, 2)].join(" · ")}
-                    </p>
-                  ) : null}
-
                   {/* Bio */}
                   {creator.profiles?.bio && (
                     <p className="line-clamp-2 text-sm text-muted-foreground">{creator.profiles.bio}</p>
                   )}
 
-                  {/* Tags */}
+                  {/* Tags: niches + product interests */}
                   <div className="flex flex-wrap gap-1.5">
                     {creator.niches?.slice(0, 3).map((n: string) => (
                       <Badge key={n} variant="secondary" className="text-xs">{n}</Badge>
                     ))}
+                    {creator.product_interests?.slice(0, 2).map((interest: string) => (
+                      <Badge key={interest} variant="outline" className="text-xs">{interest}</Badge>
+                    ))}
                     {creator.platforms?.slice(0, 2).map((p: string) => (
-                      <Badge key={p} variant="outline" className="text-xs">{p}</Badge>
+                      <Badge key={`plat-${p}`} variant="outline" className="text-xs">{p}</Badge>
                     ))}
                   </div>
                 </div>

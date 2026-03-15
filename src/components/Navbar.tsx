@@ -38,7 +38,7 @@ const Navbar = () => {
 
         <div className="hidden items-center gap-3 md:flex">
           <Button size="sm" className="rounded-full" asChild>
-            <Link to="/waitlist">Join Waitlist</Link>
+            <Link to="/auth">Get Started</Link>
           </Button>
         </div>
 
@@ -65,7 +65,7 @@ const Navbar = () => {
           ))}
           <div className="mt-3 flex flex-col gap-2">
             <Button size="sm" className="rounded-full" asChild>
-              <Link to="/waitlist" onClick={() => setMobileOpen(false)}>Join Waitlist</Link>
+              <Link to="/auth" onClick={() => setMobileOpen(false)}>Get Started</Link>
             </Button>
           </div>
         </div>
