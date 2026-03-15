@@ -179,7 +179,7 @@ const BrandFeed = () => {
                   {creator.portfolio_urls?.[0] ? (
                     <img
                       src={creator.portfolio_urls[0]}
-                      alt={creator.profiles?.display_name}
+                      alt={creator.public_profiles?.display_name}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
