@@ -1,43 +1,36 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import AppLayout from "@/components/AppLayout";
-import OfferCard from "@/components/chat/OfferCard";
-import SendOfferDialog from "@/components/chat/SendOfferDialog";
-import DealStatusBar from "@/components/chat/DealStatusBar";
-import SignatureDialog from "@/components/chat/SignatureDialog";
-import ShippingForm from "@/components/chat/ShippingForm";
-import ShippingTracker from "@/components/chat/ShippingTracker";
-import { Send, HandshakeIcon, FileSignature, DollarSign, Truck, Package } from "lucide-react";
+import { Send, RefreshCw, MessageCircle, ArrowLeft, Plus, DollarSign, FileText, Package, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import OfferCard from "@/components/deals/OfferCard";
+import OfferModal from "@/components/deals/OfferModal";
+import SystemEventCard from "@/components/deals/SystemEventCard";
+import StatusBadge from "@/components/deals/StatusBadge";
+import DealSummaryPanel from "@/components/deals/DealSummaryPanel";
+import ContractView from "@/components/deals/ContractView";
+import ShipmentTracker from "@/components/deals/ShipmentTracker";
+import AnalyticsTab from "@/components/deals/AnalyticsTab";
 
 const ConversationThread = () => {
   const { id } = useParams<{ id: string }>();
   const { user, role } = useAuth();
   const [message, setMessage] = useState("");
-  const [showOfferDialog, setShowOfferDialog] = useState(false);
-  const [showSignDialog, setShowSignDialog] = useState(false);
-  const [showShippingForm, setShowShippingForm] = useState(false);
-  const [counterOfferDefaults, setCounterOfferDefaults] = useState<{
-    hourly_rate?: number;
-    commission_percentage?: number;
-    hours?: number;
-  } | undefined>();
-  const [isCounterOffer, setIsCounterOffer] = useState(false);
+  const [offerOpen, setOfferOpen] = useState(false);
+  const [counterOpen, setCounterOpen] = useState(false);
+  const [counterDefaults, setCounterDefaults] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState("chat");
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Scroll to bottom when messages change
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   // Fetch conversation
   const { data: conversation } = useQuery({
@@ -47,8 +40,8 @@ const ConversationThread = () => {
         .from("conversations")
         .select(`
           *,
-          brand_profile:profiles!conversations_brand_profile_fkey(display_name),
-          creator_profile:profiles!conversations_creator_profile_fkey(display_name),
+          brand_profile:profiles!conversations_brand_profile_fkey(display_name, avatar_url),
+          creator_profile:profiles!conversations_creator_profile_fkey(display_name, avatar_url),
           product:products(title)
         `)
         .eq("id", id!)
@@ -59,8 +52,23 @@ const ConversationThread = () => {
     enabled: !!id,
   });
 
+  // Fetch deal associated with this conversation
+  const { data: deal } = useQuery({
+    queryKey: ["deal-by-conversation", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deals")
+        .select("*")
+        .eq("conversation_id", id!)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id,
+  });
+
   // Fetch messages
-  const { data: messages, isLoading: messagesLoading } = useQuery({
+  const { data: messages, isLoading, refetch } = useQuery({
     queryKey: ["messages", id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -74,24 +82,9 @@ const ConversationThread = () => {
     enabled: !!id,
   });
 
-  // Fetch deal for this conversation
-  const { data: deal } = useQuery({
-    queryKey: ["deal", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("deals")
-        .select("*")
-        .eq("conversation_id", id!)
-        .maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!id,
-  });
-
-  // Fetch offers for the deal
+  // Fetch offers if deal exists
   const { data: offers } = useQuery({
-    queryKey: ["deal_offers", deal?.id],
+    queryKey: ["deal-offers", deal?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("deal_offers")
@@ -104,21 +97,7 @@ const ConversationThread = () => {
     enabled: !!deal?.id,
   });
 
-  // Fetch signatures for the deal
-  const { data: signatures } = useQuery({
-    queryKey: ["deal_signatures", deal?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("deal_signatures")
-        .select("*")
-        .eq("deal_id", deal!.id);
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!deal?.id,
-  });
-
-  // Fetch escrow for the deal
+  // Fetch escrow if deal exists
   const { data: escrow } = useQuery({
     queryKey: ["escrow", deal?.id],
     queryFn: async () => {
@@ -133,81 +112,42 @@ const ConversationThread = () => {
     enabled: !!deal?.id,
   });
 
-  // Fetch shipments for the deal
-  const { data: shipments } = useQuery({
-    queryKey: ["shipments", deal?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("shipments")
-        .select("*")
-        .eq("deal_id", deal!.id)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!deal?.id,
-  });
-
-  // Realtime subscription for messages
+  // Realtime subscription
   useEffect(() => {
     if (!id) return;
     const channel = supabase
-      .channel(`messages:${id}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${id}` },
-        (payload) => {
-          queryClient.setQueryData(["messages", id], (old: any[] | undefined) => {
-            if (!old) return [payload.new];
-            if (old.find((m: any) => m.id === payload.new.id)) return old;
-            return [...old, payload.new];
-          });
-        }
+      .channel(`conversation-${id}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${id}` },
+        () => queryClient.invalidateQueries({ queryKey: ["messages", id] })
+      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "deals", filter: `conversation_id=eq.${id}` },
+        () => queryClient.invalidateQueries({ queryKey: ["deal-by-conversation", id] })
       )
       .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => { supabase.removeChannel(channel); };
   }, [id, queryClient]);
 
-  // Realtime subscription for deal updates
+  // Realtime for offers
   useEffect(() => {
-    if (!id) return;
+    if (!deal?.id) return;
     const channel = supabase
-      .channel(`deal:${id}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "deals" },
+      .channel(`deal-offers-${deal.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "deal_offers", filter: `deal_id=eq.${deal.id}` },
         () => {
-          queryClient.invalidateQueries({ queryKey: ["deal", id] });
-          queryClient.invalidateQueries({ queryKey: ["deal_offers", deal?.id] });
-          queryClient.invalidateQueries({ queryKey: ["deal_signatures", deal?.id] });
-          queryClient.invalidateQueries({ queryKey: ["escrow", deal?.id] });
-          queryClient.invalidateQueries({ queryKey: ["shipments", deal?.id] });
-        }
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "deal_offers" },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ["deal_offers", deal?.id] });
-          queryClient.invalidateQueries({ queryKey: ["deal", id] });
+          queryClient.invalidateQueries({ queryKey: ["deal-offers", deal.id] });
+          queryClient.invalidateQueries({ queryKey: ["deal-by-conversation", id] });
         }
       )
       .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [deal?.id, id, queryClient]);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [id, deal?.id, queryClient]);
-
-  // Scroll to bottom on new messages
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, offers]);
 
-  // Send text message
+  // Send message mutation
   const sendMutation = useMutation({
     mutationFn: async (content: string) => {
       const { error } = await supabase.from("messages").insert({
@@ -220,312 +160,188 @@ const ConversationThread = () => {
     },
     onSuccess: () => {
       setMessage("");
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
     },
     onError: (err: any) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     },
   });
 
-  // Send offer
+  // Create deal mutation (if doesn't exist)
+  const createDealMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.from("deals").insert({
+        conversation_id: id!,
+        status: "negotiating" as any,
+      }).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["deal-by-conversation", id] });
+    },
+    onError: (err: any) => {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    },
+  });
+
+  // Send offer mutation
   const sendOfferMutation = useMutation({
-    mutationFn: async (offerData: {
-      hourly_rate: number;
-      commission_percentage: number;
-      hours: number;
-      note: string;
-    }) => {
-      // Create deal if doesn't exist
+    mutationFn: async (offer: { rate: number; deliverables: string; liveDate: string; usageRights: string[]; note: string }) => {
       let dealId = deal?.id;
+      
+      // Create deal if it doesn't exist
       if (!dealId) {
-        const { data: newDeal, error: dealError } = await supabase
-          .from("deals")
-          .insert({ conversation_id: id! })
-          .select()
-          .single();
+        const { data: newDeal, error: dealError } = await supabase.from("deals").insert({
+          conversation_id: id!,
+          status: "negotiating" as any,
+        }).select().single();
         if (dealError) throw dealError;
         dealId = newDeal.id;
       }
 
-      // If countering, mark previous pending offers as countered
-      if (isCounterOffer) {
-        await supabase
-          .from("deal_offers")
-          .update({ status: "countered" as any })
-          .eq("deal_id", dealId)
-          .eq("status", "pending" as any);
-      }
+      // Create offer
+      await supabase.from("deal_offers").insert({
+        deal_id: dealId,
+        sender_id: user!.id,
+        rate: offer.rate,
+        hourly_rate: 0,
+        hours: 0,
+        commission_percentage: 0,
+        deliverables: offer.deliverables,
+        live_date: offer.liveDate || null,
+        usage_rights: offer.usageRights,
+        note: offer.note || null,
+        status: "pending",
+      } as any);
 
-      // Create the offer
-      const { data: newOffer, error: offerError } = await supabase
-        .from("deal_offers")
-        .insert({
-          deal_id: dealId,
-          sender_id: user!.id,
-          hourly_rate: offerData.hourly_rate,
-          commission_percentage: offerData.commission_percentage,
-          hours: offerData.hours,
-          note: offerData.note || null,
-        })
-        .select()
-        .single();
-      if (offerError) throw offerError;
-
-      // Send a message referencing the offer
+      // Send message
       await supabase.from("messages").insert({
         conversation_id: id!,
         sender_id: user!.id,
-        content: isCounterOffer ? "Sent a counter offer" : "Sent an offer",
+        content: `Sent an offer: $${offer.rate.toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
         message_type: "offer",
-        metadata: { offer_id: newOffer.id },
+        metadata: { offer_rate: offer.rate },
       });
     },
     onSuccess: () => {
-      setShowOfferDialog(false);
-      setIsCounterOffer(false);
-      setCounterOfferDefaults(undefined);
-      queryClient.invalidateQueries({ queryKey: ["deal", id] });
-      queryClient.invalidateQueries({ queryKey: ["deal_offers"] });
-    },
-    onError: (err: any) => {
-      toast({ title: "Error sending offer", description: err.message, variant: "destructive" });
-    },
-  });
-
-  // Accept offer
-  const acceptOfferMutation = useMutation({
-    mutationFn: async (offerId: string) => {
-      const offer = offers?.find((o) => o.id === offerId);
-      if (!offer || !deal) throw new Error("Offer not found");
-
-      // Mark offer as accepted
-      await supabase
-        .from("deal_offers")
-        .update({ status: "accepted" as any })
-        .eq("id", offerId);
-
-      // Mark any other pending offers as expired
-      await supabase
-        .from("deal_offers")
-        .update({ status: "expired" as any })
-        .eq("deal_id", deal.id)
-        .eq("status", "pending" as any)
-        .neq("id", offerId);
-
-      // Update deal with agreed terms
-      const total = offer.hourly_rate * offer.hours;
-      await supabase
-        .from("deals")
-        .update({
-          status: "agreed" as any,
-          hourly_rate: offer.hourly_rate,
-          commission_percentage: offer.commission_percentage,
-          hours: offer.hours,
-          total_amount: total,
-        })
-        .eq("id", deal.id);
-
-      // System message
-      await supabase.from("messages").insert({
-        conversation_id: id!,
-        sender_id: user!.id,
-        content: `Offer accepted! $${offer.hourly_rate}/hr + ${offer.commission_percentage}% commission for ${offer.hours}h ($${total.toFixed(2)} total)`,
-        message_type: "system",
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deal", id] });
-      queryClient.invalidateQueries({ queryKey: ["deal_offers"] });
+      setOfferOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["deal-by-conversation", id] });
+      queryClient.invalidateQueries({ queryKey: ["deal-offers", deal?.id] });
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
     },
     onError: (err: any) => {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     },
   });
 
-  // Reject offer
-  const rejectOfferMutation = useMutation({
+  // Accept offer mutation
+  const acceptMutation = useMutation({
     mutationFn: async (offerId: string) => {
-      await supabase
-        .from("deal_offers")
-        .update({ status: "rejected" as any })
-        .eq("id", offerId);
-
+      const offer = offers?.find((o: any) => o.id === offerId);
+      if (!offer) return;
+      
+      await supabase.from("deal_offers").update({ status: "accepted" }).eq("id", offerId);
+      
+      await supabase.from("deals").update({
+        status: "agreed" as any,
+        rate: (offer as any).rate,
+        deliverables: (offer as any).deliverables,
+        live_date: (offer as any).live_date,
+        usage_rights: (offer as any).usage_rights,
+      }).eq("id", deal!.id);
+      
+      // Create contract
+      await supabase.from("contracts").insert({
+        deal_id: deal!.id,
+        terms: {
+          rate: (offer as any).rate,
+          deliverables: (offer as any).deliverables,
+          live_date: (offer as any).live_date,
+          usage_rights: (offer as any).usage_rights,
+          brand_name: brandName,
+          creator_name: creatorName,
+        },
+      });
+      
       await supabase.from("messages").insert({
         conversation_id: id!,
         sender_id: user!.id,
-        content: "Offer declined",
-        message_type: "system",
+        content: "🎉 Deal terms agreed. Contract has been generated.",
+        message_type: "system_event",
+        metadata: { event_type: "deal_agreed" },
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deal_offers"] });
+      queryClient.invalidateQueries({ queryKey: ["deal-offers", deal?.id] });
+      queryClient.invalidateQueries({ queryKey: ["deal-by-conversation", id] });
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
     },
-    onError: (err: any) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
-    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
-  // Sign deal
-  const signDealMutation = useMutation({
-    mutationFn: async (fullName: string) => {
-      if (!deal) throw new Error("No deal");
-
-      await supabase.from("deal_signatures").insert({
-        deal_id: deal.id,
-        user_id: user!.id,
-        full_name: fullName,
-      });
-
-      // Check if both parties have now signed
-      const { data: sigs } = await supabase
-        .from("deal_signatures")
-        .select("*")
-        .eq("deal_id", deal.id);
-
-      const bothSigned = (sigs?.length || 0) >= 2;
-
-      if (bothSigned) {
-        await supabase
-          .from("deals")
-          .update({ status: "signed" as any })
-          .eq("id", deal.id);
-
-        await supabase.from("messages").insert({
-          conversation_id: id!,
-          sender_id: user!.id,
-          content: "Both parties have signed the agreement!",
-          message_type: "system",
-        });
-      } else {
-        await supabase.from("messages").insert({
-          conversation_id: id!,
-          sender_id: user!.id,
-          content: `${fullName} signed the agreement`,
-          message_type: "system",
-        });
+  // Counter offer mutation
+  const counterMutation = useMutation({
+    mutationFn: async (offer: { rate: number; deliverables: string; liveDate: string; usageRights: string[]; note: string }) => {
+      const pending = offers?.filter((o: any) => o.status === "pending") || [];
+      for (const p of pending) {
+        await supabase.from("deal_offers").update({ status: "countered" }).eq("id", p.id);
       }
+      
+      await supabase.from("deal_offers").insert({
+        deal_id: deal!.id,
+        sender_id: user!.id,
+        rate: offer.rate,
+        hourly_rate: 0,
+        hours: 0,
+        commission_percentage: 0,
+        deliverables: offer.deliverables,
+        live_date: offer.liveDate || null,
+        usage_rights: offer.usageRights,
+        note: offer.note || null,
+        status: "pending",
+      } as any);
+      
+      await supabase.from("messages").insert({
+        conversation_id: id!,
+        sender_id: user!.id,
+        content: `Counter offer: $${offer.rate.toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
+        message_type: "offer",
+        metadata: { offer_rate: offer.rate },
+      });
     },
     onSuccess: () => {
-      setShowSignDialog(false);
-      queryClient.invalidateQueries({ queryKey: ["deal", id] });
-      queryClient.invalidateQueries({ queryKey: ["deal_signatures"] });
+      setCounterOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["deal-offers", deal?.id] });
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
     },
-    onError: (err: any) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
-    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
-  // Fund escrow (brand action)
+  // Fund escrow mutation
   const fundEscrowMutation = useMutation({
     mutationFn: async () => {
-      if (!deal) throw new Error("No deal");
-
       await supabase.from("escrow_payments").insert({
-        deal_id: deal.id,
-        amount: deal.total_amount || 0,
-        status: "funded" as any,
+        deal_id: deal!.id,
+        amount: Number(deal!.rate) || 0,
+        status: "funded",
         funded_at: new Date().toISOString(),
       });
-
-      await supabase
-        .from("deals")
-        .update({ status: "escrow_funded" as any })
-        .eq("id", deal.id);
-
+      await supabase.from("deals").update({ status: "funded" as any }).eq("id", deal!.id);
       await supabase.from("messages").insert({
         conversation_id: id!,
         sender_id: user!.id,
-        content: `Escrow funded: $${deal.total_amount?.toFixed(2)}`,
-        message_type: "system",
+        content: "💰 Escrow has been funded. Product can now be shipped.",
+        message_type: "system_event",
+        metadata: { event_type: "escrow_funded" },
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deal", id] });
-      queryClient.invalidateQueries({ queryKey: ["escrow"] });
+      queryClient.invalidateQueries({ queryKey: ["deal-by-conversation", id] });
+      queryClient.invalidateQueries({ queryKey: ["escrow", deal?.id] });
+      queryClient.invalidateQueries({ queryKey: ["messages", id] });
     },
-    onError: (err: any) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
-    },
-  });
-
-  // Add shipping
-  const addShippingMutation = useMutation({
-    mutationFn: async (data: { tracking_number: string; carrier: string }) => {
-      if (!deal) throw new Error("No deal");
-
-      await supabase.from("shipments").insert({
-        deal_id: deal.id,
-        tracking_number: data.tracking_number,
-        carrier: data.carrier,
-        status: "shipped" as any,
-        shipped_at: new Date().toISOString(),
-      });
-
-      await supabase.from("messages").insert({
-        conversation_id: id!,
-        sender_id: user!.id,
-        content: `Product shipped via ${data.carrier} (${data.tracking_number})`,
-        message_type: "system",
-      });
-    },
-    onSuccess: () => {
-      setShowShippingForm(false);
-      queryClient.invalidateQueries({ queryKey: ["shipments"] });
-    },
-    onError: (err: any) => {
-      toast({ title: "Error", description: err.message, variant: "destructive" });
-    },
-  });
-
-  // Mark live session started (creator action)
-  const startSessionMutation = useMutation({
-    mutationFn: async () => {
-      if (!deal) throw new Error("No deal");
-
-      await supabase
-        .from("deals")
-        .update({ status: "in_progress" as any })
-        .eq("id", deal.id);
-
-      await supabase.from("messages").insert({
-        conversation_id: id!,
-        sender_id: user!.id,
-        content: "Live session started!",
-        message_type: "system",
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deal", id] });
-    },
-  });
-
-  // Mark deal complete
-  const completeDealMutation = useMutation({
-    mutationFn: async () => {
-      if (!deal) throw new Error("No deal");
-
-      await supabase
-        .from("deals")
-        .update({ status: "completed" as any })
-        .eq("id", deal.id);
-
-      if (escrow) {
-        await supabase
-          .from("escrow_payments")
-          .update({ status: "released" as any, released_at: new Date().toISOString() })
-          .eq("id", escrow.id);
-      }
-
-      await supabase.from("messages").insert({
-        conversation_id: id!,
-        sender_id: user!.id,
-        content: "Deal completed! Escrow funds released.",
-        message_type: "system",
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deal", id] });
-      queryClient.invalidateQueries({ queryKey: ["escrow"] });
-    },
+    onError: (err: any) => toast({ title: "Error", description: err.message, variant: "destructive" }),
   });
 
   const handleSend = (e: React.FormEvent) => {
@@ -534,236 +350,323 @@ const ConversationThread = () => {
     sendMutation.mutate(message.trim());
   };
 
-  const handleCounter = (offer: any) => {
-    setCounterOfferDefaults({
-      hourly_rate: offer.hourly_rate,
-      commission_percentage: offer.commission_percentage,
-      hours: offer.hours,
-    });
-    setIsCounterOffer(true);
-    setShowOfferDialog(true);
+  const handleCta = () => {
+    if (!deal) {
+      setOfferOpen(true);
+      return;
+    }
+    const status = deal.status;
+    if (status === "negotiating") {
+      setOfferOpen(true);
+    } else if (status === "agreed") {
+      setActiveTab("contract");
+    } else if (status === "contracted" && isBrand) {
+      fundEscrowMutation.mutate();
+    } else if (status === "funded" && isBrand) {
+      setActiveTab("shipment");
+    } else if (status === "delivered" && !isBrand) {
+      setActiveTab("analytics");
+    } else if (status === "live" && isBrand) {
+      setActiveTab("analytics");
+    }
   };
 
-  const otherName = role === "brand"
-    ? (conversation as any)?.creator_profile?.display_name
-    : (conversation as any)?.brand_profile?.display_name;
+  const isBrand = conversation?.brand_user_id === user?.id;
+  const brandName = (conversation as any)?.brand_profile?.display_name || "Brand";
+  const creatorName = (conversation as any)?.creator_profile?.display_name || "Creator";
+  const otherParty = isBrand ? (conversation as any)?.creator_profile : (conversation as any)?.brand_profile;
+  const otherName = otherParty?.display_name || "User";
 
-  const userSigned = signatures?.some((s) => s.user_id === user?.id);
-  const otherSigned = signatures?.some((s) => s.user_id !== user?.id);
+  const suggestedFirstMessages = role === "brand"
+    ? [
+        "Hi! I'd love to work with you on a live stream for our product.",
+        "We're looking for a host for our upcoming campaign. Can you share your rates?",
+      ]
+    : [
+        "Hi! I'd love to learn more about this opportunity.",
+        "I'm interested in hosting this. Here's my rate and availability.",
+      ];
 
-  // Determine available actions based on deal status
-  const dealStatus = deal?.status;
-  const canSign = dealStatus === "agreed" && !userSigned;
-  const canFundEscrow = dealStatus === "signed" && role === "brand" && !escrow;
-  const canStartSession = dealStatus === "escrow_funded" && role === "creator";
-  const canShip = dealStatus === "in_progress" && role === "brand" && (!shipments || shipments.length === 0);
-  const canComplete = dealStatus === "in_progress" && shipments && shipments.length > 0;
+  // Build timeline
+  const timeline = [
+    ...(messages || []).map((m: any) => ({ ...m, _type: m.message_type === "system_event" ? "system" : m.message_type === "offer" ? "offer_msg" : "text", _time: m.created_at })),
+  ].sort((a, b) => new Date(a._time).getTime() - new Date(b._time).getTime());
 
-  // Build offer lookup map
-  const offerMap = new Map<string, any>();
-  offers?.forEach((o) => offerMap.set(o.id, o));
-
-  const renderMessage = (msg: any) => {
-    const isOwn = msg.sender_id === user?.id;
-
-    if (msg.message_type === "system") {
-      return (
-        <div key={msg.id} className="flex justify-center my-2">
-          <div className="rounded-full bg-muted px-4 py-1.5 text-xs text-muted-foreground text-center max-w-[80%]">
-            {msg.content}
-          </div>
-        </div>
-      );
-    }
-
-    if (msg.message_type === "offer") {
-      const offerId = msg.metadata?.offer_id;
-      const offer = offerId ? offerMap.get(offerId) : null;
-
-      return (
-        <div key={msg.id} className={cn("flex my-2", isOwn ? "justify-end" : "justify-start")}>
-          {offer ? (
-            <OfferCard
-              offer={offer}
-              isOwn={isOwn}
-              onAccept={() => acceptOfferMutation.mutate(offer.id)}
-              onReject={() => rejectOfferMutation.mutate(offer.id)}
-              onCounter={() => handleCounter(offer)}
-              isPending={acceptOfferMutation.isPending || rejectOfferMutation.isPending}
-            />
-          ) : (
-            <div className={cn(
-              "max-w-[70%] rounded-lg px-4 py-2 text-sm italic",
-              isOwn ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-            )}>
-              {msg.content}
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    // Regular text message
-    return (
-      <div key={msg.id} className={cn("flex", isOwn ? "justify-end" : "justify-start")}>
-        <div className={cn(
-          "max-w-[70%] rounded-2xl px-4 py-2 text-sm",
-          isOwn ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-        )}>
-          <p>{msg.content}</p>
-          <p className={cn(
-            "text-[10px] mt-1",
-            isOwn ? "text-primary-foreground/60" : "text-muted-foreground"
-          )}>
-            {format(new Date(msg.created_at), "h:mm a")}
-          </p>
-        </div>
-      </div>
-    );
-  };
+  const hasDealTabs = deal && deal.status !== "negotiating";
 
   return (
     <AppLayout>
-      <div className="flex flex-col" style={{ height: "calc(100vh - 8rem)" }}>
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-border pb-3">
-          <div>
-            <h2 className="text-lg font-semibold">{otherName || "Conversation"}</h2>
-            {(conversation as any)?.product?.title && (
-              <p className="text-sm text-muted-foreground">Re: {(conversation as any).product.title}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Deal Status Bar */}
+      <div className="flex flex-col lg:flex-row gap-6" style={{ height: "calc(100vh - 8rem)" }}>
+        {/* Left Panel - Deal Summary (shows when deal exists) */}
         {deal && (
-          <div className="py-3 border-b border-border">
-            <DealStatusBar
-              status={deal.status}
-              hourlyRate={deal.hourly_rate}
-              commissionPercentage={deal.commission_percentage}
-              hours={deal.hours}
-              totalAmount={deal.total_amount}
+          <div className="lg:w-80 shrink-0">
+            <DealSummaryPanel
+              deal={deal}
+              otherParty={otherParty}
+              isBrand={isBrand}
+              escrowAmount={escrow?.amount}
+              onCta={handleCta}
+              ctaLoading={fundEscrowMutation.isPending}
             />
           </div>
         )}
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto py-4 space-y-3">
-          {messagesLoading ? (
-            <p className="text-center text-muted-foreground">Loading...</p>
-          ) : messages?.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">No messages yet. Start the conversation!</p>
-          ) : (
-            messages?.map(renderMessage)
-          )}
-
-          {/* Shipping tracker inline */}
-          {shipments && shipments.length > 0 && (
-            <div className="flex justify-center my-2">
-              <ShippingTracker shipment={shipments[0]} />
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Header */}
+          <div className="flex items-center gap-3 border-b border-border pb-3 mb-3">
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/messages"><ArrowLeft className="h-4 w-4" /></Link>
+            </Button>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-semibold truncate">{otherName}</h2>
+                {deal && <StatusBadge status={deal.status} />}
+              </div>
+              {(conversation as any)?.product?.title && (
+                <p className="text-sm text-muted-foreground truncate">Re: {(conversation as any).product.title}</p>
+              )}
             </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Action buttons for deal progression */}
-        {(canSign || canFundEscrow || canStartSession || canShip || canComplete) && (
-          <div className="flex gap-2 border-t border-border py-2 flex-wrap">
-            {canSign && (
-              <Button size="sm" variant="outline" onClick={() => setShowSignDialog(true)}>
-                <FileSignature className="h-4 w-4 mr-1" /> Sign Agreement
-              </Button>
-            )}
-            {canFundEscrow && (
-              <Button size="sm" variant="outline" onClick={() => fundEscrowMutation.mutate()}>
-                <DollarSign className="h-4 w-4 mr-1" /> Fund Escrow (${deal?.total_amount})
-              </Button>
-            )}
-            {canStartSession && (
-              <Button size="sm" variant="outline" onClick={() => startSessionMutation.mutate()}>
-                <Package className="h-4 w-4 mr-1" /> Start Live Session
-              </Button>
-            )}
-            {canShip && (
-              <Button size="sm" variant="outline" onClick={() => setShowShippingForm(true)}>
-                <Truck className="h-4 w-4 mr-1" /> Ship Product
-              </Button>
-            )}
-            {canComplete && (
-              <Button size="sm" onClick={() => completeDealMutation.mutate()}>
-                Mark Complete & Release Escrow
-              </Button>
-            )}
+            <Button variant="ghost" size="icon" onClick={() => refetch()} title="Refresh">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
           </div>
-        )}
 
-        {/* Input + Send Offer */}
-        <form onSubmit={handleSend} className="flex gap-2 border-t border-border pt-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              setIsCounterOffer(false);
-              setCounterOfferDefaults(undefined);
-              setShowOfferDialog(true);
-            }}
-            title="Send Offer"
-          >
-            <HandshakeIcon className="h-4 w-4" />
-          </Button>
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1"
-          />
-          <Button type="submit" size="icon" disabled={sendMutation.isPending || !message.trim()}>
-            <Send className="h-4 w-4" />
-          </Button>
-        </form>
+          {/* Tabs (visible when deal has progressed) */}
+          {hasDealTabs ? (
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
+              <TabsList className="mb-3">
+                <TabsTrigger value="chat" className="gap-1.5"><MessageCircle className="h-4 w-4" />Chat</TabsTrigger>
+                <TabsTrigger value="contract" className="gap-1.5"><FileText className="h-4 w-4" />Contract</TabsTrigger>
+                <TabsTrigger value="shipment" className="gap-1.5"><Package className="h-4 w-4" />Shipment</TabsTrigger>
+                <TabsTrigger value="analytics" className="gap-1.5"><BarChart3 className="h-4 w-4" />Analytics</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="chat" className="flex-1 flex flex-col min-h-0 mt-0">
+                <ChatContent
+                  timeline={timeline}
+                  offers={offers}
+                  user={user}
+                  isBrand={isBrand}
+                  brandName={brandName}
+                  creatorName={creatorName}
+                  conversation={conversation}
+                  deal={deal}
+                  isLoading={isLoading}
+                  suggestedFirstMessages={suggestedFirstMessages}
+                  sendMutation={sendMutation}
+                  acceptMutation={acceptMutation}
+                  setCounterDefaults={setCounterDefaults}
+                  setCounterOpen={setCounterOpen}
+                  bottomRef={bottomRef}
+                  message={message}
+                  setMessage={setMessage}
+                  handleSend={handleSend}
+                  setOfferOpen={setOfferOpen}
+                />
+              </TabsContent>
+
+              <TabsContent value="contract" className="flex-1 overflow-y-auto mt-0">
+                <ContractView dealId={deal.id} conversationId={id!} />
+              </TabsContent>
+
+              <TabsContent value="shipment" className="flex-1 overflow-y-auto mt-0">
+                <ShipmentTracker dealId={deal.id} conversationId={id!} isBrand={isBrand} />
+              </TabsContent>
+
+              <TabsContent value="analytics" className="flex-1 overflow-y-auto mt-0">
+                <AnalyticsTab dealId={deal.id} conversationId={id!} isBrand={isBrand} />
+              </TabsContent>
+            </Tabs>
+          ) : (
+            <ChatContent
+              timeline={timeline}
+              offers={offers}
+              user={user}
+              isBrand={isBrand}
+              brandName={brandName}
+              creatorName={creatorName}
+              conversation={conversation}
+              deal={deal}
+              isLoading={isLoading}
+              suggestedFirstMessages={suggestedFirstMessages}
+              sendMutation={sendMutation}
+              acceptMutation={acceptMutation}
+              setCounterDefaults={setCounterDefaults}
+              setCounterOpen={setCounterOpen}
+              bottomRef={bottomRef}
+              message={message}
+              setMessage={setMessage}
+              handleSend={handleSend}
+              setOfferOpen={setOfferOpen}
+            />
+          )}
+        </div>
       </div>
 
-      {/* Dialogs */}
-      <SendOfferDialog
-        open={showOfferDialog}
-        onClose={() => {
-          setShowOfferDialog(false);
-          setIsCounterOffer(false);
-          setCounterOfferDefaults(undefined);
-        }}
-        onSend={(data) => sendOfferMutation.mutate(data)}
+      {/* Offer Modal */}
+      <OfferModal
+        open={offerOpen}
+        onClose={() => setOfferOpen(false)}
+        onSubmit={(o) => sendOfferMutation.mutate(o)}
         isPending={sendOfferMutation.isPending}
-        defaultValues={counterOfferDefaults}
-        isCounter={isCounterOffer}
+        title="Send Offer"
       />
 
-      {deal && (
-        <SignatureDialog
-          open={showSignDialog}
-          onClose={() => setShowSignDialog(false)}
-          onSign={(name) => signDealMutation.mutate(name)}
-          isPending={signDealMutation.isPending}
-          deal={{
-            hourly_rate: deal.hourly_rate,
-            commission_percentage: deal.commission_percentage,
-            hours: deal.hours,
-            total_amount: deal.total_amount,
-          }}
-          otherPartyName={otherName || "Other party"}
-          otherPartySigned={!!otherSigned}
-        />
-      )}
-
-      <ShippingForm
-        open={showShippingForm}
-        onClose={() => setShowShippingForm(false)}
-        onSubmit={(data) => addShippingMutation.mutate(data)}
-        isPending={addShippingMutation.isPending}
+      {/* Counter Modal */}
+      <OfferModal
+        open={counterOpen}
+        onClose={() => setCounterOpen(false)}
+        onSubmit={(o) => counterMutation.mutate(o)}
+        isPending={counterMutation.isPending}
+        defaultValues={counterDefaults}
+        title="Counter Offer"
       />
     </AppLayout>
+  );
+};
+
+// Extracted Chat Content component
+interface ChatContentProps {
+  timeline: any[];
+  offers: any[] | undefined;
+  user: any;
+  isBrand: boolean;
+  brandName: string;
+  creatorName: string;
+  conversation: any;
+  deal: any;
+  isLoading: boolean;
+  suggestedFirstMessages: string[];
+  sendMutation: any;
+  acceptMutation: any;
+  setCounterDefaults: (v: any) => void;
+  setCounterOpen: (v: boolean) => void;
+  bottomRef: React.RefObject<HTMLDivElement>;
+  message: string;
+  setMessage: (v: string) => void;
+  handleSend: (e: React.FormEvent) => void;
+  setOfferOpen: (v: boolean) => void;
+}
+
+const ChatContent = ({
+  timeline,
+  offers,
+  user,
+  isBrand,
+  brandName,
+  creatorName,
+  conversation,
+  deal,
+  isLoading,
+  suggestedFirstMessages,
+  sendMutation,
+  acceptMutation,
+  setCounterDefaults,
+  setCounterOpen,
+  bottomRef,
+  message,
+  setMessage,
+  handleSend,
+  setOfferOpen,
+}: ChatContentProps) => {
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto py-4 space-y-3 px-1">
+        {isLoading ? (
+          <p className="text-center text-muted-foreground">Loading…</p>
+        ) : timeline.length === 0 && (!offers || offers.length === 0) ? (
+          <div className="space-y-4">
+            <p className="text-center text-muted-foreground">No messages yet. Say hello — or try one of these:</p>
+            <div className="flex flex-col gap-2 max-w-md mx-auto">
+              <p className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                <MessageCircle className="h-3.5 w-3.5" /> Suggested ways to start
+              </p>
+              {suggestedFirstMessages.map((text, i) => (
+                <Button
+                  key={i}
+                  type="button"
+                  variant="outline"
+                  className="h-auto py-3 px-4 text-left text-sm font-normal whitespace-normal justify-start"
+                  onClick={() => sendMutation.mutate(text)}
+                  disabled={sendMutation.isPending}
+                >
+                  {text}
+                </Button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Render offer cards */}
+            {offers?.map((offer: any) => (
+              <OfferCard
+                key={offer.id}
+                rate={Number(offer.rate || offer.hourly_rate * offer.hours)}
+                deliverables={offer.deliverables}
+                liveDate={offer.live_date}
+                usageRights={offer.usage_rights}
+                note={offer.note}
+                status={offer.status}
+                isOwn={offer.sender_id === user?.id}
+                senderName={offer.sender_id === conversation?.brand_user_id ? brandName : creatorName}
+                onAccept={() => acceptMutation.mutate(offer.id)}
+                onCounter={() => {
+                  setCounterDefaults({
+                    rate: Number(offer.rate || offer.hourly_rate * offer.hours),
+                    deliverables: offer.deliverables,
+                    liveDate: offer.live_date,
+                    usageRights: offer.usage_rights,
+                  });
+                  setCounterOpen(true);
+                }}
+                isPending={acceptMutation.isPending}
+              />
+            ))}
+
+            {/* Render messages */}
+            {timeline.map((item: any) => {
+              if (item._type === "system") {
+                const meta = item.metadata as any;
+                return <SystemEventCard key={item.id} content={item.content} eventType={meta?.event_type} timestamp={item.created_at} />;
+              }
+              const isOwn = item.sender_id === user?.id;
+              return (
+                <div key={item.id} className={cn("flex", isOwn ? "justify-end" : "justify-start")}>
+                  <div className={cn(
+                    "max-w-[75%] rounded-2xl px-4 py-2.5 text-sm",
+                    isOwn ? "bg-primary text-primary-foreground rounded-br-md" : "bg-secondary text-foreground rounded-bl-md"
+                  )}>
+                    <p>{item.content}</p>
+                    <p className={cn("text-[10px] mt-1", isOwn ? "text-primary-foreground/60" : "text-muted-foreground")}>
+                      {format(new Date(item.created_at), "h:mm a")}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+            <div ref={bottomRef} />
+          </>
+        )}
+      </div>
+
+      {/* Input */}
+      <form onSubmit={handleSend} className="flex gap-2 border-t border-border pt-3">
+        <Button type="button" variant="outline" size="icon" onClick={() => setOfferOpen(true)} title="Send Offer">
+          <DollarSign className="h-4 w-4" />
+        </Button>
+        <Input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type a message…"
+          className="flex-1"
+        />
+        <Button type="submit" size="icon" disabled={sendMutation.isPending || !message.trim()}>
+          <Send className="h-4 w-4" />
+        </Button>
+      </form>
+    </div>
   );
 };
 
