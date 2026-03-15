@@ -247,8 +247,8 @@ const BrandFeed = () => {
                   </div>
 
                   {/* Bio */}
-                  {creator.profiles?.bio && (
-                    <p className="line-clamp-2 text-sm text-muted-foreground">{creator.profiles.bio}</p>
+                  {creator.public_profiles?.bio && (
+                    <p className="line-clamp-2 text-sm text-muted-foreground">{creator.public_profiles.bio}</p>
                   )}
 
                   {/* Tags: niches + product interests */}
