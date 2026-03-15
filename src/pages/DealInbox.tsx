@@ -27,8 +27,8 @@ const DealInbox = () => {
           *,
           conversations(
             id, brand_user_id, creator_user_id, last_message_at,
-            brand_profile:profiles!conversations_brand_profile_fkey(display_name, avatar_url),
-            creator_profile:profiles!conversations_creator_profile_fkey(display_name, avatar_url)
+            brand_profile:public_profiles!conversations_brand_profile_fkey(display_name, avatar_url),
+            creator_profile:public_profiles!conversations_creator_profile_fkey(display_name, avatar_url)
           )
         `)
         .order("updated_at", { ascending: false });
