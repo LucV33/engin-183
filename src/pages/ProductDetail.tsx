@@ -99,7 +99,7 @@ const ProductDetail = () => {
     );
   }
 
-  const profile = (product as any).profiles;
+  const profile = (product as any).public_profiles;
   const brandName = profile?.display_name || "Brand";
   const initials = brandName.slice(0, 2).toUpperCase();
   const heroImage = product.images?.[0];

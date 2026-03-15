@@ -175,7 +175,7 @@ const CreatorDetail = () => {
     );
   }
 
-  const profile = (creator as any).profiles;
+  const profile = (creator as any).public_profiles;
   const displayName = profile?.display_name || "Creator";
   const initials = displayName.slice(0, 2).toUpperCase();
   const portfolioImages = creator.portfolio_urls?.filter(Boolean) || [];
