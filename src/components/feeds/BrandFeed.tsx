@@ -31,7 +31,7 @@ const BrandFeed = () => {
     queryFn: async () => {
       let q = supabase
         .from("creator_profiles")
-        .select("*, profiles!creator_profiles_profile_fkey(display_name, avatar_url, bio)")
+        .select("*, public_profiles!creator_profiles_profile_fkey(display_name, avatar_url, bio)")
         .order("created_at", { ascending: false });
 
       if (search) {
