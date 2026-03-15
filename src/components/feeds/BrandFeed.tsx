@@ -235,7 +235,7 @@ const BrandFeed = () => {
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <span className="truncate text-base font-semibold text-foreground block">
-                        {creator.profiles?.display_name || "Creator"}
+                        {creator.public_profiles?.display_name || "Creator"}
                       </span>
                       {creator.location && (
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
