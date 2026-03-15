@@ -228,9 +228,9 @@ const BrandFeed = () => {
                   {/* Avatar + Name + Location */}
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
-                      <AvatarImage src={creator.profiles?.avatar_url} />
+                      <AvatarImage src={creator.public_profiles?.avatar_url} />
                       <AvatarFallback className="text-xs font-medium">
-                        {(creator.profiles?.display_name || "C").slice(0, 2).toUpperCase()}
+                        {(creator.public_profiles?.display_name || "C").slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
