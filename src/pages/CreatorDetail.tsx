@@ -52,7 +52,7 @@ const CreatorDetail = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("creator_profiles")
-        .select("*, profiles!creator_profiles_profile_fkey(display_name, avatar_url, bio)")
+        .select("*, public_profiles!creator_profiles_profile_fkey(display_name, avatar_url, bio)")
         .eq("user_id", id!)
         .single();
       if (error) throw error;
@@ -175,7 +175,7 @@ const CreatorDetail = () => {
     );
   }
 
-  const profile = (creator as any).profiles;
+  const profile = (creator as any).public_profiles;
   const displayName = profile?.display_name || "Creator";
   const initials = displayName.slice(0, 2).toUpperCase();
   const portfolioImages = creator.portfolio_urls?.filter(Boolean) || [];

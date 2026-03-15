@@ -19,8 +19,8 @@ const Messages = () => {
         .from("conversations")
         .select(`
           *,
-          brand_profile:profiles!conversations_brand_profile_fkey(display_name, avatar_url),
-          creator_profile:profiles!conversations_creator_profile_fkey(display_name, avatar_url),
+          brand_profile:public_profiles!conversations_brand_profile_fkey(display_name, avatar_url),
+          creator_profile:public_profiles!conversations_creator_profile_fkey(display_name, avatar_url),
           product:products(title),
           deals(id, status, rate)
         `)

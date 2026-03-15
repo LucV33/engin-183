@@ -1,30 +1,20 @@
 
 
-# Fix 3 Security Warnings
+## SQL Migration Plan
 
-## 1. Leaked Password Protection Disabled
-This requires enabling HaveIBeenPwned (HIBP) leaked password protection in the authentication settings. This is a **manual configuration** that needs to be done in the backend settings — it cannot be set via migrations or code. I will note this as requiring manual action and update the finding accordingly.
+Run the provided SQL migration to create the deals/offers/escrow/shipments schema. This adds:
 
-## 2. Profiles table over-broad read access
-**Current**: `SELECT` policy on `profiles` uses `USING (true)` — any authenticated user reads all profiles including `onboarding_completed`, `onboarding_step`, `profile_images`.
+1. **4 new enum types**: `deal_status`, `offer_status`, `escrow_status`, `shipment_status`
+2. **Alter `messages` table**: Add `message_type` (text, default 'text') and `metadata` (jsonb) columns
+3. **4 new tables**:
+   - `deals` (linked 1:1 to conversations)
+   - `deal_offers` (linked to deals, tracks negotiation offers)
+   - `deal_signatures` (linked to deals, tracks contract signatures)
+   - `escrow_payments` (linked 1:1 to deals)
+   - `shipments` (linked to deals)
 
-**Fix**: Migration to drop the current permissive SELECT policy and replace with `USING (auth.uid() = id)` so users can only read their own full profile. Cross-user lookups already go through the `public_profiles` view.
-
-Need to verify code doesn't query other users' profiles directly. The `BrandFeed.tsx` joins `creator_profiles` to `profiles` — need to check if that join will break.
-
-## 3. Products missing role check
-**Current**: INSERT/UPDATE/DELETE on `products` only check `auth.uid() = brand_id`. A creator could set `brand_id` to their own ID.
-
-**Fix**: Migration to drop and recreate INSERT, UPDATE, DELETE policies with an additional role check:
-```sql
-EXISTS (SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role = 'brand')
-```
-
-## Files / Changes
-
-1. **Migration** — Drop + recreate `profiles` SELECT policy; drop + recreate `products` INSERT/UPDATE/DELETE policies with role check
-2. **Leaked password** — Update finding as requiring manual backend config (cannot be automated)
-
-## Code Impact Check
-The `BrandFeed.tsx` joins `profiles` via `creator_profiles` FK. With the restricted profiles policy, a brand viewing the feed won't be able to read creator profile rows. Fix: change `BrandFeed.tsx` to join `public_profiles` instead of `profiles`, since `public_profiles` is a view with no RLS restrictions and only exposes safe fields (display_name, avatar_url, bio).
+### Implementation
+- Execute the full SQL block as a single migration
+- No RLS policies included in this migration (will need to be added separately)
+- No code changes needed yet, just the schema
 
