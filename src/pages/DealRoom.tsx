@@ -53,7 +53,7 @@ const DealRoom = () => {
   const { data: creatorProfile } = useQuery({
     queryKey: ["profile", convo?.creator_user_id],
     queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("display_name, avatar_url").eq("id", convo.creator_user_id).single();
+      const { data } = await supabase.from("public_profiles").select("display_name, avatar_url").eq("id", convo.creator_user_id).single();
       return data;
     },
     enabled: !!convo?.creator_user_id,
