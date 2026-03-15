@@ -29,6 +29,7 @@ import Pricing from "./pages/Pricing";
 import Blog from "./pages/Blog";
 import DealInbox from "./pages/DealInbox";
 import DealRoom from "./pages/DealRoom";
+import EditProduct from "./pages/EditProduct";
 
 const queryClient = new QueryClient();
 
