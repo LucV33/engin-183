@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
-import { Plus } from "lucide-react";
+import { Plus, Package } from "lucide-react";
 
 const MyProducts = () => {
   const { user } = useAuth();
@@ -38,17 +38,37 @@ const MyProducts = () => {
           <p className="col-span-full py-12 text-center text-muted-foreground">No products yet. Add your first one!</p>
         ) : (
           products?.map((p: any) => (
-            <Card key={p.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">{p.title}</CardTitle>
-                  <Badge variant={p.status === "active" ? "default" : "secondary"}>{p.status}</Badge>
+            <Link key={p.id} to={`/products/${p.id}/edit`} className="group">
+              <Card className="overflow-hidden transition-shadow group-hover:shadow-lg">
+                {/* Hero image */}
+                <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
+                  {p.images?.[0] ? (
+                    <img
+                      src={p.images[0]}
+                      alt={p.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <Package className="h-12 w-12 text-muted-foreground/30" />
+                    </div>
+                  )}
+                  <Badge
+                    variant={p.status === "active" ? "default" : "secondary"}
+                    className="absolute right-3 top-3 shadow-sm"
+                  >
+                    {p.status}
+                  </Badge>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
-              </CardContent>
-            </Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">{p.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
+                </CardContent>
+              </Card>
+            </Link>
           ))
         )}
       </div>
