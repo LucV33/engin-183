@@ -30,6 +30,8 @@ const MultiImageUploader = ({ value, onChange, max = 3, label, className }: Mult
   };
 
   const remove = (index: number) => {
+    const item = value[index];
+    if (item.previewUrl.startsWith("blob:")) URL.revokeObjectURL(item.previewUrl);
     onChange(value.filter((_, i) => i !== index));
   };
 

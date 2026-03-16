@@ -19,7 +19,7 @@ const CreatorFeed = () => {
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 5000]);
 
-  const { data: products, isLoading } = useQuery({
+  const { data: products, isLoading, isError } = useQuery({
     queryKey: ["products", search],
     queryFn: async () => {
       let q = supabase
@@ -154,6 +154,8 @@ const CreatorFeed = () => {
               </div>
             ))}
           </div>
+        ) : isError ? (
+          <p className="py-12 text-center text-muted-foreground">Something went wrong loading products. Please try refreshing the page.</p>
         ) : filtered?.length === 0 ? (
           <p className="py-12 text-center text-muted-foreground">No products match your filters. Try adjusting your search or clearing filters.</p>
         ) : (
@@ -172,6 +174,7 @@ const CreatorFeed = () => {
                       alt={product.title}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">

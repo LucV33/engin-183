@@ -78,6 +78,10 @@ const EditProduct = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !id) return;
+    if (budgetMin && budgetMax && parseFloat(budgetMin) > parseFloat(budgetMax)) {
+      toast({ title: "Invalid budget", description: "Min budget cannot be greater than max budget.", variant: "destructive" });
+      return;
+    }
     setSubmitting(true);
     try {
       // Upload new images

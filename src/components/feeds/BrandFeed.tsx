@@ -26,7 +26,7 @@ const BrandFeed = () => {
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [followerRange, setFollowerRange] = useState<[number, number]>([0, 1000000]);
 
-  const { data: creators, isLoading } = useQuery({
+  const { data: creators, isLoading, isError } = useQuery({
     queryKey: ["creators", search],
     queryFn: async () => {
       let q = supabase
@@ -164,6 +164,8 @@ const BrandFeed = () => {
               </div>
             ))}
           </div>
+        ) : isError ? (
+          <p className="py-12 text-center text-muted-foreground">Something went wrong loading creators. Please try refreshing the page.</p>
         ) : filtered?.length === 0 ? (
           <p className="py-12 text-center text-muted-foreground">No creators match your filters. Try adjusting your search or clearing filters.</p>
         ) : (
@@ -182,6 +184,7 @@ const BrandFeed = () => {
                       alt={creator.public_profiles?.display_name}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">

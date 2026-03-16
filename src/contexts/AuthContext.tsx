@@ -10,6 +10,7 @@ interface AuthContextType {
   role: AppRole | null;
   loading: boolean;
   onboardingCompleted: boolean;
+  onboardingStep: string | null;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -29,6 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<AppRole | null>(null);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
+  const [onboardingStep, setOnboardingStep] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
@@ -41,17 +43,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           .maybeSingle(),
         supabase
           .from("profiles")
-          .select("onboarding_completed")
+          .select("onboarding_completed, onboarding_step")
           .eq("id", userId)
           .maybeSingle(),
       ]);
 
       setRole((roleData?.role as AppRole) ?? null);
       setOnboardingCompleted(!!profile?.onboarding_completed);
+      setOnboardingStep(profile?.onboarding_step ?? null);
     } catch (error) {
       console.error("Failed to fetch profile state:", error);
       setRole(null);
       setOnboardingCompleted(false);
+      setOnboardingStep(null);
     }
   };
 
@@ -136,7 +140,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ session, user, role, loading, onboardingCompleted, signUp, signIn, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ session, user, role, loading, onboardingCompleted, onboardingStep, signUp, signIn, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );
