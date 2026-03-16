@@ -97,9 +97,6 @@ const Blog = () => {
                   <Badge variant="secondary" className="rounded-full text-xs">
                     {article.category}
                   </Badge>
-                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 rounded-full">
-                    Coming Soon
-                  </Badge>
                 </div>
                 <h3 className="text-base font-semibold text-card-foreground leading-snug sm:text-lg">
                   {article.title}
@@ -126,7 +123,7 @@ const Blog = () => {
             Ready to Put Live Shopping to Work?
           </h2>
           <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted-foreground">
-            Join the waitlist and get matched with vetted college creators who can sell your products live.
+            Sign up and get matched with vetted college creators who can sell your products live.
           </p>
           <div className="mt-6 sm:mt-8">
             <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>

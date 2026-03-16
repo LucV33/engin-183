@@ -168,7 +168,7 @@ const AnalyticsTab = ({ dealId, conversationId, isBrand }: AnalyticsTabProps) =>
         </CardContent>
       </Card>
 
-      <p className="text-xs text-muted-foreground">Avg for Beauty category: 2.1x GMV benchmark</p>
+      <p className="text-xs text-muted-foreground">Analytics are based on data submitted by the creator.</p>
 
       {/* Brand actions */}
       {isBrand && !analytics.approved_at && (

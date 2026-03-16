@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import StatusBadge from "@/components/deals/StatusBadge";
 import { formatDistanceToNow } from "date-fns";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Loader2 } from "lucide-react";
 
 const Messages = () => {
   const { user } = useAuth();
@@ -35,9 +35,9 @@ const Messages = () => {
     <AppLayout>
       <h1 className="mb-6 text-2xl font-bold">Messages</h1>
       {isLoading ? (
-        <p>Loading…</p>
+        <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
       ) : conversations?.length === 0 ? (
-        <p className="py-12 text-center text-muted-foreground">No conversations yet.</p>
+        <p className="py-12 text-center text-muted-foreground">No conversations yet. Browse the feed to connect with creators and brands.</p>
       ) : (
         <div className="space-y-2">
           {conversations?.map((c: any) => {

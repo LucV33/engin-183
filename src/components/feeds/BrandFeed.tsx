@@ -57,7 +57,7 @@ const BrandFeed = () => {
 
   const getDisplayRating = (rating: number | null) => {
     const r = Number(rating || 0);
-    return r > 0 ? r.toFixed(1) : "4.0";
+    return r > 0 ? r.toFixed(1) : null;
   };
 
   return (
@@ -165,7 +165,7 @@ const BrandFeed = () => {
             ))}
           </div>
         ) : filtered?.length === 0 ? (
-          <p className="py-12 text-center text-muted-foreground">No creators found.</p>
+          <p className="py-12 text-center text-muted-foreground">No creators match your filters. Try adjusting your search or clearing filters.</p>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {filtered?.map((creator: any) => (
@@ -188,20 +188,33 @@ const BrandFeed = () => {
                       <Users className="h-12 w-12 text-muted-foreground/30" />
                     </div>
                   )}
-                  <Badge className="absolute right-3 top-3 shadow-sm">
-                    <Star className="mr-1 h-3 w-3 fill-current" />
-                    {getDisplayRating(creator.rating)}
-                  </Badge>
+                  {getDisplayRating(creator.rating) ? (
+                    <Badge className="absolute right-3 top-3 shadow-sm">
+                      <Star className="mr-1 h-3 w-3 fill-current" />
+                      {getDisplayRating(creator.rating)}
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="absolute right-3 top-3 shadow-sm">
+                      New
+                    </Badge>
+                  )}
                 </div>
 
                 {/* Info section */}
                 <div className="flex flex-col gap-3 p-4">
                   {/* Stats row */}
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-0.5 font-medium text-foreground">
-                      <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                      {getDisplayRating(creator.rating)}
-                    </span>
+                    {getDisplayRating(creator.rating) ? (
+                      <span className="flex items-center gap-0.5 font-medium text-foreground">
+                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                        {getDisplayRating(creator.rating)}
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-0.5 text-muted-foreground">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        New
+                      </span>
+                    )}
                     {(creator.follower_count ?? 0) > 0 ? (
                       <span className="flex items-center gap-1">
                         <Users className="h-3.5 w-3.5" />

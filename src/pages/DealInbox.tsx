@@ -105,7 +105,7 @@ const DealInbox = () => {
             {isLoading ? (
               <p className="text-center text-muted-foreground py-8">Loading deals…</p>
             ) : filterDeals(tab).length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">No deals yet.</p>
+              <p className="text-center text-muted-foreground py-8">No deals yet. Start a conversation to negotiate your first deal.</p>
             ) : (
               filterDeals(tab).map(renderDealRow)
             )}

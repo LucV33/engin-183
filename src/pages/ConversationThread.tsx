@@ -267,7 +267,7 @@ const ConversationThread = () => {
       await supabase.from("messages").insert({
         conversation_id: id!,
         sender_id: user!.id,
-        content: "🎉 Deal terms agreed. Contract has been generated.",
+        content: "Deal terms agreed. Contract has been generated.",
         message_type: "system_event",
         metadata: { event_type: "deal_agreed" },
       });
@@ -331,7 +331,7 @@ const ConversationThread = () => {
       await supabase.from("messages").insert({
         conversation_id: id!,
         sender_id: user!.id,
-        content: "💰 Escrow has been funded. Product can now be shipped.",
+        content: "Escrow has been funded. Product can now be shipped.",
         message_type: "system_event",
         metadata: { event_type: "escrow_funded" },
       });
