@@ -32,7 +32,7 @@ const ProductDetail = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*, profiles!products_brand_profile_fkey(display_name, avatar_url, bio)")
+        .select("*, public_profiles!products_brand_profile_fkey(display_name, avatar_url, bio)")
         .eq("id", id!)
         .single();
       if (error) throw error;
@@ -99,7 +99,7 @@ const ProductDetail = () => {
     );
   }
 
-  const profile = (product as any).profiles;
+  const profile = (product as any).public_profiles;
   const brandName = profile?.display_name || "Brand";
   const initials = brandName.slice(0, 2).toUpperCase();
   const heroImage = product.images?.[0];
