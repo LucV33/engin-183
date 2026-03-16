@@ -192,7 +192,7 @@ const ProductDetail = () => {
           {/* CTA button */}
           <div className="flex gap-2 sm:pb-1 shrink-0">
             <Button onClick={handleStartConversation} className="gap-2">
-              <MessageSquare className="h-4 w-4" /> I'm Interested
+              <MessageSquare className="h-4 w-4" /> Message Brand
             </Button>
           </div>
         </div>
@@ -320,7 +320,7 @@ const ProductDetail = () => {
               <CardContent className="p-5 text-center">
                 <p className="text-sm font-medium text-foreground mb-3">Want to promote this product?</p>
                 <Button onClick={handleStartConversation} className="w-full gap-2">
-                  <MessageSquare className="h-4 w-4" /> I'm Interested
+                  <MessageSquare className="h-4 w-4" /> Message Brand
                 </Button>
               </CardContent>
             </Card>

@@ -45,7 +45,7 @@ const OnboardingRole = () => {
               <Tag className="h-8 w-8" />
             </div>
             <span className="text-xl font-semibold">Brand</span>
-            <span className="text-sm text-muted-foreground">I want to find creators</span>
+            <span className="text-sm text-muted-foreground">I want to find live-shopping hosts</span>
           </button>
 
           <button
@@ -56,7 +56,7 @@ const OnboardingRole = () => {
               <Video className="h-8 w-8" />
             </div>
             <span className="text-xl font-semibold">Creator</span>
-            <span className="text-sm text-muted-foreground">I want to find brand deals</span>
+            <span className="text-sm text-muted-foreground">I want to host live shopping for brands</span>
           </button>
         </div>
       </div>

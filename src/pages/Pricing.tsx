@@ -43,9 +43,9 @@ const Pricing = () => {
               <div className="mx-auto mb-3 sm:mb-4 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <DollarSign className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-card-foreground">Commission-Based</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-card-foreground">Pay Per Campaign</h3>
               <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
-                We take a small commission on each booking. No subscriptions, no hidden fees, no cost until a campaign runs.
+                We take a small commission on each live-shopping booking. No subscriptions, no hidden fees, no cost until a campaign runs.
               </p>
             </div>
 
@@ -63,9 +63,9 @@ const Pricing = () => {
               <div className="mx-auto mb-3 sm:mb-4 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Users className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-card-foreground">Software-Powered</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-card-foreground">Vetted College Hosts</h3>
               <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
-                We're a software platform, not an agency. That means our fees stay dramatically lower than traditional alternatives.
+                Every creator on gmv.live is a verified college student with live-shopping experience. No guesswork, no unreliable hosts.
               </p>
             </div>
           </div>
@@ -89,7 +89,7 @@ const Pricing = () => {
                   <tr className="border-b border-border">
                     <th className="p-3 sm:p-4 text-left font-medium text-muted-foreground">Feature</th>
                     <th className="p-3 sm:p-4 text-center font-semibold text-primary">gmv.live</th>
-                    <th className="p-3 sm:p-4 text-center font-medium text-muted-foreground">Others</th>
+                    <th className="p-3 sm:p-4 text-center font-medium text-muted-foreground">Agencies</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -128,7 +128,7 @@ const Pricing = () => {
             Ready to Go Live?
           </h2>
           <p className="mx-auto mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted-foreground">
-            Join the waitlist and start connecting with vetted college creators. Completely free.
+            Sign up and start connecting with vetted college creators. Completely free.
           </p>
           <div className="mt-8 sm:mt-10">
             <Button size="lg" className="rounded-full px-6 sm:px-8 text-sm sm:text-base font-bold" asChild>

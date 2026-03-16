@@ -155,7 +155,7 @@ const CreatorFeed = () => {
             ))}
           </div>
         ) : filtered?.length === 0 ? (
-          <p className="py-12 text-center text-muted-foreground">No products found.</p>
+          <p className="py-12 text-center text-muted-foreground">No products match your filters. Try adjusting your search or clearing filters.</p>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {filtered?.map((product: any) => (

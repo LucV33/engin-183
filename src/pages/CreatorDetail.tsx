@@ -20,6 +20,8 @@ import {
   Star,
   Users,
   TrendingUp,
+  Music,
+  Camera,
   Play,
   ExternalLink,
   CheckCircle2,
@@ -184,8 +186,8 @@ const CreatorDetail = () => {
   const stats = [
     { icon: Users, label: "Followers", value: (creator.follower_count ?? 0).toLocaleString(), color: "text-accent" },
     { icon: TrendingUp, label: "Avg GMV", value: `$${Number(creator.avg_gmv || 0).toLocaleString()}`, color: "text-primary" },
-    { icon: Star, label: "Rating", value: `${Number(creator.rating || 0).toFixed(1)}/5`, color: "text-amber-400" },
-    { icon: Play, label: "Streams", value: creator.past_collabs?.length?.toString() || "0", color: "text-accent" },
+    { icon: Star, label: "Rating", value: Number(creator.rating || 0) > 0 ? `${Number(creator.rating).toFixed(1)}/5` : "New", color: "text-amber-400" },
+    { icon: Music, label: "Streams", value: creator.past_collabs?.length?.toString() || "0", color: "text-accent" },
   ];
 
   return (
@@ -321,7 +323,7 @@ const CreatorDetail = () => {
                         className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
                       >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary group-hover:bg-primary/10 transition-colors">
-                          <Play className="h-4 w-4 text-foreground" />
+                          <Music className="h-4 w-4 text-foreground" />
                         </div>
                         <div>
                           <span className="font-medium text-foreground block text-xs">TikTok</span>
@@ -338,7 +340,7 @@ const CreatorDetail = () => {
                         className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
                       >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary group-hover:bg-primary/10 transition-colors">
-                          <Users className="h-4 w-4 text-foreground" />
+                          <Camera className="h-4 w-4 text-foreground" />
                         </div>
                         <div>
                           <span className="font-medium text-foreground block text-xs">Instagram</span>

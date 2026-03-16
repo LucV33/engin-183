@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,12 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Code, Video, ShoppingBag } from "lucide-react";
-
-const DEMO_ACCOUNTS = {
-  creator: { email: "creator1@demo.com", password: "demo1234", label: "Creator (Sarah Chen)" },
-  brand: { email: "brand1@demo.com", password: "demo1234", label: "Brand (GlowUp Beauty)" },
-};
+import { Loader2 } from "lucide-react";
 
 const Auth = () => {
   const { user, onboardingCompleted, loading, signUp, signIn } = useAuth();
@@ -26,10 +20,6 @@ const Auth = () => {
   const [displayName, setDisplayName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [tab, setTab] = useState<string>("signup");
-  const [devMode, setDevMode] = useState(false);
-  const [devPassword, setDevPassword] = useState("");
-  const [devUnlocked, setDevUnlocked] = useState(false);
-
   useEffect(() => {
     if (!loading && user) {
       navigate(onboardingCompleted ? "/feed" : "/onboarding/role", { replace: true });
@@ -75,52 +65,6 @@ const Auth = () => {
       setSubmitting(false);
     }
   };
-  const handleDevLogin = async (role: "creator" | "brand") => {
-    setSubmitting(true);
-    try {
-      const timestamp = Date.now();
-      const testEmail = `test-${role}-${timestamp}@dev.local`;
-      const testPassword = "devtest1234";
-
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: testEmail,
-        password: testPassword,
-        options: {
-          data: { display_name: `Test ${role.charAt(0).toUpperCase() + role.slice(1)}` },
-        },
-      });
-      if (signUpError) throw signUpError;
-
-      // Wait for the session to be fully established
-      if (!signUpData.session) {
-        // If no session returned, sign in explicitly
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: testEmail,
-          password: testPassword,
-        });
-        if (signInError) throw signInError;
-      }
-
-      // Wait for auth state change to propagate and profile to be created
-      await new Promise((r) => setTimeout(r, 800));
-
-      // Don't navigate — the useEffect in this component will redirect
-      // once the auth state settles and user is detected
-    } catch (err: any) {
-      toast({ title: "Dev login failed", description: err.message, variant: "destructive" });
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleDevUnlock = () => {
-    if (devPassword === "123") {
-      setDevUnlocked(true);
-    } else {
-      toast({ title: "Wrong password", variant: "destructive" });
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -137,8 +81,8 @@ const Auth = () => {
 
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Welcome to VibeHost</CardTitle>
-          <CardDescription>Connect brands with creators for TikTok Live shopping</CardDescription>
+          <CardTitle className="text-2xl">Welcome to gmv.live</CardTitle>
+          <CardDescription>Connect brands with live-shopping hosts</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <Button
@@ -250,57 +194,6 @@ const Auth = () => {
         </CardContent>
       </Card>
 
-      {/* Dev Tool */}
-      <Card className="w-full max-w-md mt-4 border-dashed border-muted-foreground/30">
-        {!devMode ? (
-          <CardContent className="flex justify-center py-3">
-            <Button variant="ghost" size="sm" className="text-xs text-muted-foreground gap-1" onClick={() => setDevMode(true)}>
-              <Code className="h-3 w-3" /> Dev Access
-            </Button>
-          </CardContent>
-        ) : !devUnlocked ? (
-          <CardContent className="space-y-3 pt-4">
-            <p className="text-sm font-medium text-muted-foreground text-center">Enter dev password</p>
-            <div className="flex gap-2">
-              <Input
-                type="password"
-                value={devPassword}
-                onChange={(e) => setDevPassword(e.target.value)}
-                placeholder="Password"
-                onKeyDown={(e) => e.key === "Enter" && handleDevUnlock()}
-                className="flex-1"
-              />
-              <Button size="sm" onClick={handleDevUnlock}>Unlock</Button>
-            </div>
-          </CardContent>
-        ) : (
-          <CardContent className="space-y-3 pt-4">
-            <p className="text-sm font-medium text-center text-muted-foreground">Start onboarding as…</p>
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-3"
-                onClick={() => handleDevLogin("creator")}
-                disabled={submitting}
-              >
-                <Video className="h-5 w-5 text-primary" />
-                <span className="text-xs">Creator</span>
-                <span className="text-[10px] text-muted-foreground">New test account</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-3"
-                onClick={() => handleDevLogin("brand")}
-                disabled={submitting}
-              >
-                <ShoppingBag className="h-5 w-5 text-primary" />
-                <span className="text-xs">Brand</span>
-                <span className="text-[10px] text-muted-foreground">New test account</span>
-              </Button>
-            </div>
-          </CardContent>
-        )}
-      </Card>
     </div>
   );
 };
