@@ -7,7 +7,7 @@ interface Props {
 }
 
 const ProtectedRoute = ({ children, requiredRole }: Props) => {
-  const { user, role, loading, onboardingCompleted } = useAuth();
+  const { user, role, loading, onboardingCompleted, onboardingStep } = useAuth();
 
   if (loading) {
     return (
@@ -18,7 +18,18 @@ const ProtectedRoute = ({ children, requiredRole }: Props) => {
   }
 
   if (!user) return <Navigate to="/auth" replace />;
-  if (!onboardingCompleted) return <Navigate to="/onboarding/role" replace />;
+
+  if (!onboardingCompleted) {
+    // If user has started onboarding, redirect to the right step
+    if (onboardingStep?.startsWith("creator")) {
+      return <Navigate to="/onboarding/creator" replace />;
+    }
+    if (onboardingStep?.startsWith("brand")) {
+      return <Navigate to="/onboarding/brand" replace />;
+    }
+    return <Navigate to="/onboarding/role" replace />;
+  }
+
   if (requiredRole && role !== requiredRole) return <Navigate to="/feed" replace />;
 
   return <>{children}</>;

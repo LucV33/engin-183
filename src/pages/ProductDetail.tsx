@@ -154,6 +154,7 @@ const ProductDetail = () => {
                 src={heroImage}
                 alt={product.title}
                 className="h-full w-full object-cover opacity-60"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center">

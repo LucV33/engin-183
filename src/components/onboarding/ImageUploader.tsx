@@ -17,12 +17,14 @@ const ImageUploader = ({ value, onChange, circular = false, label, className }: 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (preview && preview.startsWith("blob:")) URL.revokeObjectURL(preview);
     const url = URL.createObjectURL(file);
     setPreview(url);
     onChange(file, url);
   };
 
   const remove = () => {
+    if (preview && preview.startsWith("blob:")) URL.revokeObjectURL(preview);
     setPreview(null);
     onChange(null, null);
     if (inputRef.current) inputRef.current.value = "";

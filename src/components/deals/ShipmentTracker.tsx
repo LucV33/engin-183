@@ -48,7 +48,7 @@ const ShipmentTracker = ({ dealId, conversationId, isBrand }: ShipmentTrackerPro
       await supabase.from("deals").update({ status: "shipped" as any }).eq("id", dealId);
       await supabase.from("messages").insert({
         conversation_id: conversationId, sender_id: user!.id,
-        content: `📦 Product shipped via ${carrier}. Tracking: ${trackingNumber}`,
+        content: `Product shipped via ${carrier}. Tracking: ${trackingNumber}`,
         message_type: "system_event", metadata: { event_type: "product_shipped" },
       });
     },
@@ -69,7 +69,7 @@ const ShipmentTracker = ({ dealId, conversationId, isBrand }: ShipmentTrackerPro
         await supabase.from("deals").update({ status: "delivered" as any }).eq("id", dealId);
         await supabase.from("messages").insert({
           conversation_id: conversationId, sender_id: user!.id,
-          content: "📦 Product received by creator.",
+          content: "Product received by creator.",
           message_type: "system_event", metadata: { event_type: "product_received" },
         });
       }
@@ -91,7 +91,7 @@ const ShipmentTracker = ({ dealId, conversationId, isBrand }: ShipmentTrackerPro
         <h3 className="text-lg font-bold flex items-center gap-2"><Package className="h-5 w-5" /> Ship Product</h3>
         <div className="space-y-2">
           <Label>Tracking Number</Label>
-          <Input value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)} placeholder="1Z999AA10123456784" />
+          <Input value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)} placeholder="Enter tracking number" />
         </div>
         <div className="space-y-2">
           <Label>Carrier</Label>
@@ -147,7 +147,9 @@ const ShipmentTracker = ({ dealId, conversationId, isBrand }: ShipmentTrackerPro
         </div>
       )}
       {!isBrand && shipment.status === "delivered" && (
-        <Button onClick={() => updateStatus.mutate("delivered")} className="w-full">✅ Mark as Received</Button>
+        <Button onClick={() => updateStatus.mutate("delivered")} disabled={updateStatus.isPending} className="w-full">
+          {updateStatus.isPending ? "Confirming…" : "Mark as Received"}
+        </Button>
       )}
     </div>
   );
