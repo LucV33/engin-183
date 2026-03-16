@@ -145,7 +145,7 @@ const Settings = () => {
         }).eq("user_id", user.id);
       }
 
-      toast({ title: "Saved!", description: "Your profile has been updated." });
+      toast({ title: "Profile updated", description: "Your changes have been saved." });
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     } finally {
@@ -301,7 +301,7 @@ const Settings = () => {
                   Email: {user?.email}
                 </p>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Password and security settings will be available here soon.
+                  To change your password, use the "Forgot Password" option on the login page.
                 </p>
               </CardContent>
             </Card>
@@ -314,7 +314,7 @@ const Settings = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Notification preferences coming soon.
+                  Email notifications are enabled by default. More notification options will be available soon.
                 </p>
               </CardContent>
             </Card>

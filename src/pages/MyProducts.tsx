@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
-import { Plus, Package } from "lucide-react";
+import { Plus, Package, Loader2 } from "lucide-react";
 
 const MyProducts = () => {
   const { user } = useAuth();
@@ -33,7 +33,7 @@ const MyProducts = () => {
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {isLoading ? (
-          <p>Loading…</p>
+          <div className="col-span-full flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
         ) : products?.length === 0 ? (
           <p className="col-span-full py-12 text-center text-muted-foreground">No products yet. Add your first one!</p>
         ) : (
@@ -48,6 +48,7 @@ const MyProducts = () => {
                       alt={p.title}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">

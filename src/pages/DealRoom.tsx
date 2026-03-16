@@ -111,7 +111,7 @@ const DealRoom = () => {
       await supabase.from("messages").insert({
         conversation_id: convo.id,
         sender_id: user!.id,
-        content: `💰 Escrow funded: $${Number(deal?.rate).toLocaleString("en-US", { minimumFractionDigits: 2 })} is held securely. Brand: ship your product.`,
+        content: `Escrow funded: $${Number(deal?.rate).toLocaleString("en-US", { minimumFractionDigits: 2 })} held securely. Brand can now ship the product.`,
         message_type: "system_event",
         metadata: { event_type: "escrow_funded" },
       });
