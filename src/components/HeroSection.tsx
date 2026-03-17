@@ -13,10 +13,10 @@ const rotatingWords = [
 ];
 
 const hosts = [
-  { name: "Mia Chen", gmv: "$3,200", rating: "4.9" },
-  { name: "Jordan Lee", gmv: "$4,800", rating: "5.0" },
-  { name: "Aisha Patel", gmv: "$2,900", rating: "4.8" },
-  { name: "Tyler Ross", gmv: "$3,600", rating: "4.9" },
+  { name: "Mia Chen", gmv: "$4,800", rating: "4.9", image: "/images/hosts/girl-1.png" },
+  { name: "Jordan Lee", gmv: "$3,600", rating: "5.0", image: "/images/hosts/boy-1.png" },
+  { name: "Aisha Patel", gmv: "$5,200", rating: "4.8", image: "/images/hosts/girl-2.png" },
+  { name: "Sofia Martinez", gmv: "$3,200", rating: "4.9", image: "/images/hosts/girl-3.png" },
 ];
 
 const HeroSection = () => {
@@ -86,8 +86,13 @@ const HeroSection = () => {
                 className="group relative overflow-hidden rounded-2xl bg-card shadow-md border border-border/50 transition-shadow hover:shadow-xl"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
-                {/* Placeholder thumbnail */}
                 <div className="relative aspect-[3/4] bg-gradient-to-br from-secondary to-muted">
+                  <img
+                    src={host.image}
+                    alt={host.name}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/80 text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100">
                       <Play className="h-4 w-4 ml-0.5" fill="currentColor" />
