@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Link } from "react-router-dom";
 import { Search, DollarSign, TrendingUp, Package } from "lucide-react";
+import { DEMO_PRODUCTS } from "@/data/demoData";
 
 const CATEGORY_OPTIONS = ["Beauty", "Tech", "Fashion", "Health", "Home", "Food", "Pets", "Fitness"];
 const PLATFORM_OPTIONS = ["TikTok", "Instagram", "YouTube", "Facebook", "Amazon Live"];
@@ -34,7 +35,9 @@ const CreatorFeed = () => {
 
       const { data, error } = await q;
       if (error) throw error;
-      return data;
+      // Merge demo products so the feed always has content
+      const demoMapped = DEMO_PRODUCTS.map((d) => ({ ...d }));
+      return [...(data || []), ...demoMapped];
     },
   });
 

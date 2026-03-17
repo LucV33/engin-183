@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Link } from "react-router-dom";
 import { Search, MapPin, Star, Users, Sparkles } from "lucide-react";
+import { DEMO_CREATORS } from "@/data/demoData";
 
 const NICHE_OPTIONS = ["Beauty", "Fashion", "Tech", "Food", "Fitness", "Lifestyle", "Gaming", "Home"];
 const PLATFORM_OPTIONS = ["TikTok", "Instagram", "YouTube", "Facebook"];
@@ -40,7 +41,9 @@ const BrandFeed = () => {
 
       const { data, error } = await q;
       if (error) throw error;
-      return data;
+      // Merge demo creators so the feed always has content
+      const demoMapped = DEMO_CREATORS.map((d) => ({ ...d }));
+      return [...(data || []), ...demoMapped];
     },
   });
 

@@ -1,4 +1,15 @@
-const logoPlaceholders = Array.from({ length: 10 }, (_, i) => `Brand ${i + 1}`);
+const brands = [
+  { name: "Sephora", logo: "/images/brands/sephora.png" },
+  { name: "Crocs", logo: "/images/brands/crocs.png" },
+  { name: "Samsung", logo: "/images/brands/samsung.png" },
+  { name: "Rhode", logo: "/images/brands/rhode.png" },
+  { name: "Adidas", logo: "/images/brands/adidas.png" },
+  { name: "Halara" },
+  { name: "medicube" },
+  { name: "Tarte" },
+  { name: "VEVOR" },
+  { name: "Gymshark" },
+];
 
 const SocialProofBar = () => {
   return (
@@ -10,12 +21,22 @@ const SocialProofBar = () => {
       </div>
       <div className="relative overflow-hidden">
         <div className="flex animate-scroll-logos w-max gap-12 px-6">
-          {[...logoPlaceholders, ...logoPlaceholders].map((name, i) => (
+          {[...brands, ...brands].map((brand, i) => (
             <div
               key={i}
-              className="flex h-10 w-28 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground/50"
+              className="flex h-10 w-28 shrink-0 items-center justify-center rounded-md bg-muted px-3"
             >
-              {name}
+              {brand.logo ? (
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="h-7 w-auto max-w-full object-contain opacity-60 grayscale"
+                />
+              ) : (
+                <span className="text-xs font-semibold text-muted-foreground/60 tracking-wide">
+                  {brand.name}
+                </span>
+              )}
             </div>
           ))}
         </div>

@@ -27,6 +27,7 @@ import {
   CheckCircle2,
   Zap,
 } from "lucide-react";
+import { isDemoId, getDemoCreator } from "@/data/demoData";
 
 const getSocialUrl = (platform: string, creator: any): string | null => {
   const map: Record<string, { handle: string | null; urlPrefix: string }> = {
@@ -49,9 +50,16 @@ const CreatorDetail = () => {
   const { toast } = useToast();
   const [offerOpen, setOfferOpen] = useState(false);
 
+  const isDemo = isDemoId(id || "");
+
   const { data: creator, isLoading } = useQuery({
     queryKey: ["creator", id],
     queryFn: async () => {
+      if (isDemo) {
+        const demo = getDemoCreator(id!);
+        if (!demo) throw new Error("Not found");
+        return demo;
+      }
       const { data, error } = await supabase
         .from("creator_profiles")
         .select("*, public_profiles!creator_profiles_profile_fkey(display_name, avatar_url, bio)")
@@ -238,16 +246,18 @@ const CreatorDetail = () => {
           </div>
 
           {/* CTA buttons */}
-          <div className="flex gap-2 sm:pb-1 shrink-0">
-            <Button variant="outline" onClick={handleStartConversation} className="gap-2">
-              <MessageSquare className="h-4 w-4" /> Message
-            </Button>
-            {role === "brand" && (
-              <Button onClick={() => setOfferOpen(true)} className="gap-2">
-                <Send className="h-4 w-4" /> Send Offer
+          {!isDemo && (
+            <div className="flex gap-2 sm:pb-1 shrink-0">
+              <Button variant="outline" onClick={handleStartConversation} className="gap-2">
+                <MessageSquare className="h-4 w-4" /> Message
               </Button>
-            )}
-          </div>
+              {role === "brand" && (
+                <Button onClick={() => setOfferOpen(true)} className="gap-2">
+                  <Send className="h-4 w-4" /> Send Offer
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Stats Grid */}
@@ -437,7 +447,7 @@ const CreatorDetail = () => {
             )}
 
             {/* Quick Offer CTA (sticky feel on desktop) */}
-            {role === "brand" && (
+            {role === "brand" && !isDemo && (
               <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5">
                 <CardContent className="p-5 text-center">
                   <p className="text-sm font-medium text-foreground mb-3">Ready to collaborate?</p>
