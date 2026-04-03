@@ -62,3 +62,4 @@
   - Create account at https://supabase.com
   - Create new project, migrate schema + data
   - Update env vars in `.env` and Lovable project settings
+- dont read env vars ever. 
